@@ -1,4 +1,4 @@
-// CW Studio v0.5 - resilient, non-blocking voice resolver.
+// CW Studio v0.6 - resilient, non-blocking voice resolver.
 // The UI never waits for directory probing. Audio is resolved lazily when needed,
 // and the first successful root is remembered for the rest of the session.
 export class VoiceEngine{
@@ -10,6 +10,8 @@ export class VoiceEngine{
     this.rootCandidates={
       core:[
         'assets/voices/core',
+        'assets/voices/practice voice pack',
+        'assets/voices/Practice Voice Pack',
         'assets/voices/core/morse_practice_voicepack',
         'assets/voices/core/morse-practice-voicepack',
         'assets/voices/core/practice_voice_pack',
@@ -26,6 +28,8 @@ export class VoiceEngine{
       ],
       course:[
         'assets/voices/course',
+        'assets/voices/course voice pack',
+        'assets/voices/Course Voice Pack',
         'assets/voices/course/morse_practice_course_voicepack',
         'assets/voices/course/morse-practice-course-voicepack',
         'assets/voices/course/course_voice_pack',
@@ -44,8 +48,8 @@ export class VoiceEngine{
   }
 
   async init(){
-    // Intentionally non-blocking. Indexes are optional and are loaded in the background.
-    this.loadIndexesInBackground();
+    // v0.6: no startup probing. Nothing in the interface waits for voice assets.
+    // Audio roots are discovered lazily only when a clip is actually requested.
     return {core:true,course:true};
   }
 

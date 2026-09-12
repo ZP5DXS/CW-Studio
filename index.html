@@ -12,7 +12,7 @@
     <header class="topbar">
       <div>
         <div class="eyebrow">MORSE PRACTICE</div>
-        <h1>CW Studio <span class="version-badge">v0.5</span></h1>
+        <h1>CW Studio <span class="version-badge">v0.6</span></h1>
       </div>
       <div class="top-controls">
         <label>Language
@@ -37,7 +37,28 @@
           <div class="course-meta"><span id="courseProgressText">0 / 20 completed</span></div>
         </div>
         <div class="course-progress"><div id="courseProgressBar"></div></div>
-        <div id="lessonGrid" class="lesson-grid"></div>
+        <div id="lessonGrid" class="lesson-grid">
+          <article class="lesson current" data-lesson="1"><div class="lesson-top"><div class="n">LESSON 01</div><span class="lesson-check"></span></div><h3>T · E · A</h3><p>First CW sounds<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="2"><div class="lesson-top"><div class="n">LESSON 02</div><span class="lesson-check"></span></div><h3>N · I · M</h3><p>Recognition<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="3"><div class="lesson-top"><div class="n">LESSON 03</div><span class="lesson-check"></span></div><h3>S · O · R</h3><p>Short groups<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="4"><div class="lesson-top"><div class="n">LESSON 04</div><span class="lesson-check"></span></div><h3>K · D · U</h3><p>Cumulative recognition<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="5"><div class="lesson-top"><div class="n">LESSON 05</div><span class="lesson-check"></span></div><h3>G · W · H</h3><p>Groups of two and three<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="6"><div class="lesson-top"><div class="n">LESSON 06</div><span class="lesson-check"></span></div><h3>L · P · F</h3><p>Direct recognition<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="7"><div class="lesson-top"><div class="n">LESSON 07</div><span class="lesson-check"></span></div><h3>B · V · C</h3><p>Less visual help<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="8"><div class="lesson-top"><div class="n">LESSON 08</div><span class="lesson-check"></span></div><h3>Y · X · J</h3><p>Recovery and recognition<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="9"><div class="lesson-top"><div class="n">LESSON 09</div><span class="lesson-check"></span></div><h3>Q · Z</h3><p>Complete A–Z<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="10"><div class="lesson-top"><div class="n">LESSON 10</div><span class="lesson-check"></span></div><h3>Alphabet consolidation</h3><p>Groups and flow<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="11"><div class="lesson-top"><div class="n">LESSON 11</div><span class="lesson-check"></span></div><h3>1 · 2 · 3</h3><p>Numbers<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="12"><div class="lesson-top"><div class="n">LESSON 12</div><span class="lesson-check"></span></div><h3>4 · 5 · 6</h3><p>Letters + numbers<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="13"><div class="lesson-top"><div class="n">LESSON 13</div><span class="lesson-check"></span></div><h3>7 · 8 · 9 · 0</h3><p>Complete alphanumeric set<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="14"><div class="lesson-top"><div class="n">LESSON 14</div><span class="lesson-check"></span></div><h3>Callsigns</h3><p>Real-world recognition<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="15"><div class="lesson-top"><div class="n">LESSON 15</div><span class="lesson-check"></span></div><h3>CQ · DE · K</h3><p>Making a call<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="16"><div class="lesson-top"><div class="n">LESSON 16</div><span class="lesson-check"></span></div><h3>R · RST · 73</h3><p>Signal reports<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="17"><div class="lesson-top"><div class="n">LESSON 17</div><span class="lesson-check"></span></div><h3>NAME · QTH · BT</h3><p>Operator information<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="18"><div class="lesson-top"><div class="n">LESSON 18</div><span class="lesson-check"></span></div><h3>KN · AR · SK</h3><p>QSO control<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="19"><div class="lesson-top"><div class="n">LESSON 19</div><span class="lesson-check"></span></div><h3>Build a QSO</h3><p>Full exchange<br>15 WPM</p></article>
+          <article class="lesson" data-lesson="20"><div class="lesson-top"><div class="n">LESSON 20</div><span class="lesson-check"></span></div><h3>Your First QSO</h3><p>Guided head copy<br>15 WPM</p></article>
+        </div>
         <div class="course-nav">
           <button id="prevLessonBtn">← Previous</button>
           <div id="currentLessonLabel">Lesson 01</div>
@@ -133,8 +154,6 @@
       </section>
     </main>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
-  <script type="module" src="js/app.js?v=5"></script>
+  <script type="module" src="js/app.js?v=6"></script>
 </body>
 </html>

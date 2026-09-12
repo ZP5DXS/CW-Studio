@@ -1,14 +1,16 @@
-import {VoiceEngine} from './voice-engine.js?v=5';
-import {Playback} from './playback.js?v=5';
-import {VisualEngine} from './visual-engine.js?v=5';
-import {COURSE,buildLesson} from './course-engine.js?v=5';
-import {buildCustom} from './session-builder.js?v=5';
-import {exportWav,exportMp3,download} from './export-engine.js?v=5';
-import {exportVideo} from './video-export.js?v=5';
+import {VoiceEngine} from './voice-engine.js?v=6';
+import {Playback} from './playback.js?v=6';
+import {VisualEngine} from './visual-engine.js?v=6';
+import {COURSE,buildLesson} from './course-engine.js?v=6';
+import {buildCustom} from './session-builder.js?v=6';
+import {exportWav,exportMp3,download} from './export-engine.js?v=6';
+import {exportVideo} from './video-export.js?v=6';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+window.addEventListener('error',e=>{const el=document.querySelector('#assetStatus');if(el){el.textContent=`Startup error: ${e.message}`;el.classList.add('warning')}console.error(e.error||e.message)});
+window.addEventListener('unhandledrejection',e=>{const el=document.querySelector('#assetStatus');if(el){el.textContent=`Startup error: ${e.reason?.message||e.reason||'unknown error'}`;el.classList.add('warning')}console.error(e.reason)});
 const voice=new VoiceEngine();const playback=new Playback(voice),visual=new VisualEngine($('#visualCanvas'));
-voice.init().catch(()=>{});
+voice.init().catch(err=>console.warn('Voice init:',err));
 let currentLesson=Number(localStorage.getItem('cwStudio.currentLesson')||1),timeline=null,wizardStep=1,selectedModes=new Set(['familiarization','recognition']),selectedContents=new Set(['letters']),selectedDuration=900;
 const completed=new Set(JSON.parse(localStorage.getItem('cwStudio.completedLessons')||'[]'));
 
@@ -60,5 +62,15 @@ $('#mp3Btn').onclick=async()=>{const b=await exportMp3(timeline,voice,{lang:$('#
 $('#videoBtn').onclick=async()=>{const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;try{const b=await exportVideo(timeline,voice,visual,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value,onProgress:p=>btn.textContent=`Video ${Math.round(p*100)}%`});download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`)}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;drawLoop(0)}};
 
 renderLessons();
-$('#assetStatus').textContent='Voice resolver ready · audio loads on demand';
-loadLesson(currentLesson).then(()=>{const r=voice.roots();if(r.core||r.course){$('#assetStatus').textContent=`Audio ready${r.core?` · Core: ${r.core}`:''}${r.course?` · Course: ${r.course}`:''}`;$('#assetStatus').classList.remove('warning')}}).catch(err=>{console.error(err);$('#assetStatus').textContent='Lesson loaded with audio fallback · open console only if a voice clip is missing';});
+$('#assetStatus').textContent='CW Studio v0.6 · interface ready · loading lesson audio in background';
+setTimeout(()=>{
+  loadLesson(currentLesson).then(()=>{
+    const r=voice.roots();
+    $('#assetStatus').textContent=`CW Studio v0.6 · ${r.core||r.course?'audio path resolved':'lesson ready; voice will resolve when played'}${r.core?` · Core: ${r.core}`:''}${r.course?` · Course: ${r.course}`:''}`;
+    $('#assetStatus').classList.remove('warning');
+  }).catch(err=>{
+    console.error(err);
+    $('#assetStatus').textContent=`CW Studio v0.6 · lesson UI ready · audio issue: ${err.message||err}`;
+    $('#assetStatus').classList.add('warning');
+  });
+},0);

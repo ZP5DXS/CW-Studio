@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=5';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=6';
 
 function ascii(s){return new TextEncoder().encode(s)}
 function concat(...parts){const n=parts.reduce((a,p)=>a+p.length,0),o=new Uint8Array(n);let x=0;for(const p of parts){o.set(p,x);x+=p.length}return o}
@@ -11,5 +11,14 @@ function wavBlob(buffer,meta={}){const ch=buffer.numberOfChannels,sr=buffer.samp
 
 export async function renderOffline(tl,voice,{lang='es',gender='female',tone=700}={}){const sr=44100,ctx=new OfflineAudioContext(1,Math.ceil((tl.duration+.5)*sr),sr),master=ctx.createGain();master.gain.value=.82;const comp=ctx.createDynamicsCompressor();comp.threshold.value=-3;comp.ratio.value=6;comp.attack.value=.003;comp.release.value=.18;master.connect(comp).connect(ctx.destination);for(const e of tl.events){if(e.type==='cw')scheduleText(ctx,master,e.data.text,e.start,{wpm:e.data.wpm||15,effectiveWpm:e.data.eff||15,tone:e.data.tone||tone,amp:.30});else if(e.type==='check')scheduleCheckTone(ctx,master,e.start,{amp:.14});else if(e.type==='voice'||e.type==='charVoice'){const id=e.type==='voice'?e.data.id:`char_${String(e.data.char).toLowerCase()}`;const b=await voice.buffer(ctx,id,lang,gender);if(b){const s=ctx.createBufferSource();s.buffer=b;s.connect(master);s.start(e.start)}}}return ctx.startRendering()}
 export async function exportWav(tl,voice,o,meta={}){return wavBlob(await renderOffline(tl,voice,o),meta)}
-export async function exportMp3(tl,voice,o,meta={}){if(!window.lamejs)throw new Error('MP3 encoder unavailable');const b=await renderOffline(tl,voice,o),pcm=b.getChannelData(0),enc=new lamejs.Mp3Encoder(1,b.sampleRate,128),chunks=[];for(let i=0;i<pcm.length;i+=1152){const n=Math.min(1152,pcm.length-i),arr=new Int16Array(n);for(let j=0;j<n;j++)arr[j]=Math.max(-32768,Math.min(32767,pcm[i+j]*32767));const x=enc.encodeBuffer(arr);if(x.length)chunks.push(x)}const end=enc.flush();if(end.length)chunks.push(end);return addId3(new Blob(chunks,{type:'audio/mpeg'}),meta)}
+async function ensureLame(){
+  if(window.lamejs)return;
+  await new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js';
+    s.onload=resolve;s.onerror=()=>reject(new Error('Could not load MP3 encoder'));
+    document.head.appendChild(s);
+  });
+}
+export async function exportMp3(tl,voice,o,meta={}){await ensureLame();if(!window.lamejs)throw new Error('MP3 encoder unavailable');const b=await renderOffline(tl,voice,o),pcm=b.getChannelData(0),enc=new lamejs.Mp3Encoder(1,b.sampleRate,128),chunks=[];for(let i=0;i<pcm.length;i+=1152){const n=Math.min(1152,pcm.length-i),arr=new Int16Array(n);for(let j=0;j<n;j++)arr[j]=Math.max(-32768,Math.min(32767,pcm[i+j]*32767));const x=enc.encodeBuffer(arr);if(x.length)chunks.push(x)}const end=enc.flush();if(end.length)chunks.push(end);return addId3(new Blob(chunks,{type:'audio/mpeg'}),meta)}
 export function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
