@@ -10,37 +10,53 @@ function rng(seed){let h=2166136261;for(const ch of seed)h=Math.imul(h^ch.charCo
 function pickChars(set,count,r){let s='';for(let i=0;i<count;i++)s+=set[Math.floor(r()*set.length)];return s}
 async function voiceDur(voice,id,lang,gender,fallback=3){const d=await voice.duration(id,lang,gender);return d>0?d:fallback}
 
+function addCheck(tl,t){tl.add('check',t,.20,{label:'NEXT'});return t+.30}
+
 export async function buildLesson(lesson,{lang='es',gender='female',voice}={}){
-  const cfg=COURSE.find(x=>x.lesson===lesson);const tl=new Timeline({kind:'course',lesson,title:`Learn CW · Lesson ${String(lesson).padStart(2,'0')}`,cfg});let t=0;
+  const cfg=COURSE.find(x=>x.lesson===lesson),tl=new Timeline({kind:'course',lesson,title:`Learn CW · Lesson ${String(lesson).padStart(2,'0')}`,cfg});let t=0;
   tl.add('title',t,4,{title:`LESSON ${String(lesson).padStart(2,'0')}`,subtitle:cfg.newItems.length?cfg.newItems.join(' · '):cfg.focus});t+=4.4;
   const introId=`lesson_${String(lesson).padStart(2,'0')}_intro`,introDur=voice?await voiceDur(voice,introId,lang,gender,5):5;
   tl.add('voice',t,introDur,{id:introId});t+=introDur+.8;
   const r=rng(`course-${lesson}`),learned=learnedFor(lesson)||'TEA',wpm=cfg.charWpm;
 
+  // Familiarization: hear -> see -> spoken answer -> hear again -> courtesy check.
   if(lesson<=13&&cfg.newItems.length){
     for(const c of cfg.newItems){
       const d=tokenDuration(c,wpm);
-      tl.add('cw',t,d,{text:c,wpm,eff:cfg.effectiveWpm,mode:'familiarization',mnemonic:true});t+=d+.4;
-      tl.add('reveal',t,1.15,{text:c,mnemonic:true});t+=1.25;
+      tl.add('cw',t,d,{text:c,wpm,eff:cfg.effectiveWpm,mode:'familiarization',mnemonic:true});t+=d+.38;
+      tl.add('reveal',t,1.05,{text:c,mnemonic:true});t+=1.12;
       const id=`char_${String(c).toLowerCase()}`,vd=voice?await voiceDur(voice,id,lang,gender,.55):.55;
-      tl.add('charVoice',t,vd,{char:c});t+=vd+.28;
-      tl.add('cw',t,d,{text:c,wpm,eff:cfg.effectiveWpm,mode:'familiarization'});t+=d+.9;
+      tl.add('charVoice',t,vd,{char:c});t+=vd+.24;
+      tl.add('cw',t,d,{text:c,wpm,eff:cfg.effectiveWpm,mode:'familiarization'});t+=d+.28;
+      t=addCheck(tl,t);
+      t+=.45;
     }
   }
 
+  // Recognition for character-learning lessons keeps the same reassuring cycle:
+  // hear -> reveal -> say -> hear again -> check. This prevents the voice from
+  // disappearing halfway through the lesson.
   const rounds=lesson<10?30:lesson<14?36:24;
   for(let i=0;i<rounds;i++){
     const text=lesson>=14?pickChars(learned,lesson===14?5:Math.min(5,2+Math.floor(r()*4)),r):learned[Math.floor(r()*learned.length)];
     const dur=wordDuration(text,wpm,cfg.effectiveWpm);
-    tl.add('cw',t,dur,{text,wpm,eff:cfg.effectiveWpm,mode:'recognition'});t+=dur+(lesson<7?1.8:1.4);
-    tl.add('reveal',t,.85,{text});t+=1.05;
+    tl.add('cw',t,dur,{text,wpm,eff:cfg.effectiveWpm,mode:'recognition'});t+=dur+(lesson<7?1.45:1.15);
+    tl.add('reveal',t,.78,{text});t+=.86;
+
+    if(lesson<=13&&text.length===1){
+      const id=`char_${String(text).toLowerCase()}`,vd=voice?await voiceDur(voice,id,lang,gender,.55):.55;
+      tl.add('charVoice',t,vd,{char:text});t+=vd+.20;
+      const d2=tokenDuration(text,wpm);
+      tl.add('cw',t,d2,{text,wpm,eff:cfg.effectiveWpm,mode:'confirmation'});t+=d2+.22;
+    }
+    t=addCheck(tl,t);t+=.40;
   }
 
   if(lesson>=15){
     const samples={15:'CQ CQ DE ZP5DXS ZP5DXS K',16:'R UR RST 579 579 73',17:'NAME MATT BT QTH ASUNCION',18:'TNX FER QSO 73 SK',19:'CQ CQ DE ZP5DXS ZP5DXS K',20:'CQ CQ DE ZP5DXS ZP5DXS K'};
     const q=samples[lesson];
     for(let i=0;i<(lesson>=19?3:2);i++){
-      const d=wordDuration(q,wpm,cfg.effectiveWpm);tl.add('cw',t,d,{text:q,wpm,eff:cfg.effectiveWpm,mode:lesson===20?'headcopy':'sequence'});t+=d+(lesson===20?3:2);tl.add('reveal',t,2,{text:q});t+=2.4
+      const d=wordDuration(q,wpm,cfg.effectiveWpm);tl.add('cw',t,d,{text:q,wpm,eff:cfg.effectiveWpm,mode:lesson===20?'headcopy':'sequence'});t+=d+(lesson===20?3:2);tl.add('reveal',t,2,{text:q});t+=2.15;t=addCheck(tl,t);t+=.35
     }
   }
 

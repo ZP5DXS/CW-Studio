@@ -28,3 +28,17 @@ export function scheduleText(ctx,destination,text,start,{wpm=18,effectiveWpm=wpm
   const u=unitSeconds(wpm),eu=unitSeconds(effectiveWpm);let t=start;const chars=[...text.toUpperCase()];
   chars.forEach((c)=>{if(c===' '){t+=7*eu;return}if(!MORSE[c])return;onChar?.(c,t);t=scheduleToken(ctx,destination,c,t,{wpm,tone,amp});t+=Math.max(3*u,3*eu)});return t-Math.max(3*u,3*eu)
 }
+
+// Soft two-note courtesy/check tone. It is deliberately different from the CW pitch,
+// with the same smooth sine-wave envelope so it never clicks or sounds digital.
+export function scheduleCheckTone(ctx,destination,start,{amp=.16}={}){
+  const notes=[{f:1046.5,d:.075},{f:1318.5,d:.095}];
+  let t=start;
+  for(const n of notes){
+    const osc=ctx.createOscillator(),g=ctx.createGain();
+    osc.type='sine';osc.frequency.setValueAtTime(n.f,t);g.gain.value=0;
+    osc.connect(g).connect(destination);scheduleEnvelope(g,t,t+n.d,amp,.012);
+    osc.start(t);osc.stop(t+n.d+.02);t+=n.d+.018;
+  }
+  return t;
+}

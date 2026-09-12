@@ -1,4 +1,4 @@
-import {scheduleText} from './morse-engine.js';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js';
 export class Playback{
   constructor(voice){this.voice=voice;this.ctx=null;this.sources=[];this.timer=null;this.ended=false}
   stop(){this.sources.forEach(s=>{try{s.stop()}catch{}});this.sources=[];if(this.ctx){this.ctx.close().catch(()=>{});this.ctx=null}clearInterval(this.timer);this.timer=null}
@@ -9,6 +9,7 @@ export class Playback{
     const base=ctx.currentTime+.16,endAt=Math.min(limit||tl.duration,tl.duration);
     for(const e of tl.events){if(e.start>endAt)continue;
       if(e.type==='cw')scheduleText(ctx,master,e.data.text,base+e.start,{wpm:e.data.wpm||15,effectiveWpm:e.data.eff||e.data.wpm||15,tone:e.data.tone||tone,amp:.30});
+      else if(e.type==='check')scheduleCheckTone(ctx,master,base+e.start,{amp:.14});
       else if(e.type==='voice'||e.type==='charVoice'){
         const id=e.type==='voice'?e.data.id:`char_${String(e.data.char).toLowerCase()}`;const b=await this.voice.buffer(ctx,id,lang,gender);if(b){const s=ctx.createBufferSource();s.buffer=b;s.connect(master);s.start(base+e.start);this.sources.push(s)}
       }
