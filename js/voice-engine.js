@@ -1,85 +1,67 @@
+// CW Studio v0.5 - resilient, non-blocking voice resolver.
+// The UI never waits for directory probing. Audio is resolved lazily when needed,
+// and the first successful root is remembered for the rest of the session.
 export class VoiceEngine{
   constructor(){
-    this.coreIndex=null;this.courseIndex=null;this.cache=new Map();
-    this.coreRoot=null;this.courseRoot=null;this.status={core:false,course:false};
+    this.cache=new Map();
+    this.coreIndex=null;this.courseIndex=null;
+    this.coreRoot=null;this.courseRoot=null;
+    this.decodeCtx=null;
     this.rootCandidates={
       core:[
         'assets/voices/core',
+        'assets/voices/core/morse_practice_voicepack',
+        'assets/voices/core/morse-practice-voicepack',
+        'assets/voices/core/practice_voice_pack',
+        'assets/voices/core/practice-voice-pack',
+        'assets/voices/core/practice voice pack',
         'assets/voices/morse_practice_voicepack',
         'assets/voices/morse-practice-voicepack',
-        'assets/voices/morse practice voicepack',
-        'assets/voices/morse practice voice pack',
         'assets/voices/practice_voice_pack',
         'assets/voices/practice-voice-pack',
         'assets/voices/practice voice pack',
-        'assets/voices/Practice Voice Pack',
         'assets/voices/Morse Practice Voice Pack',
+        'assets/voices/Practice Voice Pack',
         'assets/voices'
       ],
       course:[
         'assets/voices/course',
+        'assets/voices/course/morse_practice_course_voicepack',
+        'assets/voices/course/morse-practice-course-voicepack',
+        'assets/voices/course/course_voice_pack',
+        'assets/voices/course/course-voice-pack',
+        'assets/voices/course/course voice pack',
         'assets/voices/morse_practice_course_voicepack',
         'assets/voices/morse-practice-course-voicepack',
-        'assets/voices/morse practice course voicepack',
-        'assets/voices/morse practice course voice pack',
         'assets/voices/course_voice_pack',
         'assets/voices/course-voice-pack',
         'assets/voices/course voice pack',
-        'assets/voices/Course Voice Pack',
         'assets/voices/Morse Practice Course Voice Pack',
+        'assets/voices/Course Voice Pack',
         'assets/voices'
       ]
     };
   }
 
-  async fetchJsonCandidates(paths){
-    for(const path of paths){
-      try{const r=await fetch(encodeURI(path),{cache:'no-store'});if(r.ok)return await r.json()}catch{}
-    }
-    return null
-  }
-
-  async exists(path){
-    const url=encodeURI(path);
-    try{
-      let r=await fetch(url,{method:'HEAD',cache:'no-store'});
-      if(r.ok)return true;
-      r=await fetch(url,{cache:'no-store'});
-      return r.ok;
-    }catch{return false}
-  }
-
-  probePath(kind,root){
-    return kind==='core'
-      ?`${root}/es/female/characters/char_a.mp3`
-      :`${root}/es/female/lesson_intros/lesson_01_intro.mp3`;
-  }
-
-  async discoverRoot(kind){
-    for(const root of this.rootCandidates[kind]){
-      if(await this.exists(this.probePath(kind,root)))return root;
-    }
-    return null
-  }
-
   async init(){
-    // Best-effort discovery only. Playback also resolves assets lazily across every
-    // supported generated-folder layout, so users never need to move audio files.
-    this.coreRoot=await this.discoverRoot('core');
-    this.courseRoot=await this.discoverRoot('course');
+    // Intentionally non-blocking. Indexes are optional and are loaded in the background.
+    this.loadIndexesInBackground();
+    return {core:true,course:true};
+  }
 
-    if(this.coreRoot){
-      this.coreIndex=await this.fetchJsonCandidates([
-        `${this.coreRoot}/voice_index.json`,`${this.coreRoot}/index.json`,`${this.coreRoot}/manifest.json`
-      ]);
+  async loadIndexesInBackground(){
+    const jobs=[];
+    for(const root of this.rootCandidates.core){
+      jobs.push(this.tryJson(`${root}/voice_index.json`).then(j=>{if(j&&!this.coreIndex){this.coreIndex=j;this.coreRoot=this.coreRoot||root}}));
     }
-    if(this.courseRoot){
-      this.courseIndex=await this.fetchJsonCandidates([
-        `${this.courseRoot}/course_voice_index.json`,`${this.courseRoot}/voice_index.json`,`${this.courseRoot}/index.json`
-      ]);
+    for(const root of this.rootCandidates.course){
+      jobs.push(this.tryJson(`${root}/course_voice_index.json`).then(j=>{if(j&&!this.courseIndex){this.courseIndex=j;this.courseRoot=this.courseRoot||root}}));
     }
-    this.status.core=!!this.coreRoot;this.status.course=!!this.courseRoot;
-    return this.status
+    Promise.allSettled(jobs).catch(()=>{});
+  }
+
+  async tryJson(path){
+    try{const r=await fetch(encodeURI(path),{cache:'no-store'});return r.ok?await r.json():null}catch{return null}
   }
 
   coreCategory(id){
@@ -96,7 +78,7 @@ export class VoiceEngine{
     if(m[id])return m[id];
     if(/^lesson_\d\d_number$/.test(id))return 'course_lessons';
     if(/_(full|short)$/.test(id))return 'nomenclature';
-    return null
+    return null;
   }
 
   courseCategory(id){
@@ -108,62 +90,64 @@ export class VoiceEngine{
     if(/_intro$/.test(id)&&/^(100_|qso_head_copy|endless_head_copy)/.test(id))return 'bonus_intros';
     if(/_outro$/.test(id)&&/^(100_|qso_head_copy|endless_head_copy)/.test(id))return 'bonus_outros';
     if(/^headcopy_|^challenge_complete$/.test(id))return 'bonus_coaching';
-    return null
+    return null;
   }
 
   directPath(kind,root,id,lang,gender){
     const cat=kind==='core'?this.coreCategory(id):this.courseCategory(id);
-    return cat?`${root}/${lang}/${gender}/${cat}/${id}.mp3`:null
+    return cat?`${root}/${lang}/${gender}/${cat}/${id}.mp3`:null;
   }
 
-  indexPath(kind,id,lang,gender){
-    const root=kind==='core'?this.coreRoot:this.courseRoot;
+  indexPath(kind,root,id,lang,gender){
     const index=kind==='core'?this.coreIndex:this.courseIndex;
     const rel=index?.[id]?.files?.[lang]?.[gender];
-    return root&&rel?`${root}/${rel}`:null
+    return rel?`${root}/${rel}`:null;
   }
 
   candidateUrls(id,lang,gender){
     const out=[];
-    const preferred=[['course',this.courseRoot],['core',this.coreRoot]];
-    for(const [kind,root] of preferred){
-      const p=this.indexPath(kind,id,lang,gender);if(p)out.push({kind,root,url:p});
-      if(root){const d=this.directPath(kind,root,id,lang,gender);if(d)out.push({kind,root,url:d})}
-    }
-    // If discovery failed, try every known generated folder layout lazily.
+    const push=(kind,root,url)=>{if(url)out.push({kind,root,url})};
+    // Remembered successful roots always win.
+    if(this.courseRoot){push('course',this.courseRoot,this.indexPath('course',this.courseRoot,id,lang,gender));push('course',this.courseRoot,this.directPath('course',this.courseRoot,id,lang,gender));}
+    if(this.coreRoot){push('core',this.coreRoot,this.indexPath('core',this.coreRoot,id,lang,gender));push('core',this.coreRoot,this.directPath('core',this.coreRoot,id,lang,gender));}
+    // Then all supported layouts. Course first because lesson narration is course-specific.
     for(const kind of ['course','core'])for(const root of this.rootCandidates[kind]){
-      const d=this.directPath(kind,root,id,lang,gender);if(d)out.push({kind,root,url:d});
+      push(kind,root,this.indexPath(kind,root,id,lang,gender));
+      push(kind,root,this.directPath(kind,root,id,lang,gender));
     }
-    const seen=new Set();return out.filter(x=>{const k=x.url;if(seen.has(k))return false;seen.add(k);return true});
+    const seen=new Set();return out.filter(x=>!seen.has(x.url)&&seen.add(x.url));
+  }
+
+  async ensureDecodeCtx(){
+    if(!this.decodeCtx||this.decodeCtx.state==='closed'){
+      const Ctx=window.AudioContext||window.webkitAudioContext;this.decodeCtx=new Ctx();
+    }
+    return this.decodeCtx;
+  }
+
+  async fetchDecode(url,ctx){
+    const r=await fetch(encodeURI(url),{cache:'force-cache'});if(!r.ok)throw new Error(String(r.status));
+    const arr=await r.arrayBuffer();return await ctx.decodeAudioData(arr.slice(0));
   }
 
   async buffer(ctx,id,lang,gender){
     const key=`${lang}|${gender}|${id}`;if(this.cache.has(key))return this.cache.get(key);
-    for(const c of this.candidateUrls(id,lang,gender)){
+    const candidates=this.candidateUrls(id,lang,gender);
+    for(const c of candidates){
       try{
-        const r=await fetch(encodeURI(c.url),{cache:'force-cache'});if(!r.ok)continue;
-        const arr=await r.arrayBuffer();const b=await ctx.decodeAudioData(arr.slice(0));
+        const b=await this.fetchDecode(c.url,ctx);
         this.cache.set(key,b);
-        if(c.kind==='core'&&!this.coreRoot)this.coreRoot=c.root;
-        if(c.kind==='course'&&!this.courseRoot)this.courseRoot=c.root;
+        if(c.kind==='core')this.coreRoot=c.root;else this.courseRoot=c.root;
         return b;
       }catch{}
     }
-    console.warn('Voice asset unavailable after trying all known pack layouts:',id);
-    return null
+    console.warn('CW Studio voice asset not found:',id,candidates.map(x=>x.url));
+    return null;
   }
 
   async duration(id,lang,gender){
-    const Ctx=window.AudioContext||window.webkitAudioContext,ctx=new Ctx();
-    try{const b=await this.buffer(ctx,id,lang,gender);return b?.duration||0}finally{await ctx.close().catch(()=>{})}
+    const ctx=await this.ensureDecodeCtx();const b=await this.buffer(ctx,id,lang,gender);return b?.duration||0;
   }
 
-  async probe(lang='es',gender='female'){
-    const Ctx=window.AudioContext||window.webkitAudioContext,ctx=new Ctx();
-    try{
-      const core=!!(await this.buffer(ctx,'char_a',lang,gender));
-      const course=!!(await this.buffer(ctx,'lesson_01_intro',lang,gender));
-      return {core,course,coreRoot:this.coreRoot,courseRoot:this.courseRoot};
-    }finally{await ctx.close().catch(()=>{})}
-  }
+  roots(){return {core:this.coreRoot,course:this.courseRoot}}
 }

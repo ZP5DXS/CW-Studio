@@ -1,13 +1,14 @@
-import {VoiceEngine} from './voice-engine.js?v=4';
-import {Playback} from './playback.js?v=4';
-import {VisualEngine} from './visual-engine.js?v=4';
-import {COURSE,buildLesson} from './course-engine.js?v=4';
-import {buildCustom} from './session-builder.js?v=4';
-import {exportWav,exportMp3,download} from './export-engine.js?v=4';
-import {exportVideo} from './video-export.js?v=4';
+import {VoiceEngine} from './voice-engine.js?v=5';
+import {Playback} from './playback.js?v=5';
+import {VisualEngine} from './visual-engine.js?v=5';
+import {COURSE,buildLesson} from './course-engine.js?v=5';
+import {buildCustom} from './session-builder.js?v=5';
+import {exportWav,exportMp3,download} from './export-engine.js?v=5';
+import {exportVideo} from './video-export.js?v=5';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const voice=new VoiceEngine();await voice.init();const playback=new Playback(voice),visual=new VisualEngine($('#visualCanvas'));
+const voice=new VoiceEngine();const playback=new Playback(voice),visual=new VisualEngine($('#visualCanvas'));
+voice.init().catch(()=>{});
 let currentLesson=Number(localStorage.getItem('cwStudio.currentLesson')||1),timeline=null,wizardStep=1,selectedModes=new Set(['familiarization','recognition']),selectedContents=new Set(['letters']),selectedDuration=900;
 const completed=new Set(JSON.parse(localStorage.getItem('cwStudio.completedLessons')||'[]'));
 
@@ -58,5 +59,6 @@ $('#wavBtn').onclick=async()=>{const b=await exportWav(timeline,voice,{lang:$('#
 $('#mp3Btn').onclick=async()=>{const b=await exportMp3(timeline,voice,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value},meta());download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.mp3`)};
 $('#videoBtn').onclick=async()=>{const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;try{const b=await exportVideo(timeline,voice,visual,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value,onProgress:p=>btn.textContent=`Video ${Math.round(p*100)}%`});download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`)}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;drawLoop(0)}};
 
-const probe=await voice.probe($('#languageSelect').value,$('#voiceSelect').value);$('#assetStatus').textContent=probe.core&&probe.course?`Voice packs ready · Core: ${probe.coreRoot} · Course: ${probe.courseRoot}`:`Voice check · Core ${probe.core?'OK':'not found'} · Course ${probe.course?'OK':'not found'} · automatic multi-path lookup enabled`;$('#assetStatus').classList.toggle('warning',!(probe.core&&probe.course));
-await loadLesson(currentLesson);
+renderLessons();
+$('#assetStatus').textContent='Voice resolver ready · audio loads on demand';
+loadLesson(currentLesson).then(()=>{const r=voice.roots();if(r.core||r.course){$('#assetStatus').textContent=`Audio ready${r.core?` · Core: ${r.core}`:''}${r.course?` · Course: ${r.course}`:''}`;$('#assetStatus').classList.remove('warning')}}).catch(err=>{console.error(err);$('#assetStatus').textContent='Lesson loaded with audio fallback · open console only if a voice clip is missing';});

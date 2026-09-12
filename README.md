@@ -1,15 +1,16 @@
-# Morse Practice · CW Studio v4
+# Morse Practice · CW Studio v0.5
 
-Static GitHub Pages app for Learn CW, custom CW audio/video sessions and head-copy practice.
+Static GitHub Pages app for Learn CW, custom CW sessions and head-copy practice.
 
-## v4 fixes
-- Voice assets are resolved lazily across the existing generated folder layouts; audio files do not need to be moved or renamed.
-- Local JS modules include a v4 cache-buster so GitHub Pages/browser cache cannot keep an older voice-path detector alive.
-- Learn CW character cadence is now: CW -> pause -> reveal + spoken character -> short pause -> CW confirmation -> polyphonic courtesy chime -> pause -> next character.
-- Courtesy sound is a five-hit polyphonic `tuk-tuk / tu-ru-tu` chime, deliberately unlike Morse.
-- Spoken character confirmation continues throughout character-learning recognition rounds.
-- Course character speed remains 15 WPM.
-- CW remains generated as smooth sine-wave keying with raised amplitude ramps.
+## v0.5 fixes
 
-## Voice packs
-Keep the audio exactly where it already is. The app tries `core/course`, generated-folder names with underscores/hyphens/spaces, and direct `assets/voices` layouts automatically.
+- Visible version badge in the UI.
+- Lesson cards render immediately; voice-path discovery can no longer block the course UI.
+- Voice assets resolve lazily and support the existing generated folder layouts without moving files.
+- The first successful Core/Course root is remembered and reused.
+- Course remains at 15 WPM.
+- Familiarization timing: CW → pause → reveal + spoken character → short pause → CW confirmation → courtesy tone → pause → next character.
+- Courtesy tone restored to the softer two-note version.
+- Pure sine CW with smooth raised-cosine amplitude ramps remains unchanged.
+
+No voice folders need to be moved for this version.
