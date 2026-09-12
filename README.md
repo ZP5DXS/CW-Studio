@@ -1,48 +1,36 @@
-# Morse Practice · CW Studio v1
+# Morse Practice · CW Studio v2
 
-Static GitHub Pages app. No backend.
+Static GitHub Pages application for the Learn CW course, custom CW audio/video sessions and head-copy practice.
 
-## Design decisions
-- **Learn CW is fixed and non-editable.** 20 curated lessons.
-- **Create Session is separate.** Familiarization is limited to A–Z / 0–9; Recognition and Marathon support broader content.
-- No dots/dashes are shown in the UI.
-- CW is synthesized in-browser with a sine oscillator and smooth 7 ms raised-cosine style attack/release ramps to prevent clicks/harsh edges.
-- Voice is static: Core Voice Pack + Course Voice Pack.
-- Visuals and audio use the same timeline.
+## Voice packs
 
-## Install voice packs
-Copy the generated Core Voice Pack contents into:
+Do **not** reorganize the generated voice folders. Copy the generated pack contents directly into these folders:
 
-`assets/voices/core/`
+```text
+assets/voices/core/
+  es/
+  en/
+  voice_index.json
+  manifest.json            (optional for the app)
 
-Copy the generated Course Voice Pack contents into:
-
-`assets/voices/course/`
-
-The app expects these index files:
-- `assets/voices/core/voice_index.json`
-- `assets/voices/course/course_voice_index.json`
-
-## Run locally
-Use a local HTTP server (ES modules and fetch do not work reliably via file://):
-
-```powershell
-py -m http.server 8000
+assets/voices/course/
+  es/
+  en/
+  course_voice_index.json
+  course_voice_manifest.json   (optional for the app)
+  curriculum_course.json       (optional for the app)
 ```
 
-Then open `http://localhost:8000`.
+The app also contains a path fallback for the critical course clips and A-Z/0-9, so Learn CW can still find them if an index JSON was renamed or omitted.
 
-## Mnemonics
-Reserved locations:
-- `assets/mnemonics/es/`
-- `assets/mnemonics/en/`
+## Main v2 changes
 
-Mnemonics are shown only during familiarization of individual letters/numbers. They are not used for callsigns, words, abbreviations, or QSO sequences.
-
-## Export
-- WAV: offline render.
-- MP3: offline render through lamejs loaded from CDN.
-- WebM: visual/audio architecture is prepared; real-time capture exporter should be added next.
-
-## Course v1 sequence
-TEA → NIM → SOR → KDU → GWH → LPF → BVC → YXJ → QZ → consolidation → 1–0 → callsigns → operating vocabulary → QSO.
+- Learn CW course is fixed and non-editable, starts at 15 WPM.
+- Actual voice-file duration is measured before building a lesson, keeping CW, narration and visuals aligned.
+- Course progress and current lesson are stored in `localStorage`.
+- Previous/Next lesson navigation.
+- Custom Session rebuilt as a 4-step guided wizard.
+- Familiarization stays limited to letters/numbers and uses mnemonic visual slots; no dots/dashes are shown.
+- Metadata is embedded in WAV/MP3 exports; no separate metadata download button.
+- Video export records the canvas + generated audio into `.webm` in real time.
+- CW remains pure sine-wave audio with smooth amplitude ramps to avoid clicks and harsh keying artifacts.

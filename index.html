@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Morse Practice · CW Studio</title>
-  <meta name="description" content="Generate CW practice sessions, Learn CW lessons, audio and video — by ZP5DXS." />
+  <meta name="description" content="Learn CW and create custom Morse code practice audio and video — by ZP5DXS." />
   <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
@@ -32,74 +32,86 @@
 
     <main>
       <section id="coursePanel" class="panel active">
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">FIXED COURSE · NO EDITING</div>
-            <h2>Learn CW</h2>
-            <p>20 guided lessons. Hear → Associate → Recognize → Combine → Understand → Copy.</p>
-          </div>
-          <div class="course-meta">18 WPM character speed · 10–15 min/day</div>
+        <div class="section-head compact-head">
+          <div><h2>Learn CW</h2><p>Choose a lesson and continue from where you left off.</p></div>
+          <div class="course-meta"><span id="courseProgressText">0 / 20 completed</span></div>
         </div>
+        <div class="course-progress"><div id="courseProgressBar"></div></div>
         <div id="lessonGrid" class="lesson-grid"></div>
+        <div class="course-nav">
+          <button id="prevLessonBtn">← Previous</button>
+          <div id="currentLessonLabel">Lesson 01</div>
+          <button id="nextLessonBtn" class="primary">Next →</button>
+        </div>
       </section>
 
       <section id="studioPanel" class="panel">
-        <div class="section-head">
-          <div><div class="eyebrow">CUSTOM AUDIO / VIDEO</div><h2>Create Session</h2><p>Build a practice session without changing the fixed Learn CW course.</p></div>
+        <div class="section-head compact-head">
+          <div><h2>Create Session</h2><p>A guided builder. Pick a goal, choose content, then fine-tune only what matters.</p></div>
         </div>
-        <div class="builder-grid">
-          <div class="card">
-            <h3>Training</h3>
-            <div class="checks">
-              <label><input type="checkbox" id="modeFam" checked> Familiarization</label>
-              <label><input type="checkbox" id="modeRec" checked> Recognition</label>
-              <label><input type="checkbox" id="modeMar"> Marathon</label>
+
+        <div class="wizard" id="sessionWizard">
+          <div class="wizard-steps">
+            <button class="wizard-step active" data-step="1"><span>1</span>Goal</button>
+            <button class="wizard-step" data-step="2"><span>2</span>Content</button>
+            <button class="wizard-step" data-step="3"><span>3</span>Sound</button>
+            <button class="wizard-step" data-step="4"><span>4</span>Length</button>
+          </div>
+
+          <section class="wizard-panel active" data-wizard-panel="1">
+            <div class="wizard-copy"><div class="eyebrow">STEP 1</div><h3>What do you want to train?</h3><p>You can combine familiarization and recognition in the same session.</p></div>
+            <div class="choice-grid mode-grid">
+              <button class="choice selected" data-mode="familiarization"><strong>Familiarize</strong><span>Learn letters and numbers with strong visual support.</span></button>
+              <button class="choice selected" data-mode="recognition"><strong>Recognize</strong><span>Hear first, answer in your head, then reveal.</span></button>
+              <button class="choice" data-mode="marathon"><strong>Marathon</strong><span>Continuous listening with minimal interruption.</span></button>
             </div>
-            <p class="hint">Familiarization is intentionally limited to letters and numbers and may use mnemonic visuals. Recognition and Marathon support the full content set.</p>
-          </div>
-          <div class="card">
-            <h3>Content</h3>
-            <select id="contentSelect" multiple size="8">
-              <option value="letters" selected>Letters</option>
-              <option value="numbers">Numbers</option>
-              <option value="alnum">Letters + Numbers</option>
-              <option value="punctuation">Punctuation</option>
-              <option value="prosigns">Prosigns</option>
-              <option value="abbreviations">CW Abbreviations</option>
-              <option value="callsigns">Callsigns</option>
-              <option value="prefixes">Prefixes</option>
-              <option value="rst">RST</option>
-              <option value="qso">QSO</option>
-              <option value="words">Words</option>
-              <option value="custom">Custom Text</option>
-            </select>
-            <textarea id="customText" placeholder="Custom text…"></textarea>
-          </div>
-          <div class="card">
-            <h3>CW</h3>
-            <label>Character speed <span id="wpmValue">18</span> WPM<input id="wpmRange" type="range" min="8" max="35" value="18"></label>
-            <label>Effective speed <span id="effValue">10</span> WPM<input id="effRange" type="range" min="3" max="35" value="10"></label>
-            <label>Tone <span id="toneValue">700</span> Hz<input id="toneRange" type="range" min="350" max="1000" step="10" value="700"></label>
-            <label><input id="toneVariation" type="checkbox"> Vary tone by item</label>
-          </div>
-          <div class="card">
-            <h3>Recognition</h3>
-            <label>Answer delay <span id="delayValue">1.5</span>s<input id="delayRange" type="range" min="0.5" max="4" step="0.1" value="1.5"></label>
-            <label><input id="variableRecognition" type="checkbox"> Variable-speed recognition</label>
-            <p class="hint">Variable mode: same item at 15 → 18 → 20 WPM, answer voice, then base-speed CW.</p>
-          </div>
-          <div class="card">
-            <h3>Session</h3>
-            <label>Duration<select id="durationSelect"><option value="300">5 min</option><option value="600">10 min</option><option value="900" selected>15 min</option><option value="1800">30 min</option><option value="3600">1 hour</option><option value="7200">2 hours</option></select></label>
-            <label>Narration<select id="narrationSelect"><option value="guided">Guided</option><option value="minimal">Minimal</option></select></label>
-            <label>Seed<input id="seedInput" value="MP-DEMO-001"></label>
+          </section>
+
+          <section class="wizard-panel" data-wizard-panel="2">
+            <div class="wizard-copy"><div class="eyebrow">STEP 2</div><h3>Choose the material</h3><p id="contentHelp">Familiarization uses only letters and numbers. Recognition can use richer radio content.</p></div>
+            <div id="contentChoices" class="choice-grid content-grid"></div>
+            <div id="customTextWrap" class="custom-wrap hidden"><textarea id="customText" placeholder="Paste your own text here…"></textarea></div>
+          </section>
+
+          <section class="wizard-panel" data-wizard-panel="3">
+            <div class="wizard-copy"><div class="eyebrow">STEP 3</div><h3>How should it sound?</h3><p>Start simple. Advanced options stay out of the way unless you need them.</p></div>
+            <div class="sound-grid">
+              <div class="slider-card"><label>Speed <strong><span id="wpmValue">15</span> WPM</strong><input id="wpmRange" type="range" min="8" max="35" value="15"></label></div>
+              <div class="slider-card"><label>Tone <strong><span id="toneValue">700</span> Hz</strong><input id="toneRange" type="range" min="350" max="1000" step="10" value="700"></label></div>
+            </div>
+            <button id="advancedToggle" class="ghost">Advanced ▾</button>
+            <div id="advancedOptions" class="advanced-options hidden">
+              <label>Effective speed <span id="effValue">9</span> WPM<input id="effRange" type="range" min="3" max="35" value="9"></label>
+              <label>Answer delay <span id="delayValue">1.5</span>s<input id="delayRange" type="range" min="0.5" max="4" step="0.1" value="1.5"></label>
+              <label class="inline-check"><input id="variableRecognition" type="checkbox"> Variable-speed recognition</label>
+              <label class="inline-check"><input id="toneVariation" type="checkbox"> Slight tone variation between items</label>
+            </div>
+          </section>
+
+          <section class="wizard-panel" data-wizard-panel="4">
+            <div class="wizard-copy"><div class="eyebrow">STEP 4</div><h3>How long?</h3><p>Generate a short drill or a long listening session.</p></div>
+            <div class="duration-grid">
+              <button class="duration-choice" data-duration="300">5 min</button>
+              <button class="duration-choice" data-duration="600">10 min</button>
+              <button class="duration-choice selected" data-duration="900">15 min</button>
+              <button class="duration-choice" data-duration="1800">30 min</button>
+              <button class="duration-choice" data-duration="3600">1 hour</button>
+              <button class="duration-choice" data-duration="7200">2 hours</button>
+            </div>
+            <div class="seed-row"><label>Session seed <input id="seedInput" value="MP-DEMO-001"></label></div>
+          </section>
+
+          <div class="wizard-nav">
+            <button id="wizardBack" class="ghost">Back</button>
+            <div class="grow"></div>
+            <button id="wizardNext" class="primary">Continue</button>
+            <button id="buildSessionBtn" class="primary hidden">Build Session</button>
           </div>
         </div>
-        <div class="actions"><button id="buildSessionBtn" class="primary">Build Session</button></div>
       </section>
 
       <section id="bonusPanel" class="panel">
-        <div class="section-head"><div><div class="eyebrow">POST-COURSE</div><h2>Head Copy Training</h2><p>Fixed challenge formats for consolidation after Learn CW.</p></div></div>
+        <div class="section-head compact-head"><div><h2>Head Copy Training</h2><p>Continue after the course with focused listening challenges.</p></div></div>
         <div id="bonusGrid" class="bonus-grid"></div>
       </section>
 
@@ -115,10 +127,9 @@
           <div class="grow"></div>
           <button id="wavBtn">Export WAV</button>
           <button id="mp3Btn">Export MP3</button>
-          <button id="videoBtn">Export WebM</button>
-          <button id="metaBtn">Metadata</button>
+          <button id="videoBtn">Export Video</button>
         </div>
-        <div class="note">Video export is rendered in real time in v1. WAV/MP3 are rendered offline. CW uses a sine oscillator with a smooth raised-cosine envelope to avoid clicks and harsh digital edges.</div>
+        <div id="assetStatus" class="asset-status">Checking voice packs…</div>
       </section>
     </main>
   </div>
