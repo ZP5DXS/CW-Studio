@@ -1,4 +1,4 @@
-// CW Studio v0.7 - resilient, non-blocking voice resolver.
+// CW Studio v0.8 - resilient, non-blocking voice resolver.
 // The UI never waits for directory probing. Audio is resolved lazily when needed,
 // and the first successful root is remembered for the rest of the session.
 export class VoiceEngine{
@@ -28,6 +28,9 @@ export class VoiceEngine{
         'assets/voices/Practice voice pack',
         'assets/voices/Morse Practice Voice Pack',
         'assets/voices/Practice Voice Pack',
+        'assets/voices/morse practice voicepack',
+        'assets/voices/morse practice voice pack',
+        'assets/voices/voicepack',
         'assets/voices'
       ],
       course:[
@@ -50,13 +53,17 @@ export class VoiceEngine{
         'assets/voices/Course voice pack',
         'assets/voices/Morse Practice Course Voice Pack',
         'assets/voices/Course Voice Pack',
+        'assets/voices/morse practice course voicepack',
+        'assets/voices/morse practice course voice pack',
+        'assets/voices/course_voicepack',
+        'assets/voices/course-voicepack',
         'assets/voices'
       ]
     };
   }
 
   async init(){
-    // v0.7: no startup probing. Nothing in the interface waits for voice assets.
+    // v0.8: no startup probing. Nothing in the interface waits for voice assets.
     // Audio roots are discovered lazily only when a clip is actually requested.
     return {core:true,course:true};
   }
@@ -171,6 +178,7 @@ export class VoiceEngine{
         const b=await this.fetchDecode(c.url,ctx);
         this.cache.set(key,b);
         if(c.kind==='core')this.coreRoot=c.root;else this.courseRoot=c.root;
+        this.lastResolved={id,url:c.url,kind:c.kind,root:c.root};
         return b;
       }catch{}
     }
@@ -182,5 +190,5 @@ export class VoiceEngine{
     const ctx=await this.ensureDecodeCtx();const b=await this.buffer(ctx,id,lang,gender);return b?.duration||0;
   }
 
-  roots(){return {core:this.coreRoot,course:this.courseRoot}}
+  roots(){return {core:this.coreRoot,course:this.courseRoot,last:this.lastResolved||null}}
 }

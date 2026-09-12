@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=7';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=8';
 
 export class Playback{
   constructor(voice){
@@ -71,23 +71,44 @@ export class Playback{
 
     onStatus(`loading ${needed.size} voice clips…`);
 
-    let loaded=0,missing=0;
+    const fallbackId=(id)=>{
+      if(/^lesson_\d\d_intro$/.test(id)) return 'lesson_welcome_generic';
+      if(/^lesson_\d\d_outro$/.test(id)) return 'daily_course_outro';
+      if(id==='lesson_20_final_challenge') return 'recognition_intro';
+      return null;
+    };
+
+    let loaded=0,missing=0,fallbacks=0;
     for(const id of needed.keys()){
-      const b=await this.voice.buffer(ctx,id,lang,gender);
+      let b=await this.voice.buffer(ctx,id,lang,gender);
+      if(!b){
+        const fb=fallbackId(id);
+        if(fb){
+          b=await this.voice.buffer(ctx,fb,lang,gender);
+          if(b) fallbacks++;
+        }
+      }
       needed.set(id,b||null);
       if(b) loaded++; else missing++;
     }
 
     const roots=this.voice.roots();
     if(missing){
-      onStatus(`voice ${loaded}/${needed.size} loaded · ${missing} missing`);
+      onStatus(`voice ${loaded}/${needed.size} loaded · ${missing} missing${fallbacks?` · ${fallbacks} fallback`:''}`);
       console.warn('Missing voice clips:', [...needed].filter(([,b])=>!b).map(([id])=>id));
     }else{
-      onStatus(`voice ready · ${loaded} clips${roots.core?` · Core: ${roots.core}`:''}${roots.course?` · Course: ${roots.course}`:''}`);
+      onStatus(`voice ready · ${loaded} clips${fallbacks?` · ${fallbacks} fallback`:''}${roots.core?` · Core: ${roots.core}`:''}${roots.course?` · Course: ${roots.course}`:''}`);
     }
 
-    // Establish base only AFTER voice loading is complete.
-    const base=ctx.currentTime+.22;
+    // A second explicit resume after network/decode work matters in some browsers:
+    // the context can auto-suspend while voice assets are loading.
+    try{await ctx.resume()}catch{}
+    if(ctx.state!=='running'){
+      onStatus(`audio context is ${ctx.state} · click Play once more`);
+    }
+
+    // Establish base only AFTER voice loading is complete and context is running.
+    const base=ctx.currentTime+.35;
 
     for(const e of tl.events){
       if(e.start>endAt) continue;

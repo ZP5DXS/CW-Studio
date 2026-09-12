@@ -1,10 +1,10 @@
-import {VoiceEngine} from './voice-engine.js?v=7';
-import {Playback} from './playback.js?v=7';
-import {VisualEngine} from './visual-engine.js?v=7';
-import {COURSE,buildLesson} from './course-engine.js?v=7';
-import {buildCustom} from './session-builder.js?v=7';
-import {exportWav,exportMp3,download} from './export-engine.js?v=7';
-import {exportVideo} from './video-export.js?v=7';
+import {VoiceEngine} from './voice-engine.js?v=8';
+import {Playback} from './playback.js?v=8';
+import {VisualEngine} from './visual-engine.js?v=8';
+import {COURSE,buildLesson} from './course-engine.js?v=8';
+import {buildCustom} from './session-builder.js?v=8';
+import {exportWav,exportMp3,download} from './export-engine.js?v=8';
+import {exportVideo} from './video-export.js?v=8';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 window.addEventListener('error',e=>{const el=document.querySelector('#assetStatus');if(el){el.textContent=`Startup error: ${e.message}`;el.classList.add('warning')}console.error(e.error||e.message)});
@@ -56,13 +56,13 @@ $$('.duration-choice').forEach(b=>b.onclick=()=>{selectedDuration=+b.dataset.dur
 $('#buildSessionBtn').onclick=()=>{timeline=buildCustom({familiarization:selectedModes.has('familiarization'),recognition:selectedModes.has('recognition'),marathon:selectedModes.has('marathon'),contents:[...selectedContents],customText:$('#customText').value,wpm:+$('#wpmRange').value,eff:+$('#effRange').value,tone:+$('#toneRange').value,delay:+$('#delayRange').value,variableRecognition:$('#variableRecognition').checked,toneVariation:$('#toneVariation').checked,duration:selectedDuration,seed:$('#seedInput').value});$('#statusLabel').textContent='CUSTOM SESSION';drawLoop(0)};
 
 async function play(limit=null){
-  $('#assetStatus').textContent='CW Studio v0.7 · preparing audio…';
+  $('#assetStatus').textContent='CW Studio v0.8 · preparing audio…';
   await playback.play(timeline,{
     lang:$('#languageSelect').value,
     gender:$('#voiceSelect').value,
     tone:+$('#toneRange').value,
     limit,
-    onStatus:(s)=>{ $('#assetStatus').textContent='CW Studio v0.7 · '+s; },
+    onStatus:(s)=>{ $('#assetStatus').textContent='CW Studio v0.8 · '+s; },
     onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
     onEnd:()=>{drawLoop(limit||timeline.duration);if(!limit)completeCurrent()}
   })
@@ -73,15 +73,15 @@ $('#mp3Btn').onclick=async()=>{const b=await exportMp3(timeline,voice,{lang:$('#
 $('#videoBtn').onclick=async()=>{const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;try{const b=await exportVideo(timeline,voice,visual,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value,onProgress:p=>btn.textContent=`Video ${Math.round(p*100)}%`});download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`)}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;drawLoop(0)}};
 
 renderLessons();
-$('#assetStatus').textContent='CW Studio v0.7 · interface ready · loading lesson audio in background';
+$('#assetStatus').textContent='CW Studio v0.8 · interface ready · loading lesson audio in background';
 setTimeout(()=>{
   loadLesson(currentLesson).then(()=>{
     const r=voice.roots();
-    $('#assetStatus').textContent=`CW Studio v0.7 · ${r.core||r.course?'audio path resolved':'lesson ready; voice will resolve when played'}${r.core?` · Core: ${r.core}`:''}${r.course?` · Course: ${r.course}`:''}`;
+    $('#assetStatus').textContent=`CW Studio v0.8 · ${r.core||r.course?'audio path resolved':'lesson ready; voice will resolve when played'}${r.core?` · Core: ${r.core}`:''}${r.course?` · Course: ${r.course}`:''}`;
     $('#assetStatus').classList.remove('warning');
   }).catch(err=>{
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v0.7 · lesson UI ready · audio issue: ${err.message||err}`;
+    $('#assetStatus').textContent=`CW Studio v0.8 · lesson UI ready · audio issue: ${err.message||err}`;
     $('#assetStatus').classList.add('warning');
   });
 },0);
