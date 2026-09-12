@@ -1,13 +1,14 @@
-# Morse Practice · CW Studio v0.6
+# Morse Practice · CW Studio v0.7
 
-Stability build.
+Voice playback stability build.
 
-- UI and 20 lesson cards render immediately.
-- No voice-pack probing blocks startup.
-- Voice assets resolve lazily only when a clip is needed.
-- MP3 encoder loads only when Export MP3 is pressed.
-- Visible v0.6 badge and runtime status line.
-- Course remains fixed at 15 WPM.
-- Existing `assets/voices/` folders are left untouched.
+What changed:
+- Voice clips are preloaded and decoded before live playback starts.
+- The live timeline base is created only after voice loading completes.
+- AudioContext is explicitly resumed from the Play button path.
+- The generated Core/Course JSON indexes are loaded lazily and preferred when found.
+- The status line shows how many spoken clips loaded or are missing.
+- Export behavior is unchanged.
+- Existing audio folders do not need to be moved.
 
-Replace only `index.html`, `css/`, and `js/`.
+Replace only `index.html`, `css/`, and `js/`. Keep `assets/voices/` exactly as it is.

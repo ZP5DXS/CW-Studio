@@ -1,4 +1,4 @@
-// CW Studio v0.6 - resilient, non-blocking voice resolver.
+// CW Studio v0.7 - resilient, non-blocking voice resolver.
 // The UI never waits for directory probing. Audio is resolved lazily when needed,
 // and the first successful root is remembered for the rest of the session.
 export class VoiceEngine{
@@ -11,6 +11,8 @@ export class VoiceEngine{
       core:[
         'assets/voices/core',
         'assets/voices/practice voice pack',
+        './assets/voices/practice voice pack',
+        'assets/voices/Practice voice pack',
         'assets/voices/Practice Voice Pack',
         'assets/voices/core/morse_practice_voicepack',
         'assets/voices/core/morse-practice-voicepack',
@@ -22,6 +24,8 @@ export class VoiceEngine{
         'assets/voices/practice_voice_pack',
         'assets/voices/practice-voice-pack',
         'assets/voices/practice voice pack',
+        './assets/voices/practice voice pack',
+        'assets/voices/Practice voice pack',
         'assets/voices/Morse Practice Voice Pack',
         'assets/voices/Practice Voice Pack',
         'assets/voices'
@@ -29,6 +33,8 @@ export class VoiceEngine{
       course:[
         'assets/voices/course',
         'assets/voices/course voice pack',
+        './assets/voices/course voice pack',
+        'assets/voices/Course voice pack',
         'assets/voices/Course Voice Pack',
         'assets/voices/course/morse_practice_course_voicepack',
         'assets/voices/course/morse-practice-course-voicepack',
@@ -40,6 +46,8 @@ export class VoiceEngine{
         'assets/voices/course_voice_pack',
         'assets/voices/course-voice-pack',
         'assets/voices/course voice pack',
+        './assets/voices/course voice pack',
+        'assets/voices/Course voice pack',
         'assets/voices/Morse Practice Course Voice Pack',
         'assets/voices/Course Voice Pack',
         'assets/voices'
@@ -48,7 +56,7 @@ export class VoiceEngine{
   }
 
   async init(){
-    // v0.6: no startup probing. Nothing in the interface waits for voice assets.
+    // v0.7: no startup probing. Nothing in the interface waits for voice assets.
     // Audio roots are discovered lazily only when a clip is actually requested.
     return {core:true,course:true};
   }
@@ -108,6 +116,26 @@ export class VoiceEngine{
     return rel?`${root}/${rel}`:null;
   }
 
+  async lazyLoadIndexes(){
+    if(this._indexesTried)return;
+    this._indexesTried=true;
+
+    // Indexes are optional, but when they exist they are the most reliable source
+    // because they were generated together with the MP3 pack.
+    for(const root of this.rootCandidates.core){
+      const j=await this.tryJson(`${root}/voice_index.json`);
+      if(j){this.coreIndex=j;this.coreRoot=root;break}
+      const m=await this.tryJson(`${root}/manifest.json`);
+      if(m && !this.coreRoot)this.coreRoot=root;
+    }
+    for(const root of this.rootCandidates.course){
+      const j=await this.tryJson(`${root}/course_voice_index.json`);
+      if(j){this.courseIndex=j;this.courseRoot=root;break}
+      const j2=await this.tryJson(`${root}/voice_index.json`);
+      if(j2){this.courseIndex=j2;this.courseRoot=root;break}
+    }
+  }
+
   candidateUrls(id,lang,gender){
     const out=[];
     const push=(kind,root,url)=>{if(url)out.push({kind,root,url})};
@@ -135,6 +163,7 @@ export class VoiceEngine{
   }
 
   async buffer(ctx,id,lang,gender){
+    await this.lazyLoadIndexes();
     const key=`${lang}|${gender}|${id}`;if(this.cache.has(key))return this.cache.get(key);
     const candidates=this.candidateUrls(id,lang,gender);
     for(const c of candidates){
