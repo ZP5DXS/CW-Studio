@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Morse Practice · CW Studio</title>
+  <meta name="description" content="Generate CW practice sessions, Learn CW lessons, audio and video — by ZP5DXS." />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">MORSE PRACTICE</div>
+        <h1>CW Studio</h1>
+      </div>
+      <div class="top-controls">
+        <label>Language
+          <select id="languageSelect"><option value="es">Español</option><option value="en">English</option></select>
+        </label>
+        <label>Voice
+          <select id="voiceSelect"><option value="female">Female</option><option value="male">Male</option></select>
+        </label>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Main sections">
+      <button class="tab active" data-tab="course">Learn CW</button>
+      <button class="tab" data-tab="studio">Create Session</button>
+      <button class="tab" data-tab="bonus">Head Copy</button>
+    </nav>
+
+    <main>
+      <section id="coursePanel" class="panel active">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">FIXED COURSE · NO EDITING</div>
+            <h2>Learn CW</h2>
+            <p>20 guided lessons. Hear → Associate → Recognize → Combine → Understand → Copy.</p>
+          </div>
+          <div class="course-meta">18 WPM character speed · 10–15 min/day</div>
+        </div>
+        <div id="lessonGrid" class="lesson-grid"></div>
+      </section>
+
+      <section id="studioPanel" class="panel">
+        <div class="section-head">
+          <div><div class="eyebrow">CUSTOM AUDIO / VIDEO</div><h2>Create Session</h2><p>Build a practice session without changing the fixed Learn CW course.</p></div>
+        </div>
+        <div class="builder-grid">
+          <div class="card">
+            <h3>Training</h3>
+            <div class="checks">
+              <label><input type="checkbox" id="modeFam" checked> Familiarization</label>
+              <label><input type="checkbox" id="modeRec" checked> Recognition</label>
+              <label><input type="checkbox" id="modeMar"> Marathon</label>
+            </div>
+            <p class="hint">Familiarization is intentionally limited to letters and numbers and may use mnemonic visuals. Recognition and Marathon support the full content set.</p>
+          </div>
+          <div class="card">
+            <h3>Content</h3>
+            <select id="contentSelect" multiple size="8">
+              <option value="letters" selected>Letters</option>
+              <option value="numbers">Numbers</option>
+              <option value="alnum">Letters + Numbers</option>
+              <option value="punctuation">Punctuation</option>
+              <option value="prosigns">Prosigns</option>
+              <option value="abbreviations">CW Abbreviations</option>
+              <option value="callsigns">Callsigns</option>
+              <option value="prefixes">Prefixes</option>
+              <option value="rst">RST</option>
+              <option value="qso">QSO</option>
+              <option value="words">Words</option>
+              <option value="custom">Custom Text</option>
+            </select>
+            <textarea id="customText" placeholder="Custom text…"></textarea>
+          </div>
+          <div class="card">
+            <h3>CW</h3>
+            <label>Character speed <span id="wpmValue">18</span> WPM<input id="wpmRange" type="range" min="8" max="35" value="18"></label>
+            <label>Effective speed <span id="effValue">10</span> WPM<input id="effRange" type="range" min="3" max="35" value="10"></label>
+            <label>Tone <span id="toneValue">700</span> Hz<input id="toneRange" type="range" min="350" max="1000" step="10" value="700"></label>
+            <label><input id="toneVariation" type="checkbox"> Vary tone by item</label>
+          </div>
+          <div class="card">
+            <h3>Recognition</h3>
+            <label>Answer delay <span id="delayValue">1.5</span>s<input id="delayRange" type="range" min="0.5" max="4" step="0.1" value="1.5"></label>
+            <label><input id="variableRecognition" type="checkbox"> Variable-speed recognition</label>
+            <p class="hint">Variable mode: same item at 15 → 18 → 20 WPM, answer voice, then base-speed CW.</p>
+          </div>
+          <div class="card">
+            <h3>Session</h3>
+            <label>Duration<select id="durationSelect"><option value="300">5 min</option><option value="600">10 min</option><option value="900" selected>15 min</option><option value="1800">30 min</option><option value="3600">1 hour</option><option value="7200">2 hours</option></select></label>
+            <label>Narration<select id="narrationSelect"><option value="guided">Guided</option><option value="minimal">Minimal</option></select></label>
+            <label>Seed<input id="seedInput" value="MP-DEMO-001"></label>
+          </div>
+        </div>
+        <div class="actions"><button id="buildSessionBtn" class="primary">Build Session</button></div>
+      </section>
+
+      <section id="bonusPanel" class="panel">
+        <div class="section-head"><div><div class="eyebrow">POST-COURSE</div><h2>Head Copy Training</h2><p>Fixed challenge formats for consolidation after Learn CW.</p></div></div>
+        <div id="bonusGrid" class="bonus-grid"></div>
+      </section>
+
+      <section class="player-section">
+        <div class="visual-wrap">
+          <canvas id="visualCanvas" width="1280" height="720"></canvas>
+          <div class="visual-overlay"><span id="statusLabel">READY</span><span id="timeLabel">00:00 / 00:00</span></div>
+        </div>
+        <div class="transport">
+          <button id="playBtn" class="primary">Play</button>
+          <button id="stopBtn">Stop</button>
+          <button id="previewBtn">30s Preview</button>
+          <div class="grow"></div>
+          <button id="wavBtn">Export WAV</button>
+          <button id="mp3Btn">Export MP3</button>
+          <button id="videoBtn">Export WebM</button>
+          <button id="metaBtn">Metadata</button>
+        </div>
+        <div class="note">Video export is rendered in real time in v1. WAV/MP3 are rendered offline. CW uses a sine oscillator with a smooth raised-cosine envelope to avoid clicks and harsh digital edges.</div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

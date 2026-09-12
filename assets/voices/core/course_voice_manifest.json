@@ -1,0 +1,726 @@
+{
+  "voices": {
+    "es": {
+      "female": "es-MX-DaliaNeural",
+      "male": "es-MX-JorgeNeural"
+    },
+    "en": {
+      "female": "en-US-EmmaNeural",
+      "male": "en-US-AndrewNeural"
+    }
+  },
+  "rate": "-7%",
+  "clips": [
+    {
+      "category": "lesson_intros",
+      "id": "lesson_01_intro",
+      "text": {
+        "es": "Bienvenido a la lección uno de Morse Practice. Hoy conocerás tus primeros tres sonidos de CW: T, E y A. No memorices puntos y rayas. Escucha cada carácter como una unidad completa. Las imágenes son solamente una ayuda temporal para crear la primera asociación.",
+        "en": "Welcome to lesson one of Morse Practice. Today you will learn your first three CW sounds: T, E, and A. Do not memorize dots and dashes. Hear each character as one complete sound. The images are only a temporary aid to build the first association."
+      },
+      "lesson": 1
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_01_outro",
+      "text": {
+        "es": "Terminaste tu primera lección. Hoy conociste T, E y A. No importa si todavía necesitas pensar antes de responder. Tu objetivo por ahora es reconocer cada sonido con calma. Buen trabajo.",
+        "en": "You completed your first lesson. Today you learned T, E, and A. It is fine if you still need a moment before answering. For now, simply recognize each sound calmly. Good work."
+      },
+      "lesson": 1
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_02_intro",
+      "text": {
+        "es": "Bienvenido a la lección dos. Hoy incorporaremos N, I y M, y los mezclaremos con T, E y A. Intenta responder antes de escuchar la voz, pero no te detengas si pierdes un carácter.",
+        "en": "Welcome to lesson two. Today we will add N, I, and M, and mix them with T, E, and A. Try to answer before you hear the voice, but do not stop if you miss a character."
+      },
+      "lesson": 2
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_02_outro",
+      "text": {
+        "es": "Ya reconoces seis sonidos diferentes. Lo importante no es acertarlos todos, sino continuar escuchando sin romper el ritmo.",
+        "en": "You now recognize six different sounds. The important thing is not getting every one correct, but continuing to listen without breaking the rhythm."
+      },
+      "lesson": 2
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_03_intro",
+      "text": {
+        "es": "Bienvenido a la lección tres. Hoy agregaremos S, O y R. Por primera vez comenzarás a escuchar pequeños grupos y combinaciones. Mantén la atención en el sonido.",
+        "en": "Welcome to lesson three. Today we will add S, O, and R. For the first time you will begin hearing short groups and combinations. Keep your attention on the sound."
+      },
+      "lesson": 3
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_03_outro",
+      "text": {
+        "es": "Ya tienes nueve caracteres disponibles. A partir de ahora empezaremos a combinarlos con más frecuencia para que CW deje de sentirse como sonidos aislados.",
+        "en": "You now have nine characters available. From now on we will combine them more often so CW begins to feel less like isolated sounds."
+      },
+      "lesson": 3
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_04_intro",
+      "text": {
+        "es": "Bienvenido a la lección cuatro. Hoy conocerás K, D y U. Las ayudas visuales seguirán apareciendo para los caracteres nuevos, pero los sonidos que ya conoces dependerán cada vez más de tu oído.",
+        "en": "Welcome to lesson four. Today you will learn K, D, and U. Visual aids will still appear for new characters, but familiar sounds will rely more and more on your ear."
+      },
+      "lesson": 4
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_04_outro",
+      "text": {
+        "es": "Ya estás trabajando con doce caracteres. Si un sonido tarda en aparecer en tu mente, no lo analices demasiado. Déjalo pasar y continúa.",
+        "en": "You are now working with twelve characters. If a sound takes too long to come to mind, do not overanalyze it. Let it go and continue."
+      },
+      "lesson": 4
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_05_intro",
+      "text": {
+        "es": "Bienvenido a la lección cinco. Hoy incorporaremos G, W y H. Además del reconocimiento individual, escucharás más grupos de dos y tres caracteres.",
+        "en": "Welcome to lesson five. Today we will add G, W, and H. Along with individual recognition, you will hear more groups of two and three characters."
+      },
+      "lesson": 5
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_05_outro",
+      "text": {
+        "es": "Empieza a confiar en la primera respuesta que aparece al escuchar el sonido, sin reconstruirlo mentalmente.",
+        "en": "Begin trusting the first answer that comes to mind when you hear the sound, without mentally reconstructing it."
+      },
+      "lesson": 5
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_06_intro",
+      "text": {
+        "es": "Bienvenido a la lección seis. Hoy conocerás L, P y F. Ya tienes suficientes caracteres para comenzar a practicar reconocimiento de forma más continua.",
+        "en": "Welcome to lesson six. Today you will learn L, P, and F. You now have enough characters to practice recognition more continuously."
+      },
+      "lesson": 6
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_06_outro",
+      "text": {
+        "es": "Ya conoces dieciocho letras. A partir de la próxima lección las ayudas serán más breves y el reconocimiento tendrá mayor protagonismo.",
+        "en": "You now know eighteen letters. Starting with the next lesson, visual aids will be briefer and recognition will take a larger role."
+      },
+      "lesson": 6
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_07_intro",
+      "text": {
+        "es": "Bienvenido a la lección siete. Hoy agregaremos B, V y C. Las imágenes aparecerán solamente al presentar los nuevos caracteres. Después tendrás que confiar en lo que escuchas.",
+        "en": "Welcome to lesson seven. Today we will add B, V, and C. Images will appear only when new characters are introduced. After that, rely on what you hear."
+      },
+      "lesson": 7
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_07_outro",
+      "text": {
+        "es": "Ya estás muy cerca de completar el alfabeto. No busques perfección; busca respuestas cada vez más directas.",
+        "en": "You are getting very close to completing the alphabet. Do not chase perfection; aim for increasingly direct recognition."
+      },
+      "lesson": 7
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_08_intro",
+      "text": {
+        "es": "Bienvenido a la lección ocho. Hoy conocerás Y, X y J. Esta ronda será un poco más exigente. Si pierdes uno, vuelve inmediatamente al siguiente.",
+        "en": "Welcome to lesson eight. Today you will learn Y, X, and J. This round will be a little more demanding. If you miss one, immediately return to the next."
+      },
+      "lesson": 8
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_08_outro",
+      "text": {
+        "es": "Hoy entrenaste algo tan importante como reconocer: recuperarte rápido después de perder un carácter.",
+        "en": "Today you trained something just as important as recognition: recovering quickly after missing a character."
+      },
+      "lesson": 8
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_09_intro",
+      "text": {
+        "es": "Bienvenido a la lección nueve. Hoy incorporaremos Q y Z. Con ellas completarás las veintiséis letras del alfabeto.",
+        "en": "Welcome to lesson nine. Today we will add Q and Z. With them, you will complete all twenty-six letters of the alphabet."
+      },
+      "lesson": 9
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_09_outro",
+      "text": {
+        "es": "Ya conoces todas las letras. El siguiente paso es hacer que el reconocimiento sea cada vez más natural.",
+        "en": "You now know all the letters. The next step is making recognition increasingly natural."
+      },
+      "lesson": 9
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_10_intro",
+      "text": {
+        "es": "Bienvenido a la lección diez. Hoy no incorporaremos caracteres nuevos. Esta sesión está dedicada a consolidar todo el alfabeto, pasar de caracteres individuales a grupos y mantener el flujo.",
+        "en": "Welcome to lesson ten. Today we will not add any new characters. This session consolidates the full alphabet, moves from individual characters to groups, and develops flow."
+      },
+      "lesson": 10
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_10_outro",
+      "text": {
+        "es": "Completaste la consolidación del alfabeto. En la próxima etapa comenzarás con números, sin dejar de utilizar las letras que ya conoces.",
+        "en": "You completed the alphabet consolidation stage. In the next stage you will begin numbers while continuing to use the letters you already know."
+      },
+      "lesson": 10
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_11_intro",
+      "text": {
+        "es": "Bienvenido a la lección once. Hoy comenzaremos con los números uno, dos y tres. Los aprenderás como sonidos completos, no como secuencias para contar.",
+        "en": "Welcome to lesson eleven. Today we will begin with the numbers one, two, and three. Learn them as complete sounds, not as sequences to count."
+      },
+      "lesson": 11
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_11_outro",
+      "text": {
+        "es": "Desde ahora los números comenzarán a aparecer mezclados con letras para que no desarrolles un modo separado de escucharlos.",
+        "en": "From now on numbers will appear mixed with letters so you do not develop a separate way of listening to them."
+      },
+      "lesson": 11
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_12_intro",
+      "text": {
+        "es": "Bienvenido a la lección doce. Hoy agregaremos cuatro, cinco y seis. También escucharás combinaciones de letras y números cada vez más parecidas a las que aparecen en indicativos.",
+        "en": "Welcome to lesson twelve. Today we will add four, five, and six. You will also hear letter and number combinations that increasingly resemble call signs."
+      },
+      "lesson": 12
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_12_outro",
+      "text": {
+        "es": "Ya puedes reconocer más de la mitad de los números y combinarlos con letras.",
+        "en": "You can now recognize more than half of the numbers and combine them with letters."
+      },
+      "lesson": 12
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_13_intro",
+      "text": {
+        "es": "Bienvenido a la lección trece. Hoy completaremos los números con siete, ocho, nueve y cero. Al finalizar tendrás todo el conjunto alfanumérico necesario para trabajar con indicativos.",
+        "en": "Welcome to lesson thirteen. Today we will complete the numbers with seven, eight, nine, and zero. By the end you will have the complete alphanumeric set needed for call signs."
+      },
+      "lesson": 13
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_13_outro",
+      "text": {
+        "es": "Ya conoces las veintiséis letras y los diez números. La próxima lección cambia el objetivo: comenzarás a retener indicativos completos.",
+        "en": "You now know all twenty-six letters and all ten numbers. The next lesson changes the objective: you will begin retaining complete call signs."
+      },
+      "lesson": 13
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_14_intro",
+      "text": {
+        "es": "Bienvenido a la lección catorce. Hoy no aprenderás símbolos nuevos. Trabajaremos con indicativos reales de distintas regiones. Intenta conservar el indicativo completo en tu mente antes de mirar la respuesta.",
+        "en": "Welcome to lesson fourteen. Today you will not learn any new symbols. We will work with real call signs from different regions. Try to keep the entire call sign in mind before seeing the answer."
+      },
+      "lesson": 14
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_14_outro",
+      "text": {
+        "es": "Acabas de trabajar con una de las unidades más importantes de la radio: el indicativo. En la próxima lección utilizarás lo aprendido para entender una llamada real.",
+        "en": "You just worked with one of the most important units in amateur radio: the call sign. In the next lesson you will use what you learned to understand a real call."
+      },
+      "lesson": 14
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_15_intro",
+      "text": {
+        "es": "Bienvenido a la lección quince. Hoy comienza la parte operativa. Conocerás CQ, DE y K, y al final podrás entender la estructura básica de una llamada general en CW.",
+        "en": "Welcome to lesson fifteen. Today the operating part begins. You will learn CQ, DE, and K, and by the end you will understand the basic structure of a general CW call."
+      },
+      "lesson": 15
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_15_outro",
+      "text": {
+        "es": "Ya puedes comprender una llamada básica. Lo que antes eran caracteres aislados empieza a convertirse en comunicación.",
+        "en": "You can now understand a basic call. What used to be isolated characters is beginning to become communication."
+      },
+      "lesson": 15
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_16_intro",
+      "text": {
+        "es": "Bienvenido a la lección dieciséis. Hoy aprenderás cómo confirmar recepción, cómo funciona un reporte RST y cómo aparece 73 al acercarse el final de un contacto.",
+        "en": "Welcome to lesson sixteen. Today you will learn how to acknowledge reception, how an RST report works, and how 73 appears as a contact approaches its close."
+      },
+      "lesson": 16
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_16_outro",
+      "text": {
+        "es": "Ya puedes reconocer la estructura básica de un reporte de señal. A partir de ahora empezaremos a intercambiar información sobre el operador y su estación.",
+        "en": "You can now recognize the basic structure of a signal report. From now on we will begin exchanging information about the operator and station."
+      },
+      "lesson": 16
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_17_intro",
+      "text": {
+        "es": "Bienvenido a la lección diecisiete. Hoy trabajaremos con NAME, QTH y el prosign BT. El objetivo es empezar a comprender información real dentro de un QSO, no solamente copiar caracteres.",
+        "en": "Welcome to lesson seventeen. Today we will work with NAME, QTH, and the BT prosign. The goal is to understand real information inside a QSO, not merely copy characters."
+      },
+      "lesson": 17
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_17_outro",
+      "text": {
+        "es": "Ahora puedes seguir partes de un intercambio donde un operador indica su nombre y ubicación. En la próxima lección aprenderás señales que controlan y cierran el contacto.",
+        "en": "You can now follow parts of an exchange where an operator gives a name and location. In the next lesson you will learn signals that control and close the contact."
+      },
+      "lesson": 17
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_18_intro",
+      "text": {
+        "es": "Bienvenido a la lección dieciocho. Hoy conocerás KN, AR y SK, y abreviaturas frecuentes como TNX, FER, PSE, AGN y FB. Escucha primero el significado y luego observa cómo aparecen dentro del intercambio.",
+        "en": "Welcome to lesson eighteen. Today you will learn KN, AR, and SK, along with common abbreviations such as TNX, FER, PSE, AGN, and FB. First hear the meaning, then notice how they appear inside an exchange."
+      },
+      "lesson": 18
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_18_outro",
+      "text": {
+        "es": "Ya conoces los elementos esenciales para iniciar, mantener y finalizar un QSO básico. La próxima lección los unirá en una conversación completa.",
+        "en": "You now know the essential elements needed to begin, maintain, and close a basic QSO. The next lesson will bring them together into a complete conversation."
+      },
+      "lesson": 18
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_19_intro",
+      "text": {
+        "es": "Bienvenido a la lección diecinueve. Hoy construiremos un QSO paso a paso: llamada, respuesta, reporte, nombre, ubicación y cierre. Primero escucharás los bloques separados y luego unidos.",
+        "en": "Welcome to lesson nineteen. Today we will build a QSO step by step: call, answer, report, name, location, and close. First you will hear the blocks separately, then together."
+      },
+      "lesson": 19
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_19_outro",
+      "text": {
+        "es": "Ya seguiste la estructura completa de un QSO. La próxima lección tendrá menos ayuda y dependerás mucho más de tu oído y tu memoria.",
+        "en": "You have now followed the complete structure of a QSO. The next lesson will give you less help and rely much more on your ear and memory."
+      },
+      "lesson": 19
+    },
+    {
+      "category": "lesson_intros",
+      "id": "lesson_20_intro",
+      "text": {
+        "es": "Bienvenido a la lección veinte, Your First QSO. Hoy no aprenderás nuevos caracteres ni nuevas abreviaturas. Utilizarás todo lo que ya conoces para seguir contactos completos con cada vez menos ayuda visual.",
+        "en": "Welcome to lesson twenty, Your First QSO. Today you will not learn new characters or abbreviations. You will use everything you know to follow complete contacts with progressively less visual help."
+      },
+      "lesson": 20
+    },
+    {
+      "category": "lesson_outros",
+      "id": "lesson_20_outro",
+      "text": {
+        "es": "Completaste Learn CW. Ya no estás aprendiendo símbolos aislados. Estás escuchando CW. Ahora comienza la parte más divertida: usarlo en el aire. Sigue practicando, nos escuchamos en CW. Setenta y tres.",
+        "en": "You completed Learn CW. You are no longer learning isolated symbols. You are listening to CW. Now the most enjoyable part begins: using it on the air. Keep practicing, and I hope to hear you on CW. Seventy three."
+      },
+      "lesson": 20
+    },
+    {
+      "category": "lesson_special",
+      "id": "lesson_20_final_challenge",
+      "text": {
+        "es": "Esta es la ronda final. Escucha el QSO completo sin subtítulos. No intentes recordar cada carácter. Intenta conservar el sentido del intercambio. La transcripción aparecerá cuando termine.",
+        "en": "This is the final round. Listen to the complete QSO without subtitles. Do not try to remember every character. Try to keep the meaning of the exchange in mind. The transcript will appear when it ends."
+      },
+      "lesson": 20
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "tnx_explain",
+      "text": {
+        "es": "TNX es una abreviatura habitual de thanks, gracias.",
+        "en": "TNX is a common abbreviation for thanks."
+      },
+      "concept": "tnx",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "fer_explain",
+      "text": {
+        "es": "FER es una abreviatura habitual de for, por o para, utilizada frecuentemente en CW.",
+        "en": "FER is a common CW abbreviation for for."
+      },
+      "concept": "fer",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "pse_explain",
+      "text": {
+        "es": "PSE significa please, por favor.",
+        "en": "PSE means please."
+      },
+      "concept": "pse",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "agn_explain",
+      "text": {
+        "es": "AGN significa again, otra vez. Se utiliza para pedir que algo sea repetido.",
+        "en": "AGN means again. It is used to ask for something to be repeated."
+      },
+      "concept": "agn",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "fb_explain",
+      "text": {
+        "es": "FB significa fine business. En CW se utiliza para indicar que algo está bien.",
+        "en": "FB means fine business. In CW it is used to say that something is good."
+      },
+      "concept": "fb",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "gm_explain",
+      "text": {
+        "es": "GM significa good morning, buenos días.",
+        "en": "GM means good morning."
+      },
+      "concept": "gm",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "ga_explain",
+      "text": {
+        "es": "GA significa good afternoon, buenas tardes.",
+        "en": "GA means good afternoon."
+      },
+      "concept": "ga",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "ge_explain",
+      "text": {
+        "es": "GE significa good evening.",
+        "en": "GE means good evening."
+      },
+      "concept": "ge",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "hw_explain",
+      "text": {
+        "es": "HW significa how, cómo. Aparece frecuentemente en expresiones como how copy.",
+        "en": "HW means how. It commonly appears in expressions such as how copy."
+      },
+      "concept": "hw",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "rig_explain",
+      "text": {
+        "es": "RIG se utiliza para referirse al equipo de radio o transceptor.",
+        "en": "RIG is commonly used to refer to the radio or transceiver."
+      },
+      "concept": "rig",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "ant_explain",
+      "text": {
+        "es": "ANT es una abreviatura habitual de antenna, antena.",
+        "en": "ANT is a common abbreviation for antenna."
+      },
+      "concept": "ant",
+      "first_use_only": true
+    },
+    {
+      "category": "operational_vocabulary",
+      "id": "wx_explain",
+      "text": {
+        "es": "WX es una abreviatura habitual de weather, tiempo o condiciones meteorológicas.",
+        "en": "WX is a common abbreviation for weather."
+      },
+      "concept": "wx",
+      "first_use_only": true
+    },
+    {
+      "category": "course_milestones",
+      "id": "alphabet_complete",
+      "text": {
+        "es": "Alfabeto completo. Ya conoces las veintiséis letras.",
+        "en": "Alphabet complete. You now know all twenty-six letters."
+      }
+    },
+    {
+      "category": "course_milestones",
+      "id": "alphanumeric_complete",
+      "text": {
+        "es": "Conjunto alfanumérico completo. Ya conoces todas las letras y todos los números.",
+        "en": "Alphanumeric set complete. You now know all letters and all numbers."
+      }
+    },
+    {
+      "category": "course_milestones",
+      "id": "first_callsign",
+      "text": {
+        "es": "Acabas de reconocer un indicativo completo.",
+        "en": "You just recognized a complete call sign."
+      }
+    },
+    {
+      "category": "course_milestones",
+      "id": "first_complete_call",
+      "text": {
+        "es": "Acabas de comprender la estructura de una llamada general completa.",
+        "en": "You just understood the structure of a complete general call."
+      }
+    },
+    {
+      "category": "course_milestones",
+      "id": "first_complete_qso",
+      "text": {
+        "es": "Acabas de seguir la estructura de un QSO completo.",
+        "en": "You just followed the structure of a complete QSO."
+      }
+    },
+    {
+      "category": "course_milestones",
+      "id": "headcopy_transition",
+      "text": {
+        "es": "A partir de ahora empezaremos a entrenar algo diferente: escuchar unidades completas y conservar su significado en la mente.",
+        "en": "From now on we will train something different: hearing complete units and keeping their meaning in mind."
+      }
+    },
+    {
+      "category": "bonus_intros",
+      "id": "100_common_words_intro",
+      "text": {
+        "es": "Bienvenido al reto de cien palabras comunes. Escucharás palabras completas en CW. Intenta reconocer la palabra como una unidad, sin reconstruirla carácter por carácter. La respuesta aparecerá después de cada palabra.",
+        "en": "Welcome to the one hundred common words challenge. You will hear complete words in CW. Try to recognize each word as one unit, without reconstructing it character by character. The answer will appear after each word."
+      },
+      "bonus": "100_common_words"
+    },
+    {
+      "category": "bonus_outros",
+      "id": "100_common_words_outro",
+      "text": {
+        "es": "Completaste cien palabras comunes. Repite el reto cuando quieras con menos espacio o mayor velocidad.",
+        "en": "You completed one hundred common words. Repeat the challenge whenever you want with less spacing or higher speed."
+      },
+      "bonus": "100_common_words"
+    },
+    {
+      "category": "bonus_intros",
+      "id": "100_real_callsigns_intro",
+      "text": {
+        "es": "Bienvenido al reto de cien indicativos reales. Escucha cada indicativo completo e intenta conservarlo en tu memoria antes de ver la respuesta. No intentes adivinar por contexto.",
+        "en": "Welcome to the one hundred real call signs challenge. Listen to each complete call sign and try to keep it in memory before seeing the answer. Do not try to guess from context."
+      },
+      "bonus": "100_real_callsigns"
+    },
+    {
+      "category": "bonus_outros",
+      "id": "100_real_callsigns_outro",
+      "text": {
+        "es": "Completaste cien indicativos reales. Este ejercicio entrena reconocimiento y memoria auditiva a corto plazo.",
+        "en": "You completed one hundred real call signs. This exercise trains recognition and short-term auditory memory."
+      },
+      "bonus": "100_real_callsigns"
+    },
+    {
+      "category": "bonus_intros",
+      "id": "100_radio_words_intro",
+      "text": {
+        "es": "Bienvenido al reto de cien palabras de radio. Escucharás vocabulario habitual de operación, equipos, antenas, señales y contactos. Intenta reconocer la palabra completa antes de verla.",
+        "en": "Welcome to the one hundred radio words challenge. You will hear common vocabulary related to operating, equipment, antennas, signals, and contacts. Try to recognize the complete word before seeing it."
+      },
+      "bonus": "100_radio_words"
+    },
+    {
+      "category": "bonus_outros",
+      "id": "100_radio_words_outro",
+      "text": {
+        "es": "Completaste cien palabras de radio.",
+        "en": "You completed one hundred radio words."
+      },
+      "bonus": "100_radio_words"
+    },
+    {
+      "category": "bonus_intros",
+      "id": "100_numbers_intro",
+      "text": {
+        "es": "Bienvenido al reto de cien ejercicios con números. Escucharás números solos y dentro de contextos de radio como reportes, potencia, hora y frecuencias.",
+        "en": "Welcome to the one hundred numbers challenge. You will hear numbers alone and in radio contexts such as reports, power, time, and frequencies."
+      },
+      "bonus": "100_numbers"
+    },
+    {
+      "category": "bonus_outros",
+      "id": "100_numbers_outro",
+      "text": {
+        "es": "Completaste cien ejercicios con números.",
+        "en": "You completed one hundred number exercises."
+      },
+      "bonus": "100_numbers"
+    },
+    {
+      "category": "bonus_intros",
+      "id": "100_abbreviations_intro",
+      "text": {
+        "es": "Bienvenido al reto de cien abreviaturas CW. Escucha cada abreviatura como una unidad y trata de recordar su significado antes de ver la respuesta.",
+        "en": "Welcome to the one hundred CW abbreviations challenge. Listen to each abbreviation as one unit and try to recall its meaning before seeing the answer."
+      },
+      "bonus": "100_abbreviations"
+    },
+    {
+      "category": "bonus_outros",
+      "id": "100_abbreviations_outro",
+      "text": {
+        "es": "Completaste cien abreviaturas CW.",
+        "en": "You completed one hundred CW abbreviations."
+      },
+      "bonus": "100_abbreviations"
+    },
+    {
+      "category": "bonus_intros",
+      "id": "qso_head_copy_intro",
+      "text": {
+        "es": "Bienvenido a QSO Head Copy. Escucharás intercambios progresivamente más largos. La transcripción no aparecerá mientras escuchas. No intentes retener cada carácter: conserva los datos importantes y el sentido del intercambio.",
+        "en": "Welcome to QSO Head Copy. You will hear progressively longer exchanges. The transcript will not appear while you listen. Do not try to retain every character: keep the important information and the meaning of the exchange."
+      },
+      "bonus": "qso_head_copy"
+    },
+    {
+      "category": "bonus_outros",
+      "id": "qso_head_copy_outro",
+      "text": {
+        "es": "Sesión de QSO Head Copy completada. Con la práctica empezarás a escuchar información en lugar de caracteres.",
+        "en": "QSO Head Copy session complete. With practice you will begin hearing information instead of characters."
+      },
+      "bonus": "qso_head_copy"
+    },
+    {
+      "category": "bonus_intros",
+      "id": "endless_head_copy_intro",
+      "text": {
+        "es": "Bienvenido a Endless Head Copy. Esta sesión continuará hasta que decidas detenerla. Relájate, mantén el flujo y deja pasar cualquier elemento que no reconozcas.",
+        "en": "Welcome to Endless Head Copy. This session will continue until you decide to stop it. Relax, stay with the flow, and let go of anything you do not recognize."
+      },
+      "bonus": "endless_head_copy"
+    },
+    {
+      "category": "bonus_outros",
+      "id": "endless_head_copy_outro",
+      "text": {
+        "es": "Sesión finalizada. Buen trabajo.",
+        "en": "Session complete. Good work."
+      },
+      "bonus": "endless_head_copy"
+    },
+    {
+      "category": "bonus_coaching",
+      "id": "headcopy_less_time",
+      "text": {
+        "es": "A partir de ahora tendrás menos tiempo antes de ver la respuesta.",
+        "en": "From now on you will have less time before seeing the answer."
+      }
+    },
+    {
+      "category": "bonus_coaching",
+      "id": "headcopy_no_spelling",
+      "text": {
+        "es": "No intentes deletrear mentalmente. Escucha la unidad completa.",
+        "en": "Do not try to spell it mentally. Listen to the complete unit."
+      }
+    },
+    {
+      "category": "bonus_coaching",
+      "id": "headcopy_remember_meaning",
+      "text": {
+        "es": "No necesitas conservar cada carácter. Intenta conservar el significado.",
+        "en": "You do not need to keep every character. Try to keep the meaning."
+      }
+    },
+    {
+      "category": "bonus_coaching",
+      "id": "headcopy_halfway",
+      "text": {
+        "es": "Has completado la mitad del reto. Mantén el ritmo.",
+        "en": "You have completed half of the challenge. Stay with the rhythm."
+      }
+    },
+    {
+      "category": "bonus_coaching",
+      "id": "headcopy_final_ten",
+      "text": {
+        "es": "Últimos diez. Mantén la concentración y continúa.",
+        "en": "Final ten. Stay focused and keep going."
+      }
+    },
+    {
+      "category": "bonus_coaching",
+      "id": "challenge_complete",
+      "text": {
+        "es": "Reto completado.",
+        "en": "Challenge complete."
+      }
+    }
+  ]
+}

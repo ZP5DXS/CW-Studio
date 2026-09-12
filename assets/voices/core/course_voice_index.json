@@ -1,0 +1,1254 @@
+{
+  "lesson_01_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 1
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_01_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_01_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_01_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_01_intro.mp3"
+      }
+    }
+  },
+  "lesson_01_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 1
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_01_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_01_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_01_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_01_outro.mp3"
+      }
+    }
+  },
+  "lesson_02_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 2
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_02_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_02_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_02_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_02_intro.mp3"
+      }
+    }
+  },
+  "lesson_02_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 2
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_02_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_02_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_02_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_02_outro.mp3"
+      }
+    }
+  },
+  "lesson_03_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 3
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_03_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_03_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_03_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_03_intro.mp3"
+      }
+    }
+  },
+  "lesson_03_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 3
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_03_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_03_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_03_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_03_outro.mp3"
+      }
+    }
+  },
+  "lesson_04_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 4
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_04_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_04_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_04_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_04_intro.mp3"
+      }
+    }
+  },
+  "lesson_04_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 4
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_04_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_04_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_04_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_04_outro.mp3"
+      }
+    }
+  },
+  "lesson_05_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 5
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_05_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_05_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_05_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_05_intro.mp3"
+      }
+    }
+  },
+  "lesson_05_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 5
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_05_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_05_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_05_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_05_outro.mp3"
+      }
+    }
+  },
+  "lesson_06_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 6
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_06_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_06_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_06_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_06_intro.mp3"
+      }
+    }
+  },
+  "lesson_06_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 6
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_06_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_06_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_06_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_06_outro.mp3"
+      }
+    }
+  },
+  "lesson_07_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 7
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_07_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_07_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_07_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_07_intro.mp3"
+      }
+    }
+  },
+  "lesson_07_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 7
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_07_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_07_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_07_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_07_outro.mp3"
+      }
+    }
+  },
+  "lesson_08_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 8
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_08_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_08_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_08_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_08_intro.mp3"
+      }
+    }
+  },
+  "lesson_08_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 8
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_08_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_08_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_08_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_08_outro.mp3"
+      }
+    }
+  },
+  "lesson_09_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 9
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_09_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_09_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_09_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_09_intro.mp3"
+      }
+    }
+  },
+  "lesson_09_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 9
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_09_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_09_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_09_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_09_outro.mp3"
+      }
+    }
+  },
+  "lesson_10_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 10
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_10_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_10_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_10_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_10_intro.mp3"
+      }
+    }
+  },
+  "lesson_10_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 10
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_10_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_10_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_10_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_10_outro.mp3"
+      }
+    }
+  },
+  "lesson_11_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 11
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_11_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_11_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_11_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_11_intro.mp3"
+      }
+    }
+  },
+  "lesson_11_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 11
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_11_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_11_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_11_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_11_outro.mp3"
+      }
+    }
+  },
+  "lesson_12_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 12
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_12_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_12_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_12_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_12_intro.mp3"
+      }
+    }
+  },
+  "lesson_12_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 12
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_12_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_12_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_12_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_12_outro.mp3"
+      }
+    }
+  },
+  "lesson_13_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 13
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_13_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_13_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_13_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_13_intro.mp3"
+      }
+    }
+  },
+  "lesson_13_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 13
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_13_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_13_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_13_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_13_outro.mp3"
+      }
+    }
+  },
+  "lesson_14_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 14
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_14_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_14_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_14_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_14_intro.mp3"
+      }
+    }
+  },
+  "lesson_14_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 14
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_14_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_14_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_14_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_14_outro.mp3"
+      }
+    }
+  },
+  "lesson_15_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 15
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_15_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_15_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_15_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_15_intro.mp3"
+      }
+    }
+  },
+  "lesson_15_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 15
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_15_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_15_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_15_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_15_outro.mp3"
+      }
+    }
+  },
+  "lesson_16_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 16
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_16_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_16_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_16_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_16_intro.mp3"
+      }
+    }
+  },
+  "lesson_16_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 16
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_16_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_16_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_16_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_16_outro.mp3"
+      }
+    }
+  },
+  "lesson_17_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 17
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_17_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_17_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_17_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_17_intro.mp3"
+      }
+    }
+  },
+  "lesson_17_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 17
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_17_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_17_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_17_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_17_outro.mp3"
+      }
+    }
+  },
+  "lesson_18_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 18
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_18_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_18_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_18_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_18_intro.mp3"
+      }
+    }
+  },
+  "lesson_18_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 18
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_18_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_18_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_18_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_18_outro.mp3"
+      }
+    }
+  },
+  "lesson_19_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 19
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_19_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_19_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_19_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_19_intro.mp3"
+      }
+    }
+  },
+  "lesson_19_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 19
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_19_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_19_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_19_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_19_outro.mp3"
+      }
+    }
+  },
+  "lesson_20_intro": {
+    "category": "lesson_intros",
+    "meta": {
+      "lesson": 20
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_intros/lesson_20_intro.mp3",
+        "male": "es/male/lesson_intros/lesson_20_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_intros/lesson_20_intro.mp3",
+        "male": "en/male/lesson_intros/lesson_20_intro.mp3"
+      }
+    }
+  },
+  "lesson_20_outro": {
+    "category": "lesson_outros",
+    "meta": {
+      "lesson": 20
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_outros/lesson_20_outro.mp3",
+        "male": "es/male/lesson_outros/lesson_20_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_outros/lesson_20_outro.mp3",
+        "male": "en/male/lesson_outros/lesson_20_outro.mp3"
+      }
+    }
+  },
+  "lesson_20_final_challenge": {
+    "category": "lesson_special",
+    "meta": {
+      "lesson": 20
+    },
+    "files": {
+      "es": {
+        "female": "es/female/lesson_special/lesson_20_final_challenge.mp3",
+        "male": "es/male/lesson_special/lesson_20_final_challenge.mp3"
+      },
+      "en": {
+        "female": "en/female/lesson_special/lesson_20_final_challenge.mp3",
+        "male": "en/male/lesson_special/lesson_20_final_challenge.mp3"
+      }
+    }
+  },
+  "tnx_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "tnx",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/tnx_explain.mp3",
+        "male": "es/male/operational_vocabulary/tnx_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/tnx_explain.mp3",
+        "male": "en/male/operational_vocabulary/tnx_explain.mp3"
+      }
+    }
+  },
+  "fer_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "fer",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/fer_explain.mp3",
+        "male": "es/male/operational_vocabulary/fer_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/fer_explain.mp3",
+        "male": "en/male/operational_vocabulary/fer_explain.mp3"
+      }
+    }
+  },
+  "pse_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "pse",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/pse_explain.mp3",
+        "male": "es/male/operational_vocabulary/pse_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/pse_explain.mp3",
+        "male": "en/male/operational_vocabulary/pse_explain.mp3"
+      }
+    }
+  },
+  "agn_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "agn",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/agn_explain.mp3",
+        "male": "es/male/operational_vocabulary/agn_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/agn_explain.mp3",
+        "male": "en/male/operational_vocabulary/agn_explain.mp3"
+      }
+    }
+  },
+  "fb_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "fb",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/fb_explain.mp3",
+        "male": "es/male/operational_vocabulary/fb_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/fb_explain.mp3",
+        "male": "en/male/operational_vocabulary/fb_explain.mp3"
+      }
+    }
+  },
+  "gm_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "gm",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/gm_explain.mp3",
+        "male": "es/male/operational_vocabulary/gm_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/gm_explain.mp3",
+        "male": "en/male/operational_vocabulary/gm_explain.mp3"
+      }
+    }
+  },
+  "ga_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "ga",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/ga_explain.mp3",
+        "male": "es/male/operational_vocabulary/ga_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/ga_explain.mp3",
+        "male": "en/male/operational_vocabulary/ga_explain.mp3"
+      }
+    }
+  },
+  "ge_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "ge",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/ge_explain.mp3",
+        "male": "es/male/operational_vocabulary/ge_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/ge_explain.mp3",
+        "male": "en/male/operational_vocabulary/ge_explain.mp3"
+      }
+    }
+  },
+  "hw_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "hw",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/hw_explain.mp3",
+        "male": "es/male/operational_vocabulary/hw_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/hw_explain.mp3",
+        "male": "en/male/operational_vocabulary/hw_explain.mp3"
+      }
+    }
+  },
+  "rig_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "rig",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/rig_explain.mp3",
+        "male": "es/male/operational_vocabulary/rig_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/rig_explain.mp3",
+        "male": "en/male/operational_vocabulary/rig_explain.mp3"
+      }
+    }
+  },
+  "ant_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "ant",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/ant_explain.mp3",
+        "male": "es/male/operational_vocabulary/ant_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/ant_explain.mp3",
+        "male": "en/male/operational_vocabulary/ant_explain.mp3"
+      }
+    }
+  },
+  "wx_explain": {
+    "category": "operational_vocabulary",
+    "meta": {
+      "concept": "wx",
+      "first_use_only": true
+    },
+    "files": {
+      "es": {
+        "female": "es/female/operational_vocabulary/wx_explain.mp3",
+        "male": "es/male/operational_vocabulary/wx_explain.mp3"
+      },
+      "en": {
+        "female": "en/female/operational_vocabulary/wx_explain.mp3",
+        "male": "en/male/operational_vocabulary/wx_explain.mp3"
+      }
+    }
+  },
+  "alphabet_complete": {
+    "category": "course_milestones",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/course_milestones/alphabet_complete.mp3",
+        "male": "es/male/course_milestones/alphabet_complete.mp3"
+      },
+      "en": {
+        "female": "en/female/course_milestones/alphabet_complete.mp3",
+        "male": "en/male/course_milestones/alphabet_complete.mp3"
+      }
+    }
+  },
+  "alphanumeric_complete": {
+    "category": "course_milestones",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/course_milestones/alphanumeric_complete.mp3",
+        "male": "es/male/course_milestones/alphanumeric_complete.mp3"
+      },
+      "en": {
+        "female": "en/female/course_milestones/alphanumeric_complete.mp3",
+        "male": "en/male/course_milestones/alphanumeric_complete.mp3"
+      }
+    }
+  },
+  "first_callsign": {
+    "category": "course_milestones",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/course_milestones/first_callsign.mp3",
+        "male": "es/male/course_milestones/first_callsign.mp3"
+      },
+      "en": {
+        "female": "en/female/course_milestones/first_callsign.mp3",
+        "male": "en/male/course_milestones/first_callsign.mp3"
+      }
+    }
+  },
+  "first_complete_call": {
+    "category": "course_milestones",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/course_milestones/first_complete_call.mp3",
+        "male": "es/male/course_milestones/first_complete_call.mp3"
+      },
+      "en": {
+        "female": "en/female/course_milestones/first_complete_call.mp3",
+        "male": "en/male/course_milestones/first_complete_call.mp3"
+      }
+    }
+  },
+  "first_complete_qso": {
+    "category": "course_milestones",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/course_milestones/first_complete_qso.mp3",
+        "male": "es/male/course_milestones/first_complete_qso.mp3"
+      },
+      "en": {
+        "female": "en/female/course_milestones/first_complete_qso.mp3",
+        "male": "en/male/course_milestones/first_complete_qso.mp3"
+      }
+    }
+  },
+  "headcopy_transition": {
+    "category": "course_milestones",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/course_milestones/headcopy_transition.mp3",
+        "male": "es/male/course_milestones/headcopy_transition.mp3"
+      },
+      "en": {
+        "female": "en/female/course_milestones/headcopy_transition.mp3",
+        "male": "en/male/course_milestones/headcopy_transition.mp3"
+      }
+    }
+  },
+  "100_common_words_intro": {
+    "category": "bonus_intros",
+    "meta": {
+      "bonus": "100_common_words"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_intros/100_common_words_intro.mp3",
+        "male": "es/male/bonus_intros/100_common_words_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_intros/100_common_words_intro.mp3",
+        "male": "en/male/bonus_intros/100_common_words_intro.mp3"
+      }
+    }
+  },
+  "100_common_words_outro": {
+    "category": "bonus_outros",
+    "meta": {
+      "bonus": "100_common_words"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_outros/100_common_words_outro.mp3",
+        "male": "es/male/bonus_outros/100_common_words_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_outros/100_common_words_outro.mp3",
+        "male": "en/male/bonus_outros/100_common_words_outro.mp3"
+      }
+    }
+  },
+  "100_real_callsigns_intro": {
+    "category": "bonus_intros",
+    "meta": {
+      "bonus": "100_real_callsigns"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_intros/100_real_callsigns_intro.mp3",
+        "male": "es/male/bonus_intros/100_real_callsigns_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_intros/100_real_callsigns_intro.mp3",
+        "male": "en/male/bonus_intros/100_real_callsigns_intro.mp3"
+      }
+    }
+  },
+  "100_real_callsigns_outro": {
+    "category": "bonus_outros",
+    "meta": {
+      "bonus": "100_real_callsigns"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_outros/100_real_callsigns_outro.mp3",
+        "male": "es/male/bonus_outros/100_real_callsigns_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_outros/100_real_callsigns_outro.mp3",
+        "male": "en/male/bonus_outros/100_real_callsigns_outro.mp3"
+      }
+    }
+  },
+  "100_radio_words_intro": {
+    "category": "bonus_intros",
+    "meta": {
+      "bonus": "100_radio_words"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_intros/100_radio_words_intro.mp3",
+        "male": "es/male/bonus_intros/100_radio_words_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_intros/100_radio_words_intro.mp3",
+        "male": "en/male/bonus_intros/100_radio_words_intro.mp3"
+      }
+    }
+  },
+  "100_radio_words_outro": {
+    "category": "bonus_outros",
+    "meta": {
+      "bonus": "100_radio_words"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_outros/100_radio_words_outro.mp3",
+        "male": "es/male/bonus_outros/100_radio_words_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_outros/100_radio_words_outro.mp3",
+        "male": "en/male/bonus_outros/100_radio_words_outro.mp3"
+      }
+    }
+  },
+  "100_numbers_intro": {
+    "category": "bonus_intros",
+    "meta": {
+      "bonus": "100_numbers"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_intros/100_numbers_intro.mp3",
+        "male": "es/male/bonus_intros/100_numbers_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_intros/100_numbers_intro.mp3",
+        "male": "en/male/bonus_intros/100_numbers_intro.mp3"
+      }
+    }
+  },
+  "100_numbers_outro": {
+    "category": "bonus_outros",
+    "meta": {
+      "bonus": "100_numbers"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_outros/100_numbers_outro.mp3",
+        "male": "es/male/bonus_outros/100_numbers_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_outros/100_numbers_outro.mp3",
+        "male": "en/male/bonus_outros/100_numbers_outro.mp3"
+      }
+    }
+  },
+  "100_abbreviations_intro": {
+    "category": "bonus_intros",
+    "meta": {
+      "bonus": "100_abbreviations"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_intros/100_abbreviations_intro.mp3",
+        "male": "es/male/bonus_intros/100_abbreviations_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_intros/100_abbreviations_intro.mp3",
+        "male": "en/male/bonus_intros/100_abbreviations_intro.mp3"
+      }
+    }
+  },
+  "100_abbreviations_outro": {
+    "category": "bonus_outros",
+    "meta": {
+      "bonus": "100_abbreviations"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_outros/100_abbreviations_outro.mp3",
+        "male": "es/male/bonus_outros/100_abbreviations_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_outros/100_abbreviations_outro.mp3",
+        "male": "en/male/bonus_outros/100_abbreviations_outro.mp3"
+      }
+    }
+  },
+  "qso_head_copy_intro": {
+    "category": "bonus_intros",
+    "meta": {
+      "bonus": "qso_head_copy"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_intros/qso_head_copy_intro.mp3",
+        "male": "es/male/bonus_intros/qso_head_copy_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_intros/qso_head_copy_intro.mp3",
+        "male": "en/male/bonus_intros/qso_head_copy_intro.mp3"
+      }
+    }
+  },
+  "qso_head_copy_outro": {
+    "category": "bonus_outros",
+    "meta": {
+      "bonus": "qso_head_copy"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_outros/qso_head_copy_outro.mp3",
+        "male": "es/male/bonus_outros/qso_head_copy_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_outros/qso_head_copy_outro.mp3",
+        "male": "en/male/bonus_outros/qso_head_copy_outro.mp3"
+      }
+    }
+  },
+  "endless_head_copy_intro": {
+    "category": "bonus_intros",
+    "meta": {
+      "bonus": "endless_head_copy"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_intros/endless_head_copy_intro.mp3",
+        "male": "es/male/bonus_intros/endless_head_copy_intro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_intros/endless_head_copy_intro.mp3",
+        "male": "en/male/bonus_intros/endless_head_copy_intro.mp3"
+      }
+    }
+  },
+  "endless_head_copy_outro": {
+    "category": "bonus_outros",
+    "meta": {
+      "bonus": "endless_head_copy"
+    },
+    "files": {
+      "es": {
+        "female": "es/female/bonus_outros/endless_head_copy_outro.mp3",
+        "male": "es/male/bonus_outros/endless_head_copy_outro.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_outros/endless_head_copy_outro.mp3",
+        "male": "en/male/bonus_outros/endless_head_copy_outro.mp3"
+      }
+    }
+  },
+  "headcopy_less_time": {
+    "category": "bonus_coaching",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/bonus_coaching/headcopy_less_time.mp3",
+        "male": "es/male/bonus_coaching/headcopy_less_time.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_coaching/headcopy_less_time.mp3",
+        "male": "en/male/bonus_coaching/headcopy_less_time.mp3"
+      }
+    }
+  },
+  "headcopy_no_spelling": {
+    "category": "bonus_coaching",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/bonus_coaching/headcopy_no_spelling.mp3",
+        "male": "es/male/bonus_coaching/headcopy_no_spelling.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_coaching/headcopy_no_spelling.mp3",
+        "male": "en/male/bonus_coaching/headcopy_no_spelling.mp3"
+      }
+    }
+  },
+  "headcopy_remember_meaning": {
+    "category": "bonus_coaching",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/bonus_coaching/headcopy_remember_meaning.mp3",
+        "male": "es/male/bonus_coaching/headcopy_remember_meaning.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_coaching/headcopy_remember_meaning.mp3",
+        "male": "en/male/bonus_coaching/headcopy_remember_meaning.mp3"
+      }
+    }
+  },
+  "headcopy_halfway": {
+    "category": "bonus_coaching",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/bonus_coaching/headcopy_halfway.mp3",
+        "male": "es/male/bonus_coaching/headcopy_halfway.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_coaching/headcopy_halfway.mp3",
+        "male": "en/male/bonus_coaching/headcopy_halfway.mp3"
+      }
+    }
+  },
+  "headcopy_final_ten": {
+    "category": "bonus_coaching",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/bonus_coaching/headcopy_final_ten.mp3",
+        "male": "es/male/bonus_coaching/headcopy_final_ten.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_coaching/headcopy_final_ten.mp3",
+        "male": "en/male/bonus_coaching/headcopy_final_ten.mp3"
+      }
+    }
+  },
+  "challenge_complete": {
+    "category": "bonus_coaching",
+    "meta": {},
+    "files": {
+      "es": {
+        "female": "es/female/bonus_coaching/challenge_complete.mp3",
+        "male": "es/male/bonus_coaching/challenge_complete.mp3"
+      },
+      "en": {
+        "female": "en/female/bonus_coaching/challenge_complete.mp3",
+        "male": "en/male/bonus_coaching/challenge_complete.mp3"
+      }
+    }
+  }
+}

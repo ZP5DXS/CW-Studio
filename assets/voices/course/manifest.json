@@ -1,0 +1,1690 @@
+{
+  "project": "Morse Practice",
+  "author": "ZP5DXS",
+  "version": "1.0",
+  "voices": {
+    "es": {
+      "female": "es-MX-DaliaNeural",
+      "male": "es-MX-JorgeNeural"
+    },
+    "en": {
+      "female": "en-US-EmmaNeural",
+      "male": "en-US-AndrewNeural"
+    }
+  },
+  "rate": "-7%",
+  "volume": "+0%",
+  "pitch": "+0Hz",
+  "clip_count": 168,
+  "clips": [
+    {
+      "category": "characters",
+      "id": "char_a",
+      "text": {
+        "es": "A",
+        "en": "A"
+      },
+      "token": "A",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_b",
+      "text": {
+        "es": "B",
+        "en": "B"
+      },
+      "token": "B",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_c",
+      "text": {
+        "es": "C",
+        "en": "C"
+      },
+      "token": "C",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_d",
+      "text": {
+        "es": "D",
+        "en": "D"
+      },
+      "token": "D",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_e",
+      "text": {
+        "es": "E",
+        "en": "E"
+      },
+      "token": "E",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_f",
+      "text": {
+        "es": "F",
+        "en": "F"
+      },
+      "token": "F",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_g",
+      "text": {
+        "es": "G",
+        "en": "G"
+      },
+      "token": "G",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_h",
+      "text": {
+        "es": "H",
+        "en": "H"
+      },
+      "token": "H",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_i",
+      "text": {
+        "es": "I",
+        "en": "I"
+      },
+      "token": "I",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_j",
+      "text": {
+        "es": "J",
+        "en": "J"
+      },
+      "token": "J",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_k",
+      "text": {
+        "es": "K",
+        "en": "K"
+      },
+      "token": "K",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_l",
+      "text": {
+        "es": "L",
+        "en": "L"
+      },
+      "token": "L",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_m",
+      "text": {
+        "es": "M",
+        "en": "M"
+      },
+      "token": "M",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_n",
+      "text": {
+        "es": "N",
+        "en": "N"
+      },
+      "token": "N",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_o",
+      "text": {
+        "es": "O",
+        "en": "O"
+      },
+      "token": "O",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_p",
+      "text": {
+        "es": "P",
+        "en": "P"
+      },
+      "token": "P",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_q",
+      "text": {
+        "es": "Q",
+        "en": "Q"
+      },
+      "token": "Q",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_r",
+      "text": {
+        "es": "R",
+        "en": "R"
+      },
+      "token": "R",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_s",
+      "text": {
+        "es": "S",
+        "en": "S"
+      },
+      "token": "S",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_t",
+      "text": {
+        "es": "T",
+        "en": "T"
+      },
+      "token": "T",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_u",
+      "text": {
+        "es": "U",
+        "en": "U"
+      },
+      "token": "U",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_v",
+      "text": {
+        "es": "V",
+        "en": "V"
+      },
+      "token": "V",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_w",
+      "text": {
+        "es": "W",
+        "en": "W"
+      },
+      "token": "W",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_x",
+      "text": {
+        "es": "X",
+        "en": "X"
+      },
+      "token": "X",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_y",
+      "text": {
+        "es": "Y",
+        "en": "Y"
+      },
+      "token": "Y",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_z",
+      "text": {
+        "es": "Z",
+        "en": "Z"
+      },
+      "token": "Z",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_0",
+      "text": {
+        "es": "cero",
+        "en": "zero"
+      },
+      "token": "0",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_1",
+      "text": {
+        "es": "uno",
+        "en": "one"
+      },
+      "token": "1",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_2",
+      "text": {
+        "es": "dos",
+        "en": "two"
+      },
+      "token": "2",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_3",
+      "text": {
+        "es": "tres",
+        "en": "three"
+      },
+      "token": "3",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_4",
+      "text": {
+        "es": "cuatro",
+        "en": "four"
+      },
+      "token": "4",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_5",
+      "text": {
+        "es": "cinco",
+        "en": "five"
+      },
+      "token": "5",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_6",
+      "text": {
+        "es": "seis",
+        "en": "six"
+      },
+      "token": "6",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_7",
+      "text": {
+        "es": "siete",
+        "en": "seven"
+      },
+      "token": "7",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_8",
+      "text": {
+        "es": "ocho",
+        "en": "eight"
+      },
+      "token": "8",
+      "atomic": true
+    },
+    {
+      "category": "characters",
+      "id": "char_9",
+      "text": {
+        "es": "nueve",
+        "en": "nine"
+      },
+      "token": "9",
+      "atomic": true
+    },
+    {
+      "category": "intros",
+      "id": "welcome_general",
+      "text": {
+        "es": "Bienvenido a Morse Practice.",
+        "en": "Welcome to Morse Practice."
+      },
+      "use": [
+        "studio",
+        "course",
+        "live"
+      ]
+    },
+    {
+      "category": "intros",
+      "id": "welcome_relaxed",
+      "text": {
+        "es": "Bienvenido a Morse Practice. Relájate, escucha y concéntrate en el sonido.",
+        "en": "Welcome to Morse Practice. Relax, listen, and focus on the sound."
+      }
+    },
+    {
+      "category": "intros",
+      "id": "session_begins",
+      "text": {
+        "es": "Tu sesión está a punto de comenzar. Prepárate y concéntrate únicamente en escuchar.",
+        "en": "Your session is about to begin. Get ready and focus only on listening."
+      }
+    },
+    {
+      "category": "intros",
+      "id": "course_welcome",
+      "text": {
+        "es": "Bienvenido al curso Learn CW de Morse Practice. Aprenderás código Morse escuchando sus sonidos como unidades completas, sin memorizar puntos y rayas.",
+        "en": "Welcome to the Morse Practice Learn CW course. You will learn Morse code by hearing each sound as a complete unit, without memorizing dots and dashes."
+      },
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "intros",
+      "id": "course_daily_guidance",
+      "text": {
+        "es": "No necesitas hacer varias lecciones en un solo día. Una sesión breve y concentrada es suficiente. La constancia es más importante que practicar durante muchas horas.",
+        "en": "You do not need to complete several lessons in one day. One short, focused session is enough. Consistency matters more than practicing for many hours."
+      },
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "instructions",
+      "id": "familiarization_intro",
+      "text": {
+        "es": "Comenzaremos con familiarización. Primero escucharás el carácter en código Morse, luego escucharás su nombre y finalmente volverás a escucharlo. No intentes contar. Escucha el sonido completo.",
+        "en": "We will begin with familiarization. First you will hear the character in Morse code, then you will hear its name, and finally you will hear it once again. Do not count. Listen to the complete sound."
+      },
+      "use": [
+        "familiarization"
+      ]
+    },
+    {
+      "category": "instructions",
+      "id": "familiarization_short",
+      "text": {
+        "es": "Escucha el carácter, escucha su nombre y luego vuelve a escuchar su sonido.",
+        "en": "Listen to the character, hear its name, and then listen to its sound again."
+      },
+      "use": [
+        "familiarization"
+      ]
+    },
+    {
+      "category": "instructions",
+      "id": "recognition_intro",
+      "text": {
+        "es": "Ahora comenzaremos un ejercicio de reconocimiento. Escucha cada carácter e intenta decirlo antes de escuchar la respuesta. Si pierdes alguno, déjalo pasar y continúa con el siguiente.",
+        "en": "We will now begin a recognition exercise. Listen to each character and try to say it before you hear the answer. If you miss one, let it go and continue with the next."
+      },
+      "use": [
+        "recognition"
+      ]
+    },
+    {
+      "category": "instructions",
+      "id": "recognition_variable_speed",
+      "text": {
+        "es": "Ahora escucharás el mismo carácter varias veces a diferentes velocidades. Intenta reconocer siempre el mismo sonido, aunque cambie su ritmo.",
+        "en": "You will now hear the same character several times at different speeds. Try to recognize the same sound even as its rhythm changes."
+      },
+      "use": [
+        "recognition",
+        "variable_speed"
+      ]
+    },
+    {
+      "category": "instructions",
+      "id": "recognition_say_before_answer",
+      "text": {
+        "es": "Intenta decir el carácter antes de escuchar la respuesta.",
+        "en": "Try to say the character before you hear the answer."
+      },
+      "use": [
+        "recognition"
+      ]
+    },
+    {
+      "category": "instructions",
+      "id": "marathon_intro",
+      "text": {
+        "es": "Ahora comienza la sesión de escucha continua. Relájate y escucha. Si pierdes un carácter, no intentes recuperarlo. Mantén tu atención en el flujo y continúa.",
+        "en": "The continuous listening session begins now. Relax and listen. If you miss a character, do not try to recover it. Stay with the flow and continue."
+      },
+      "use": [
+        "marathon"
+      ]
+    },
+    {
+      "category": "instructions",
+      "id": "groups_intro",
+      "text": {
+        "es": "Ahora escucharás caracteres agrupados. Escucha la secuencia completa y trata de mantener el ritmo.",
+        "en": "You will now hear characters in groups. Listen to the complete sequence and try to stay with the rhythm."
+      }
+    },
+    {
+      "category": "instructions",
+      "id": "no_response_required",
+      "text": {
+        "es": "Durante esta parte no necesitas responder en voz alta. Simplemente escucha.",
+        "en": "During this part you do not need to answer out loud. Simply listen."
+      }
+    },
+    {
+      "category": "instructions",
+      "id": "less_visual_help",
+      "text": {
+        "es": "A partir de ahora tendrás menos ayuda visual. Confía cada vez más en lo que escuchas.",
+        "en": "From now on you will receive less visual help. Rely more and more on what you hear."
+      },
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "context",
+      "id": "begin_review",
+      "text": {
+        "es": "Comenzaremos con un breve repaso.",
+        "en": "We will begin with a short review."
+      }
+    },
+    {
+      "category": "context",
+      "id": "new_characters",
+      "text": {
+        "es": "Ahora conocerás nuevos caracteres.",
+        "en": "You will now learn new characters."
+      }
+    },
+    {
+      "category": "context",
+      "id": "letters",
+      "text": {
+        "es": "Ahora trabajaremos con letras.",
+        "en": "We will now work with letters."
+      }
+    },
+    {
+      "category": "context",
+      "id": "numbers",
+      "text": {
+        "es": "Ahora comenzaremos a trabajar con números.",
+        "en": "We will now begin working with numbers."
+      }
+    },
+    {
+      "category": "context",
+      "id": "letters_numbers",
+      "text": {
+        "es": "Ahora mezclaremos letras y números.",
+        "en": "We will now mix letters and numbers."
+      }
+    },
+    {
+      "category": "context",
+      "id": "punctuation",
+      "text": {
+        "es": "Ahora escucharás signos de puntuación utilizados en código Morse.",
+        "en": "You will now hear punctuation marks used in Morse code."
+      }
+    },
+    {
+      "category": "context",
+      "id": "prosigns",
+      "text": {
+        "es": "Ahora conocerás algunos prosigns utilizados habitualmente en CW.",
+        "en": "You will now learn some prosigns commonly used in CW."
+      }
+    },
+    {
+      "category": "context",
+      "id": "abbreviations",
+      "text": {
+        "es": "Ahora escucharás abreviaturas utilizadas habitualmente en CW.",
+        "en": "You will now hear abbreviations commonly used in CW."
+      }
+    },
+    {
+      "category": "context",
+      "id": "callsigns",
+      "text": {
+        "es": "Ahora comenzaremos a trabajar con indicativos.",
+        "en": "We will now begin working with call signs."
+      }
+    },
+    {
+      "category": "context",
+      "id": "prefixes",
+      "text": {
+        "es": "Ahora practicaremos prefijos de indicativos.",
+        "en": "We will now practice call sign prefixes."
+      }
+    },
+    {
+      "category": "context",
+      "id": "rst",
+      "text": {
+        "es": "Ahora practicaremos reportes RST.",
+        "en": "We will now practice RST reports."
+      }
+    },
+    {
+      "category": "context",
+      "id": "words",
+      "text": {
+        "es": "Ahora escucharás palabras completas.",
+        "en": "You will now hear complete words."
+      }
+    },
+    {
+      "category": "context",
+      "id": "qso_fragments",
+      "text": {
+        "es": "A continuación escucharás fragmentos de un QSO.",
+        "en": "Next you will hear fragments of a QSO."
+      }
+    },
+    {
+      "category": "context",
+      "id": "qso_complete",
+      "text": {
+        "es": "Ahora escucharás un intercambio completo en CW.",
+        "en": "You will now hear a complete CW exchange."
+      }
+    },
+    {
+      "category": "context",
+      "id": "custom_text",
+      "text": {
+        "es": "Ahora escucharás el texto seleccionado.",
+        "en": "You will now hear the selected text."
+      }
+    },
+    {
+      "category": "context",
+      "id": "groups_two",
+      "text": {
+        "es": "Ahora escucharás grupos de dos caracteres.",
+        "en": "You will now hear groups of two characters."
+      }
+    },
+    {
+      "category": "context",
+      "id": "groups_three",
+      "text": {
+        "es": "Ahora escucharás grupos de tres caracteres.",
+        "en": "You will now hear groups of three characters."
+      }
+    },
+    {
+      "category": "context",
+      "id": "groups_five",
+      "text": {
+        "es": "Ahora escucharás grupos de cinco caracteres.",
+        "en": "You will now hear groups of five characters."
+      }
+    },
+    {
+      "category": "difficulty",
+      "id": "speed_up",
+      "text": {
+        "es": "Ahora aumentaremos ligeramente la velocidad.",
+        "en": "We will now increase the speed slightly."
+      }
+    },
+    {
+      "category": "difficulty",
+      "id": "speed_down",
+      "text": {
+        "es": "Ahora reduciremos ligeramente la velocidad.",
+        "en": "We will now reduce the speed slightly."
+      }
+    },
+    {
+      "category": "difficulty",
+      "id": "less_response_time",
+      "text": {
+        "es": "Ahora tendrás un poco menos de tiempo para responder.",
+        "en": "You will now have a little less time to respond."
+      }
+    },
+    {
+      "category": "difficulty",
+      "id": "more_response_time",
+      "text": {
+        "es": "Ahora tendrás un poco más de tiempo para responder.",
+        "en": "You will now have a little more time to respond."
+      }
+    },
+    {
+      "category": "difficulty",
+      "id": "longer_groups",
+      "text": {
+        "es": "Los siguientes grupos serán un poco más largos.",
+        "en": "The next groups will be a little longer."
+      }
+    },
+    {
+      "category": "difficulty",
+      "id": "challenge_round",
+      "text": {
+        "es": "La siguiente ronda será un poco más difícil. Mantén la calma y continúa escuchando.",
+        "en": "The next round will be a little more difficult. Stay calm and keep listening."
+      }
+    },
+    {
+      "category": "difficulty",
+      "id": "easy_round",
+      "text": {
+        "es": "Volveremos ahora a una ronda más tranquila.",
+        "en": "We will now return to a more relaxed round."
+      }
+    },
+    {
+      "category": "difficulty",
+      "id": "mixed_content",
+      "text": {
+        "es": "A partir de ahora los ejercicios combinarán distintos tipos de contenido.",
+        "en": "From now on the exercises will combine different types of content."
+      }
+    },
+    {
+      "category": "coaching",
+      "id": "good_job_01",
+      "text": {
+        "es": "Muy bien. Continuemos.",
+        "en": "Very good. Let's continue."
+      },
+      "cooldown": 180
+    },
+    {
+      "category": "coaching",
+      "id": "good_job_02",
+      "text": {
+        "es": "Excelente. Sigue así.",
+        "en": "Excellent. Keep going."
+      },
+      "cooldown": 180
+    },
+    {
+      "category": "coaching",
+      "id": "good_job_03",
+      "text": {
+        "es": "Buen trabajo. Mantén la atención en el sonido.",
+        "en": "Good work. Keep your attention on the sound."
+      },
+      "cooldown": 180
+    },
+    {
+      "category": "coaching",
+      "id": "relax_01",
+      "text": {
+        "es": "Relájate y escucha.",
+        "en": "Relax and listen."
+      },
+      "cooldown": 180
+    },
+    {
+      "category": "coaching",
+      "id": "relax_02",
+      "text": {
+        "es": "No busques velocidad. Busca reconocimiento.",
+        "en": "Do not chase speed. Focus on recognition."
+      },
+      "cooldown": 240
+    },
+    {
+      "category": "coaching",
+      "id": "whole_sound",
+      "text": {
+        "es": "Escucha el carácter como un sonido completo.",
+        "en": "Listen to the character as one complete sound."
+      },
+      "cooldown": 240
+    },
+    {
+      "category": "coaching",
+      "id": "missed_character_01",
+      "text": {
+        "es": "Si pierdes un carácter, déjalo pasar y concéntrate en el siguiente.",
+        "en": "If you miss a character, let it go and focus on the next one."
+      },
+      "cooldown": 180
+    },
+    {
+      "category": "coaching",
+      "id": "missed_character_02",
+      "text": {
+        "es": "No intentes reconstruir lo que ya pasó. Vuelve tu atención al siguiente sonido.",
+        "en": "Do not try to reconstruct what has already passed. Bring your attention back to the next sound."
+      },
+      "cooldown": 240
+    },
+    {
+      "category": "coaching",
+      "id": "not_everything",
+      "text": {
+        "es": "No pasa nada si todavía no reconoces todos los caracteres. Mantén el ritmo y continúa.",
+        "en": "It is fine if you do not recognize every character yet. Stay with the rhythm and continue."
+      },
+      "cooldown": 240
+    },
+    {
+      "category": "coaching",
+      "id": "stay_flow",
+      "text": {
+        "es": "Mantén el flujo. Un carácter perdido no importa.",
+        "en": "Stay with the flow. One missed character does not matter."
+      },
+      "cooldown": 240
+    },
+    {
+      "category": "coaching",
+      "id": "trust_ear",
+      "text": {
+        "es": "Confía en tu oído. No analices demasiado.",
+        "en": "Trust your ear. Do not overanalyze."
+      },
+      "cooldown": 240
+    },
+    {
+      "category": "coaching",
+      "id": "one_more_round",
+      "text": {
+        "es": "Muy bien. Hagamos una ronda más.",
+        "en": "Very good. Let's do one more round."
+      },
+      "cooldown": 180
+    },
+    {
+      "category": "session",
+      "id": "prepare",
+      "text": {
+        "es": "Prepárate.",
+        "en": "Get ready."
+      }
+    },
+    {
+      "category": "session",
+      "id": "begin",
+      "text": {
+        "es": "Comencemos.",
+        "en": "Let's begin."
+      }
+    },
+    {
+      "category": "session",
+      "id": "continue",
+      "text": {
+        "es": "Continuamos.",
+        "en": "Let's continue."
+      }
+    },
+    {
+      "category": "session",
+      "id": "brief_pause",
+      "text": {
+        "es": "Haremos una breve pausa.",
+        "en": "We will take a short pause."
+      }
+    },
+    {
+      "category": "session",
+      "id": "pause_over",
+      "text": {
+        "es": "La pausa terminó. Continuemos.",
+        "en": "The pause is over. Let's continue."
+      }
+    },
+    {
+      "category": "session",
+      "id": "last_round",
+      "text": {
+        "es": "Última ronda.",
+        "en": "Final round."
+      }
+    },
+    {
+      "category": "session",
+      "id": "last_exercise",
+      "text": {
+        "es": "Este será el último ejercicio de la sesión.",
+        "en": "This will be the final exercise of the session."
+      }
+    },
+    {
+      "category": "session",
+      "id": "one_minute_left",
+      "text": {
+        "es": "Queda aproximadamente un minuto.",
+        "en": "About one minute remains."
+      }
+    },
+    {
+      "category": "session",
+      "id": "section_complete",
+      "text": {
+        "es": "Esta parte ha finalizado.",
+        "en": "This section is complete."
+      }
+    },
+    {
+      "category": "session",
+      "id": "session_almost_done",
+      "text": {
+        "es": "Estamos llegando al final de la sesión.",
+        "en": "We are approaching the end of the session."
+      }
+    },
+    {
+      "category": "nomenclature",
+      "id": "cq_full",
+      "text": {
+        "es": "CQ es una llamada general. Se utiliza para indicar que estás buscando cualquier estación disponible para establecer un contacto.",
+        "en": "CQ is a general call. It is used to indicate that you are looking for any available station to make a contact."
+      },
+      "first_use_only": true,
+      "concept": "cq"
+    },
+    {
+      "category": "nomenclature",
+      "id": "cq_short",
+      "text": {
+        "es": "CQ, llamada general.",
+        "en": "CQ, general call."
+      },
+      "concept": "cq",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "de_full",
+      "text": {
+        "es": "DE significa de o desde. En CW se utiliza para identificar quién está transmitiendo.",
+        "en": "DE means from. In CW it is used to identify the station that is transmitting."
+      },
+      "first_use_only": true,
+      "concept": "de"
+    },
+    {
+      "category": "nomenclature",
+      "id": "de_short",
+      "text": {
+        "es": "DE, identifica a la estación que transmite.",
+        "en": "DE, identifies the transmitting station."
+      },
+      "concept": "de",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "k_full",
+      "text": {
+        "es": "K indica que has terminado de transmitir e invitas a cualquier estación a responder.",
+        "en": "K indicates that you have finished transmitting and invite any station to respond."
+      },
+      "first_use_only": true,
+      "concept": "k"
+    },
+    {
+      "category": "nomenclature",
+      "id": "k_short",
+      "text": {
+        "es": "K, cambio abierto para responder.",
+        "en": "K, open invitation to respond."
+      },
+      "concept": "k",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "kn_full",
+      "text": {
+        "es": "KN indica que has terminado de transmitir y esperas respuesta únicamente de la estación con la que estás comunicando.",
+        "en": "KN indicates that you have finished transmitting and expect a reply only from the station you are working."
+      },
+      "first_use_only": true,
+      "concept": "kn"
+    },
+    {
+      "category": "nomenclature",
+      "id": "kn_short",
+      "text": {
+        "es": "KN, respuesta únicamente de la estación llamada.",
+        "en": "KN, reply only from the called station."
+      },
+      "concept": "kn",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "r_full",
+      "text": {
+        "es": "R significa recibido o entendido.",
+        "en": "R means received or understood."
+      },
+      "first_use_only": true,
+      "concept": "r"
+    },
+    {
+      "category": "nomenclature",
+      "id": "r_short",
+      "text": {
+        "es": "R, recibido.",
+        "en": "R, received."
+      },
+      "concept": "r",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "bt_full",
+      "text": {
+        "es": "BT es un prosign utilizado habitualmente como separador entre partes de un mensaje. Debes escucharlo como una sola unidad.",
+        "en": "BT is a prosign commonly used as a separator between parts of a message. Listen to it as one complete unit."
+      },
+      "first_use_only": true,
+      "concept": "bt"
+    },
+    {
+      "category": "nomenclature",
+      "id": "bt_short",
+      "text": {
+        "es": "BT, separador.",
+        "en": "BT, separator."
+      },
+      "concept": "bt",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "ar_full",
+      "text": {
+        "es": "AR es un prosign que indica el final de un mensaje.",
+        "en": "AR is a prosign that indicates the end of a message."
+      },
+      "first_use_only": true,
+      "concept": "ar"
+    },
+    {
+      "category": "nomenclature",
+      "id": "ar_short",
+      "text": {
+        "es": "AR, final del mensaje.",
+        "en": "AR, end of message."
+      },
+      "concept": "ar",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "sk_full",
+      "text": {
+        "es": "SK es un prosign que indica el final del contacto o de la comunicación.",
+        "en": "SK is a prosign that indicates the end of the contact or communication."
+      },
+      "first_use_only": true,
+      "concept": "sk"
+    },
+    {
+      "category": "nomenclature",
+      "id": "sk_short",
+      "text": {
+        "es": "SK, final del contacto.",
+        "en": "SK, end of contact."
+      },
+      "concept": "sk",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "rst_full",
+      "text": {
+        "es": "RST es el reporte de señal. Sus letras representan legibilidad, intensidad y tono.",
+        "en": "RST is the signal report. Its letters stand for readability, strength, and tone."
+      },
+      "first_use_only": true,
+      "concept": "rst"
+    },
+    {
+      "category": "nomenclature",
+      "id": "rst_short",
+      "text": {
+        "es": "RST, reporte de señal.",
+        "en": "RST, signal report."
+      },
+      "concept": "rst",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "qth_full",
+      "text": {
+        "es": "QTH se refiere a tu ubicación o lugar de operación.",
+        "en": "QTH refers to your location or operating position."
+      },
+      "first_use_only": true,
+      "concept": "qth"
+    },
+    {
+      "category": "nomenclature",
+      "id": "qth_short",
+      "text": {
+        "es": "QTH, ubicación.",
+        "en": "QTH, location."
+      },
+      "concept": "qth",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "name_full",
+      "text": {
+        "es": "NAME se utiliza habitualmente para indicar o solicitar el nombre del operador.",
+        "en": "NAME is commonly used to indicate or request the operator's name."
+      },
+      "first_use_only": true,
+      "concept": "name"
+    },
+    {
+      "category": "nomenclature",
+      "id": "name_short",
+      "text": {
+        "es": "NAME, nombre del operador.",
+        "en": "NAME, operator name."
+      },
+      "concept": "name",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "73_full",
+      "text": {
+        "es": "73 significa mejores deseos y se utiliza habitualmente al despedirse en radio.",
+        "en": "73 means best regards and is commonly used when signing off on the radio."
+      },
+      "first_use_only": true,
+      "concept": "73"
+    },
+    {
+      "category": "nomenclature",
+      "id": "73_short",
+      "text": {
+        "es": "73, mejores deseos.",
+        "en": "73, best regards."
+      },
+      "concept": "73",
+      "max_uses": 2
+    },
+    {
+      "category": "nomenclature",
+      "id": "599_full",
+      "text": {
+        "es": "Cinco nueve nueve es un reporte RST muy habitual. Indica máxima legibilidad, gran intensidad de señal y tono perfecto.",
+        "en": "Five nine nine is a very common RST report. It indicates perfect readability, strong signal strength, and perfect tone."
+      },
+      "first_use_only": true,
+      "concept": "599"
+    },
+    {
+      "category": "nomenclature",
+      "id": "599_short",
+      "text": {
+        "es": "Cinco nueve nueve, reporte RST.",
+        "en": "Five nine nine, RST report."
+      },
+      "concept": "599",
+      "max_uses": 2
+    },
+    {
+      "category": "course",
+      "id": "lesson_welcome_generic",
+      "text": {
+        "es": "Bienvenido nuevamente a Morse Practice. Hoy continuaremos desarrollando tu reconocimiento de CW.",
+        "en": "Welcome back to Morse Practice. Today we will continue developing your CW recognition."
+      },
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course",
+      "id": "lesson_new_characters_generic",
+      "text": {
+        "es": "En esta lección incorporarás nuevos caracteres y reforzarás los que ya conoces.",
+        "en": "In this lesson you will add new characters and reinforce the ones you already know."
+      },
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course",
+      "id": "lesson_consolidation",
+      "text": {
+        "es": "Hoy no incorporaremos nuevos caracteres. Nos concentraremos en consolidar lo que ya has aprendido.",
+        "en": "Today we will not add new characters. We will focus on consolidating what you have already learned."
+      },
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course",
+      "id": "milestone_all_letters",
+      "text": {
+        "es": "Ya conoces todas las letras. A partir de ahora nos concentraremos en reconocerlas con menos esfuerzo y en combinarlas de forma natural.",
+        "en": "You now know all the letters. From now on we will focus on recognizing them with less effort and combining them naturally."
+      },
+      "use": [
+        "course",
+        "milestone"
+      ]
+    },
+    {
+      "category": "course",
+      "id": "milestone_numbers_begin",
+      "text": {
+        "es": "Hoy comenzaremos con los números. Los aprenderás exactamente como aprendiste las letras: por su sonido.",
+        "en": "Today we will begin with numbers. You will learn them exactly as you learned the letters: by their sound."
+      },
+      "use": [
+        "course",
+        "milestone"
+      ]
+    },
+    {
+      "category": "course",
+      "id": "milestone_callsigns_begin",
+      "text": {
+        "es": "Hoy damos un paso importante. Comenzaremos a escuchar indicativos completos, tal como aparecen realmente en el aire.",
+        "en": "Today we take an important step. We will begin listening to complete call signs, just as they appear on the air."
+      },
+      "use": [
+        "course",
+        "milestone"
+      ]
+    },
+    {
+      "category": "course",
+      "id": "milestone_operating_begin",
+      "text": {
+        "es": "A partir de ahora comenzarás a utilizar los caracteres que has aprendido para entender elementos reales de una comunicación en CW.",
+        "en": "From now on you will begin using the characters you have learned to understand real elements of a CW contact."
+      },
+      "use": [
+        "course",
+        "milestone"
+      ]
+    },
+    {
+      "category": "course",
+      "id": "milestone_first_qso",
+      "text": {
+        "es": "Has llegado a una parte especial del curso. Ahora escucharás y comprenderás un QSO básico completo.",
+        "en": "You have reached a special part of the course. You will now hear and understand a complete basic QSO."
+      },
+      "use": [
+        "course",
+        "milestone"
+      ]
+    },
+    {
+      "category": "course",
+      "id": "course_final_message",
+      "text": {
+        "es": "Si llegaste hasta aquí, ya no estás aprendiendo símbolos aislados. Estás escuchando CW. Ahora comienza la parte más divertida: usarlo en el aire.",
+        "en": "If you made it this far, you are no longer learning isolated symbols. You are listening to CW. Now the most enjoyable part begins: using it on the air."
+      },
+      "use": [
+        "course",
+        "milestone"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_01_number",
+      "text": {
+        "es": "Lección número 1.",
+        "en": "Lesson number 1."
+      },
+      "lesson": 1,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_02_number",
+      "text": {
+        "es": "Lección número 2.",
+        "en": "Lesson number 2."
+      },
+      "lesson": 2,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_03_number",
+      "text": {
+        "es": "Lección número 3.",
+        "en": "Lesson number 3."
+      },
+      "lesson": 3,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_04_number",
+      "text": {
+        "es": "Lección número 4.",
+        "en": "Lesson number 4."
+      },
+      "lesson": 4,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_05_number",
+      "text": {
+        "es": "Lección número 5.",
+        "en": "Lesson number 5."
+      },
+      "lesson": 5,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_06_number",
+      "text": {
+        "es": "Lección número 6.",
+        "en": "Lesson number 6."
+      },
+      "lesson": 6,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_07_number",
+      "text": {
+        "es": "Lección número 7.",
+        "en": "Lesson number 7."
+      },
+      "lesson": 7,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_08_number",
+      "text": {
+        "es": "Lección número 8.",
+        "en": "Lesson number 8."
+      },
+      "lesson": 8,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_09_number",
+      "text": {
+        "es": "Lección número 9.",
+        "en": "Lesson number 9."
+      },
+      "lesson": 9,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_10_number",
+      "text": {
+        "es": "Lección número 10.",
+        "en": "Lesson number 10."
+      },
+      "lesson": 10,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_11_number",
+      "text": {
+        "es": "Lección número 11.",
+        "en": "Lesson number 11."
+      },
+      "lesson": 11,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_12_number",
+      "text": {
+        "es": "Lección número 12.",
+        "en": "Lesson number 12."
+      },
+      "lesson": 12,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_13_number",
+      "text": {
+        "es": "Lección número 13.",
+        "en": "Lesson number 13."
+      },
+      "lesson": 13,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_14_number",
+      "text": {
+        "es": "Lección número 14.",
+        "en": "Lesson number 14."
+      },
+      "lesson": 14,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_15_number",
+      "text": {
+        "es": "Lección número 15.",
+        "en": "Lesson number 15."
+      },
+      "lesson": 15,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_16_number",
+      "text": {
+        "es": "Lección número 16.",
+        "en": "Lesson number 16."
+      },
+      "lesson": 16,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_17_number",
+      "text": {
+        "es": "Lección número 17.",
+        "en": "Lesson number 17."
+      },
+      "lesson": 17,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_18_number",
+      "text": {
+        "es": "Lección número 18.",
+        "en": "Lesson number 18."
+      },
+      "lesson": 18,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_19_number",
+      "text": {
+        "es": "Lección número 19.",
+        "en": "Lesson number 19."
+      },
+      "lesson": 19,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_20_number",
+      "text": {
+        "es": "Lección número 20.",
+        "en": "Lesson number 20."
+      },
+      "lesson": 20,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_21_number",
+      "text": {
+        "es": "Lección número 21.",
+        "en": "Lesson number 21."
+      },
+      "lesson": 21,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_22_number",
+      "text": {
+        "es": "Lección número 22.",
+        "en": "Lesson number 22."
+      },
+      "lesson": 22,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_23_number",
+      "text": {
+        "es": "Lección número 23.",
+        "en": "Lesson number 23."
+      },
+      "lesson": 23,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_24_number",
+      "text": {
+        "es": "Lección número 24.",
+        "en": "Lesson number 24."
+      },
+      "lesson": 24,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_25_number",
+      "text": {
+        "es": "Lección número 25.",
+        "en": "Lesson number 25."
+      },
+      "lesson": 25,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_26_number",
+      "text": {
+        "es": "Lección número 26.",
+        "en": "Lesson number 26."
+      },
+      "lesson": 26,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_27_number",
+      "text": {
+        "es": "Lección número 27.",
+        "en": "Lesson number 27."
+      },
+      "lesson": 27,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_28_number",
+      "text": {
+        "es": "Lección número 28.",
+        "en": "Lesson number 28."
+      },
+      "lesson": 28,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_29_number",
+      "text": {
+        "es": "Lección número 29.",
+        "en": "Lesson number 29."
+      },
+      "lesson": 29,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "course_lessons",
+      "id": "lesson_30_number",
+      "text": {
+        "es": "Lección número 30.",
+        "en": "Lesson number 30."
+      },
+      "lesson": 30,
+      "use": [
+        "course"
+      ]
+    },
+    {
+      "category": "outros",
+      "id": "session_complete_short",
+      "text": {
+        "es": "Sesión finalizada. Buen trabajo.",
+        "en": "Session complete. Good work."
+      }
+    },
+    {
+      "category": "outros",
+      "id": "session_complete_general",
+      "text": {
+        "es": "Sesión finalizada. Espero que este ejercicio te haya sido útil. Sigue practicando y nos escuchamos en CW.",
+        "en": "Session complete. I hope this exercise was useful. Keep practicing, and I hope to hear you on CW."
+      }
+    },
+    {
+      "category": "outros",
+      "id": "signature",
+      "text": {
+        "es": "Morse Practice, creado por ZP5DXS. Setenta y tres.",
+        "en": "Morse Practice, created by ZP5DXS. Seventy three."
+      }
+    },
+    {
+      "category": "outros",
+      "id": "full_outro",
+      "text": {
+        "es": "Sesión finalizada. Espero que este ejercicio te haya sido útil. Sigue practicando y nos escuchamos en CW. Morse Practice, creado por ZP5DXS. Setenta y tres.",
+        "en": "Session complete. I hope this exercise was useful. Keep practicing, and I hope to hear you on CW. Morse Practice, created by ZP5DXS. Seventy three."
+      }
+    },
+    {
+      "category": "outros",
+      "id": "daily_course_outro",
+      "text": {
+        "es": "Terminamos por hoy. No es necesario continuar con otra lección. Vuelve cuando estés descansado y seguiremos desde aquí.",
+        "en": "That is enough for today. You do not need to continue with another lesson. Come back when you are rested and we will continue from here."
+      },
+      "use": [
+        "course"
+      ]
+    }
+  ]
+}

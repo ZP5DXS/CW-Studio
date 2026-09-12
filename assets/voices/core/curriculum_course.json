@@ -1,0 +1,301 @@
+{
+  "project": "Morse Practice",
+  "course": "Learn CW",
+  "method": "Morse Practice Progressive Recognition Method",
+  "version": "1.0",
+  "character_sequence": [
+    "T",
+    "E",
+    "A",
+    "N",
+    "I",
+    "M",
+    "S",
+    "O",
+    "R",
+    "K",
+    "D",
+    "U",
+    "G",
+    "W",
+    "H",
+    "L",
+    "P",
+    "F",
+    "B",
+    "V",
+    "C",
+    "Y",
+    "X",
+    "J",
+    "Q",
+    "Z"
+  ],
+  "recommended_minutes_per_day": "10-15",
+  "lessons": [
+    {
+      "lesson": 1,
+      "phase": "HEAR",
+      "new": [
+        "T",
+        "E",
+        "A"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 6,
+      "mnemonic": "high",
+      "focus": "Discover complete CW sounds"
+    },
+    {
+      "lesson": 2,
+      "phase": "HEAR",
+      "new": [
+        "N",
+        "I",
+        "M"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 6,
+      "mnemonic": "high",
+      "focus": "First deliberate recognition"
+    },
+    {
+      "lesson": 3,
+      "phase": "HEAR",
+      "new": [
+        "S",
+        "O",
+        "R"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 6,
+      "mnemonic": "high",
+      "focus": "Short groups and simple words"
+    },
+    {
+      "lesson": 4,
+      "phase": "RECOGNIZE",
+      "new": [
+        "K",
+        "D",
+        "U"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 7,
+      "mnemonic": "medium",
+      "focus": "Cumulative recognition"
+    },
+    {
+      "lesson": 5,
+      "phase": "RECOGNIZE",
+      "new": [
+        "G",
+        "W",
+        "H"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 7,
+      "mnemonic": "medium",
+      "focus": "Groups of two and three"
+    },
+    {
+      "lesson": 6,
+      "phase": "RECOGNIZE",
+      "new": [
+        "L",
+        "P",
+        "F"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 7,
+      "mnemonic": "medium",
+      "focus": "Recognition without reconstruction"
+    },
+    {
+      "lesson": 7,
+      "phase": "RECALL",
+      "new": [
+        "B",
+        "V",
+        "C"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 8,
+      "mnemonic": "new_only",
+      "focus": "Less visual assistance"
+    },
+    {
+      "lesson": 8,
+      "phase": "RECALL",
+      "new": [
+        "Y",
+        "X",
+        "J"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 8,
+      "mnemonic": "new_only",
+      "focus": "Harder recognition and recovery"
+    },
+    {
+      "lesson": 9,
+      "phase": "RECALL",
+      "new": [
+        "Q",
+        "Z"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 8,
+      "mnemonic": "new_only",
+      "focus": "Complete A-Z"
+    },
+    {
+      "lesson": 10,
+      "phase": "CONSOLIDATE",
+      "new": [],
+      "char_wpm": 18,
+      "effective_wpm": 8,
+      "mnemonic": "none",
+      "focus": "Alphabet consolidation"
+    },
+    {
+      "lesson": 11,
+      "phase": "EXPAND",
+      "new": [
+        "1",
+        "2",
+        "3"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 9,
+      "mnemonic": "high",
+      "focus": "Introduce numbers"
+    },
+    {
+      "lesson": 12,
+      "phase": "EXPAND",
+      "new": [
+        "4",
+        "5",
+        "6"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 9,
+      "mnemonic": "medium",
+      "focus": "Mix letters and numbers"
+    },
+    {
+      "lesson": 13,
+      "phase": "EXPAND",
+      "new": [
+        "7",
+        "8",
+        "9",
+        "0"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 9,
+      "mnemonic": "new_only",
+      "focus": "Complete A-Z and 0-9"
+    },
+    {
+      "lesson": 14,
+      "phase": "REAL_WORLD",
+      "new": [],
+      "char_wpm": 18,
+      "effective_wpm": 9,
+      "mnemonic": "none",
+      "focus": "Callsign recognition"
+    },
+    {
+      "lesson": 15,
+      "phase": "UNDERSTAND",
+      "new": [
+        "CQ",
+        "DE",
+        "K"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 10,
+      "mnemonic": "none",
+      "focus": "Making a call"
+    },
+    {
+      "lesson": 16,
+      "phase": "UNDERSTAND",
+      "new": [
+        "R",
+        "RST",
+        "73"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 10,
+      "mnemonic": "none",
+      "focus": "Signal reports"
+    },
+    {
+      "lesson": 17,
+      "phase": "UNDERSTAND",
+      "new": [
+        "NAME",
+        "QTH",
+        "BT"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 10,
+      "mnemonic": "none",
+      "focus": "Operator information"
+    },
+    {
+      "lesson": 18,
+      "phase": "UNDERSTAND",
+      "new": [
+        "KN",
+        "AR",
+        "SK",
+        "TNX",
+        "FER",
+        "PSE",
+        "AGN",
+        "FB",
+        "GM",
+        "GA",
+        "GE"
+      ],
+      "char_wpm": 18,
+      "effective_wpm": 11,
+      "mnemonic": "none",
+      "focus": "Control and close a QSO"
+    },
+    {
+      "lesson": 19,
+      "phase": "COMMUNICATE",
+      "new": [],
+      "char_wpm": 18,
+      "effective_wpm": 12,
+      "mnemonic": "none",
+      "focus": "Build a complete QSO"
+    },
+    {
+      "lesson": 20,
+      "phase": "COPY",
+      "new": [],
+      "char_wpm": 18,
+      "effective_wpm": 12,
+      "mnemonic": "none",
+      "focus": "Your First QSO"
+    }
+  ],
+  "post_course": [
+    "100_common_words",
+    "100_real_callsigns",
+    "100_radio_words",
+    "100_numbers",
+    "100_abbreviations",
+    "qso_head_copy",
+    "endless_head_copy"
+  ],
+  "morse_generated_in_browser": true,
+  "video_generated_in_browser": true,
+  "sending_training": false
+}

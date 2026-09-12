@@ -1,0 +1,1 @@
+export class Timeline{constructor(meta={}){this.events=[];this.meta=meta;this.duration=0}add(type,start,duration,data={}){this.events.push({type,start,duration,data});this.duration=Math.max(this.duration,start+duration);return this}sort(){this.events.sort((a,b)=>a.start-b.start);return this}at(time){return this.events.filter(e=>time>=e.start&&time<e.start+e.duration)} }

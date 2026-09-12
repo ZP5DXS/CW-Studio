@@ -1,0 +1,9 @@
+export class VisualEngine{
+  constructor(canvas){this.c=canvas;this.x=canvas.getContext('2d');this.events=[];this.audioAnalyser=null;this.wave=new Uint8Array(512)}
+  setAnalyser(a){this.audioAnalyser=a;if(a)this.wave=new Uint8Array(a.fftSize)}
+  draw(time,timeline){const ctx=this.x,w=this.c.width,h=this.c.height;ctx.fillStyle='#05070b';ctx.fillRect(0,0,w,h);const ev=timeline?.at(time)||[];let main='',sub='',mode='';for(const e of ev){if(e.type==='title'||e.type==='outro'){main=e.data.title||'';sub=e.data.subtitle||''}if(e.type==='reveal'){main=e.data.text||'';mode=e.data.mnemonic?'MNEMONIC':'RECOGNITION'}if(e.type==='cw'){if(e.data.mode==='familiarization')main='LISTEN';else if(e.data.mode==='headcopy')main='HEAD COPY';else main='?';mode=(e.data.mode||'CW').toUpperCase()}if(e.type==='voice'){main='MORSE PRACTICE';sub='GUIDED INSTRUCTION'}}
+    ctx.textAlign='center';ctx.fillStyle='#8ce8ff';ctx.font='700 18px system-ui';ctx.fillText(mode,w/2,90);ctx.fillStyle='#f3f8ff';ctx.font='800 88px system-ui';ctx.fillText(main,w/2,h*.42);ctx.fillStyle='#8f9bad';ctx.font='500 25px system-ui';ctx.fillText(sub,w/2,h*.50);
+    const y=h*.72;ctx.strokeStyle='#263648';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(90,y);ctx.lineTo(w-90,y);ctx.stroke();ctx.strokeStyle='#8ce8ff';ctx.shadowBlur=12;ctx.shadowColor='#8ce8ff';ctx.beginPath();if(this.audioAnalyser){this.audioAnalyser.getByteTimeDomainData(this.wave);for(let i=0;i<this.wave.length;i++){const xx=90+(w-180)*i/(this.wave.length-1),yy=y+(this.wave[i]-128)*.55;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}}else{for(let i=0;i<180;i++){const xx=90+(w-180)*i/179,yy=y+Math.sin(i*.25+time*6)*4;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}}ctx.stroke();ctx.shadowBlur=0;
+    const p=timeline?.duration?Math.min(1,time/timeline.duration):0;ctx.fillStyle='#172333';ctx.fillRect(90,h-70,w-180,4);ctx.fillStyle='#8ce8ff';ctx.fillRect(90,h-70,(w-180)*p,4);
+  }
+}
