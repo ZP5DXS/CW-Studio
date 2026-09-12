@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=10';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=11';
 
 export class Playback{
   constructor(voice){this.voice=voice;this.ctx=null;this.sources=[];this.timer=null;this.ended=false}
@@ -36,7 +36,7 @@ export class Playback{
     for(const id of needed.keys()){
       i++;onStatus(`loading lesson audio ${i}/${needed.size} · ${id}`);
       const b=await this.voice.buffer(ctx,id,lang,gender);
-      if(!b)throw new Error(`Unable to load ${id} from ${this.voice.path(id,lang,gender)}`);
+      if(!b)throw new Error(`Unable to load ${id}`);
       needed.set(id,b);
     }
 
