@@ -1,4 +1,4 @@
-// CW Studio v0.8 - resilient, non-blocking voice resolver.
+// CW Studio v0.9 - resilient, non-blocking voice resolver.
 // The UI never waits for directory probing. Audio is resolved lazily when needed,
 // and the first successful root is remembered for the rest of the session.
 export class VoiceEngine{
@@ -63,7 +63,7 @@ export class VoiceEngine{
   }
 
   async init(){
-    // v0.8: no startup probing. Nothing in the interface waits for voice assets.
+    // v0.9: no startup probing. Nothing in the interface waits for voice assets.
     // Audio roots are discovered lazily only when a clip is actually requested.
     return {core:true,course:true};
   }
@@ -182,13 +182,36 @@ export class VoiceEngine{
         return b;
       }catch{}
     }
-    console.warn('CW Studio voice asset not found:',id,candidates.map(x=>x.url));
+    this.lastMissing={id,candidates:candidates.map(x=>x.url)};
+    console.warn('CW Studio voice asset not found:',id,this.lastMissing.candidates);
     return null;
+  }
+
+  async diagnose(id,lang,gender){
+    await this.lazyLoadIndexes();
+    const candidates=this.candidateUrls(id,lang,gender);
+    const tested=[];
+    const Ctx=window.AudioContext||window.webkitAudioContext;
+    const ctx=await this.ensureDecodeCtx();
+    for(const c of candidates){
+      try{
+        const r=await fetch(encodeURI(c.url),{cache:'no-store'});
+        tested.push({url:c.url,status:r.status,ok:r.ok,kind:c.kind});
+        if(r.ok){
+          const arr=await r.arrayBuffer();
+          const b=await ctx.decodeAudioData(arr.slice(0));
+          return {ok:true,id,url:c.url,kind:c.kind,root:c.root,duration:b.duration,tested};
+        }
+      }catch(e){
+        tested.push({url:c.url,status:0,ok:false,kind:c.kind,error:String(e)});
+      }
+    }
+    return {ok:false,id,tested};
   }
 
   async duration(id,lang,gender){
     const ctx=await this.ensureDecodeCtx();const b=await this.buffer(ctx,id,lang,gender);return b?.duration||0;
   }
 
-  roots(){return {core:this.coreRoot,course:this.courseRoot,last:this.lastResolved||null}}
+  roots(){return {core:this.coreRoot,course:this.courseRoot,last:this.lastResolved||null,missing:this.lastMissing||null}}
 }

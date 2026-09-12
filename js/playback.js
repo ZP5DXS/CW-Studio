@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=8';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=9';
 
 export class Playback{
   constructor(voice){
@@ -71,22 +71,16 @@ export class Playback{
 
     onStatus(`loading ${needed.size} voice clips…`);
 
-    const fallbackId=(id)=>{
-      if(/^lesson_\d\d_intro$/.test(id)) return 'lesson_welcome_generic';
-      if(/^lesson_\d\d_outro$/.test(id)) return 'daily_course_outro';
-      if(id==='lesson_20_final_challenge') return 'recognition_intro';
-      return null;
-    };
-
-    let loaded=0,missing=0,fallbacks=0;
+    let loaded=0,missing=0;
+    let loadIndex=0;
+    const totalNeeded=needed.size;
     for(const id of needed.keys()){
-      let b=await this.voice.buffer(ctx,id,lang,gender);
-      if(!b){
-        const fb=fallbackId(id);
-        if(fb){
-          b=await this.voice.buffer(ctx,fb,lang,gender);
-          if(b) fallbacks++;
-        }
+      loadIndex++;
+      onStatus(`loading lesson audio ${loadIndex}/${totalNeeded} · ${id}`);
+      const b=await this.voice.buffer(ctx,id,lang,gender);
+      needed.set(id,b||null);
+      if(b) loaded++; else missing++;
+    }
       }
       needed.set(id,b||null);
       if(b) loaded++; else missing++;
@@ -94,10 +88,12 @@ export class Playback{
 
     const roots=this.voice.roots();
     if(missing){
-      onStatus(`voice ${loaded}/${needed.size} loaded · ${missing} missing${fallbacks?` · ${fallbacks} fallback`:''}`);
+      const miss=[...needed].filter(([,b])=>!b).map(([id])=>id);
+      onStatus(`voice ${loaded}/${needed.size} loaded · missing: ${miss.join(', ')}`);
+
       console.warn('Missing voice clips:', [...needed].filter(([,b])=>!b).map(([id])=>id));
     }else{
-      onStatus(`voice ready · ${loaded} clips${fallbacks?` · ${fallbacks} fallback`:''}${roots.core?` · Core: ${roots.core}`:''}${roots.course?` · Course: ${roots.course}`:''}`);
+      onStatus(`voice ready · ${loaded} clips${roots.core?` · Core: ${roots.core}`:''}${roots.course?` · Course: ${roots.course}`:''}`);
     }
 
     // A second explicit resume after network/decode work matters in some browsers:

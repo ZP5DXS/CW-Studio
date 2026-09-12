@@ -1,5 +1,5 @@
-import {Timeline} from './timeline.js?v=8';
-import {tokenDuration,wordDuration} from './morse-engine.js?v=8';
+import {Timeline} from './timeline.js?v=9';
+import {tokenDuration,wordDuration} from './morse-engine.js?v=9';
 
 export const COURSE=[
 [1,'HEAR',['T','E','A'],6,'Discover complete CW sounds'],[2,'HEAR',['N','I','M'],6,'First deliberate recognition'],[3,'HEAR',['S','O','R'],6,'Short groups and simple words'],[4,'RECOGNIZE',['K','D','U'],7,'Cumulative recognition'],[5,'RECOGNIZE',['G','W','H'],7,'Groups of two and three'],[6,'RECOGNIZE',['L','P','F'],7,'Recognition without reconstruction'],[7,'RECALL',['B','V','C'],8,'Less visual assistance'],[8,'RECALL',['Y','X','J'],8,'Harder recognition and recovery'],[9,'RECALL',['Q','Z'],8,'Complete A–Z'],[10,'CONSOLIDATE',[],8,'Alphabet consolidation'],[11,'EXPAND',['1','2','3'],9,'Introduce numbers'],[12,'EXPAND',['4','5','6'],9,'Mix letters and numbers'],[13,'EXPAND',['7','8','9','0'],9,'Complete A–Z and 0–9'],[14,'REAL WORLD',[],9,'Real callsign recognition'],[15,'UNDERSTAND',['CQ','DE','K'],10,'Making a call'],[16,'UNDERSTAND',['R','RST','73'],10,'Signal reports'],[17,'UNDERSTAND',['NAME','QTH','BT'],10,'Operator information'],[18,'UNDERSTAND',['KN','AR','SK','TNX','FER','PSE','AGN','FB','GM','GA','GE'],11,'Control and close a QSO'],[19,'COMMUNICATE',[],12,'Build a complete QSO'],[20,'COPY',[],12,'Your First QSO']
@@ -9,9 +9,9 @@ const TIMING={
   afterFirstCw:.62,       // hear -> small breathing space
   afterVoice:.28,         // spoken answer -> short space
   betweenConfirmations:.16,
-  beforeChime:.55,
+  beforeChime:.62,       // silence AFTER final CW before courtesy check
   chimeDuration:.18,
-  afterChime:.78,         // clear boundary before next character
+  afterChime:.82,         // clear boundary before next character
   responseEarly:1.40,
   responseLater:1.12,
   revealTail:.25,
@@ -37,7 +37,7 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice}={}){
   const cfg=COURSE.find(x=>x.lesson===lesson),tl=new Timeline({kind:'course',lesson,title:`Learn CW · Lesson ${String(lesson).padStart(2,'0')}`,cfg});let t=0;
   tl.add('title',t,4,{title:`LESSON ${String(lesson).padStart(2,'0')}`,subtitle:cfg.newItems.length?cfg.newItems.join(' · '):cfg.focus});t+=4.4;
   const introId=`lesson_${String(lesson).padStart(2,'0')}_intro`,introDur=voice?await voiceDur(voice,introId,lang,gender,5):5;
-  tl.add('voice',t,introDur,{id:introId});t+=introDur+.85;
+  tl.add('voice',t,introDur,{id:introId,required:true});t+=introDur+1.15;
   const r=rng(`course-${lesson}`),learned=learnedFor(lesson)||'TEA',wpm=cfg.charWpm;
 
   // Familiarization sequence, deliberately paced:
@@ -91,8 +91,8 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice}={}){
     }
   }
 
-  if(lesson===20){const id='lesson_20_final_challenge',d=voice?await voiceDur(voice,id,lang,gender,6):6;tl.add('voice',t,d,{id});t+=d+.8}
+  if(lesson===20){const id='lesson_20_final_challenge',d=voice?await voiceDur(voice,id,lang,gender,6):6;tl.add('voice',t,d,{id,required:true});t+=d+1.0}
   const outroId=`lesson_${String(lesson).padStart(2,'0')}_outro`,outroDur=voice?await voiceDur(voice,outroId,lang,gender,4):4;
-  tl.add('voice',t,outroDur,{id:outroId});t+=outroDur+.7;tl.add('outro',t,5,{title:'LESSON COMPLETE'});t+=5;
+  tl.add('voice',t,outroDur,{id:outroId,required:true});t+=outroDur+.95;tl.add('outro',t,5,{title:'LESSON COMPLETE'});t+=5;
   tl.duration=t;return tl.sort()
 }
