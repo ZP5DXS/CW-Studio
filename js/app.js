@@ -1,10 +1,10 @@
-import {VoiceEngine} from './voice-engine.js?v=9';
-import {Playback} from './playback.js?v=9';
-import {VisualEngine} from './visual-engine.js?v=9';
-import {COURSE,buildLesson} from './course-engine.js?v=9';
-import {buildCustom} from './session-builder.js?v=9';
-import {exportWav,exportMp3,download} from './export-engine.js?v=9';
-import {exportVideo} from './video-export.js?v=9';
+import {VoiceEngine} from './voice-engine.js?v=10';
+import {Playback} from './playback.js?v=10';
+import {VisualEngine} from './visual-engine.js?v=10';
+import {COURSE,buildLesson} from './course-engine.js?v=10';
+import {buildCustom} from './session-builder.js?v=10';
+import {exportWav,exportMp3,download} from './export-engine.js?v=10';
+import {exportVideo} from './video-export.js?v=10';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 window.addEventListener('error',e=>{const el=document.querySelector('#assetStatus');if(el){el.textContent=`Startup error: ${e.message}`;el.classList.add('warning')}console.error(e.error||e.message)});
@@ -25,7 +25,7 @@ async function loadLesson(n){
   const label=`LESSON ${String(currentLesson).padStart(2,'0')}`;
   $('#statusLabel').textContent=label;
   $('#currentLessonLabel').textContent=`Lesson ${String(currentLesson).padStart(2,'0')}`;
-  $('#assetStatus').textContent=`CW Studio v0.9 · loading lesson ${String(currentLesson).padStart(2,'0')}…`;
+  $('#assetStatus').textContent=`CW Studio v1.0 · loading lesson ${String(currentLesson).padStart(2,'0')}…`;
 
   const controls=['#playBtn','#previewBtn','#wavBtn','#mp3Btn','#videoBtn'];
   controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=true});
@@ -34,18 +34,18 @@ async function loadLesson(n){
     timeline=await buildLesson(currentLesson,{
       lang:$('#languageSelect').value,
       gender:$('#voiceSelect').value,
-      voice
+      voice,
+      onStatus:s=>{$('#assetStatus').textContent='CW Studio v1.0 · '+s}
     });
     renderLessons();
     drawLoop(0);
 
     const r=voice.roots();
-    const missing=r.missing?.id?` · last missing: ${r.missing.id}`:'';
-    $('#assetStatus').textContent=`CW Studio v0.9 · lesson ${String(currentLesson).padStart(2,'0')} ready${r.course?` · Course: ${r.course}`:''}${r.core?` · Core: ${r.core}`:''}${missing}`;
-    $('#assetStatus').classList.toggle('warning',Boolean(r.missing?.id));
+    $('#assetStatus').textContent=`CW Studio v1.0 · lesson ${String(currentLesson).padStart(2,'0')} ready · Core ${r.coreClips} clips · Course ${r.courseClips} clips`;
+    $('#assetStatus').classList.remove('warning');
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v0.9 · could not load lesson: ${err.message||err}`;
+    $('#assetStatus').textContent=`CW Studio v1.0 · could not load lesson: ${err.message||err}`;
     $('#assetStatus').classList.add('warning');
   }finally{
     controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=false});
@@ -54,7 +54,7 @@ async function loadLesson(n){
 
 function renderLessons(){
   $('#lessonGrid').innerHTML=COURSE.map(l=>`<article class="lesson ${l.lesson===currentLesson?'current':''} ${completed.has(l.lesson)?'completed':''}" data-lesson="${l.lesson}"><div class="lesson-top"><div class="n">LESSON ${String(l.lesson).padStart(2,'0')}</div><span class="lesson-check">${completed.has(l.lesson)?'✓':''}</span></div><h3>${l.newItems.length?l.newItems.join(' · '):l.focus}</h3><p>${l.focus}<br>${l.charWpm} WPM · ${l.effectiveWpm} effective</p></article>`).join('');
-  $$('.lesson').forEach(el=>{el.classList.remove('locked');el.onclick=()=>loadLesson(Number(el.dataset.lesson))});
+  $$('.lesson').forEach(el=>{el.classList.remove('locked');el.disabled=false;el.onclick=()=>loadLesson(Number(el.dataset.lesson))});
   $('#prevLessonBtn').disabled=currentLesson===1;$('#nextLessonBtn').disabled=currentLesson===20;
   $('#courseProgressText').textContent=`${completed.size} / 20 completed`;$('#courseProgressBar').style.width=`${completed.size/20*100}%`
 }
@@ -88,13 +88,13 @@ $$('.duration-choice').forEach(b=>b.onclick=()=>{selectedDuration=+b.dataset.dur
 $('#buildSessionBtn').onclick=()=>{timeline=buildCustom({familiarization:selectedModes.has('familiarization'),recognition:selectedModes.has('recognition'),marathon:selectedModes.has('marathon'),contents:[...selectedContents],customText:$('#customText').value,wpm:+$('#wpmRange').value,eff:+$('#effRange').value,tone:+$('#toneRange').value,delay:+$('#delayRange').value,variableRecognition:$('#variableRecognition').checked,toneVariation:$('#toneVariation').checked,duration:selectedDuration,seed:$('#seedInput').value});$('#statusLabel').textContent='CUSTOM SESSION';drawLoop(0)};
 
 async function play(limit=null){
-  $('#assetStatus').textContent='CW Studio v0.9 · preparing audio…';
+  $('#assetStatus').textContent='CW Studio v1.0 · preparing audio…';
   await playback.play(timeline,{
     lang:$('#languageSelect').value,
     gender:$('#voiceSelect').value,
     tone:+$('#toneRange').value,
     limit,
-    onStatus:(s)=>{ $('#assetStatus').textContent='CW Studio v0.9 · '+s; },
+    onStatus:(s)=>{ $('#assetStatus').textContent='CW Studio v1.0 · '+s; },
     onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
     onEnd:()=>{drawLoop(limit||timeline.duration);if(!limit)completeCurrent()}
   })
@@ -103,51 +103,51 @@ $('#playBtn').onclick=()=>play();$('#previewBtn').onclick=()=>play(30);$('#stopB
 $('#wavBtn').onclick=async()=>{
   const btn=$('#wavBtn'),old=btn.textContent;
   btn.disabled=true;btn.textContent='Preparing WAV…';
-  $('#assetStatus').textContent='CW Studio v0.9 · preparing WAV…';
+  $('#assetStatus').textContent='CW Studio v1.0 · preparing WAV…';
   try{
     const b=await exportWav(timeline,voice,{
       lang:$('#languageSelect').value,
       gender:$('#voiceSelect').value,
       tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent='CW Studio v0.9 · '+s}
+      onStatus:s=>{$('#assetStatus').textContent='CW Studio v1.0 · '+s}
     },meta());
     btn.textContent='Downloading…';
     download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.wav`);
-    $('#assetStatus').textContent='CW Studio v0.9 · WAV ready';
+    $('#assetStatus').textContent='CW Studio v1.0 · WAV ready';
   }catch(e){
-    console.error(e);$('#assetStatus').textContent=`CW Studio v0.9 · WAV error: ${e.message||e}`;$('#assetStatus').classList.add('warning');
+    console.error(e);$('#assetStatus').textContent=`CW Studio v1.0 · WAV error: ${e.message||e}`;$('#assetStatus').classList.add('warning');
   }finally{btn.disabled=false;btn.textContent=old}
 };
 $('#mp3Btn').onclick=async()=>{
   const btn=$('#mp3Btn'),old=btn.textContent;
   btn.disabled=true;btn.textContent='Preparing MP3…';
-  $('#assetStatus').textContent='CW Studio v0.9 · preparing MP3…';
+  $('#assetStatus').textContent='CW Studio v1.0 · preparing MP3…';
   try{
     const b=await exportMp3(timeline,voice,{
       lang:$('#languageSelect').value,
       gender:$('#voiceSelect').value,
       tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent='CW Studio v0.9 · '+s}
+      onStatus:s=>{$('#assetStatus').textContent='CW Studio v1.0 · '+s}
     },meta());
     btn.textContent='Downloading…';
     download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.mp3`);
-    $('#assetStatus').textContent='CW Studio v0.9 · MP3 ready';
+    $('#assetStatus').textContent='CW Studio v1.0 · MP3 ready';
   }catch(e){
-    console.error(e);$('#assetStatus').textContent=`CW Studio v0.9 · MP3 error: ${e.message||e}`;$('#assetStatus').classList.add('warning');
+    console.error(e);$('#assetStatus').textContent=`CW Studio v1.0 · MP3 error: ${e.message||e}`;$('#assetStatus').classList.add('warning');
   }finally{btn.disabled=false;btn.textContent=old}
 };
 $('#videoBtn').onclick=async()=>{const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;try{const b=await exportVideo(timeline,voice,visual,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value,onProgress:p=>btn.textContent=`Video ${Math.round(p*100)}%`});download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`)}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;drawLoop(0)}};
 
 renderLessons();
-$('#assetStatus').textContent='CW Studio v0.9 · interface ready';
+$('#assetStatus').textContent='CW Studio v1.0 · interface ready';
 setTimeout(()=>{
   loadLesson(currentLesson).then(()=>{
     const r=voice.roots();
-    $('#assetStatus').textContent=`CW Studio v0.9 · ${r.core||r.course?'audio path resolved':'lesson ready; voice will resolve when played'}${r.core?` · Core: ${r.core}`:''}${r.course?` · Course: ${r.course}`:''}`;
+    $('#assetStatus').textContent=`CW Studio v1.0 · ${r.core||r.course?'audio path resolved':'lesson ready; voice will resolve when played'}${r.core?` · Core: ${r.core}`:''}${r.course?` · Course: ${r.course}`:''}`;
     $('#assetStatus').classList.remove('warning');
   }).catch(err=>{
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v0.9 · lesson UI ready · audio issue: ${err.message||err}`;
+    $('#assetStatus').textContent=`CW Studio v1.0 · lesson UI ready · audio issue: ${err.message||err}`;
     $('#assetStatus').classList.add('warning');
   });
 },0);

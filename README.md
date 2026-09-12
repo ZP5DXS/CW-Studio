@@ -1,16 +1,33 @@
-# Morse Practice · CW Studio v0.9
+# Morse Practice · CW Studio v1.0
 
-Course playback / loading UX build.
+This build is aligned directly with the two Python audio generators.
 
-Key changes:
-- Course-specific lesson intros/outros are now exact-only. Generic Core narration is no longer substituted.
-- The lesson waits for the real narration duration, then leaves a 1.15 s breathing gap before CW starts.
-- Selecting any lesson is always allowed; completion is only a local progress marker, never a lock.
-- A visible `loading lesson XX…` state appears while narration durations are prepared.
-- WAV and MP3 exports show preparation / voice loading / rendering / download status.
-- Character cadence:
-  CW -> pause -> spoken/reveal -> short pause -> CW confirmation -> 0.62 s -> courtesy check -> 0.82 s -> next.
-- Version is visible as v0.9.
-- Existing `assets/voices/` files do not need to be moved.
+## Exact generated audio inventory
 
-Replace only `index.html`, `css/`, `js/`, and optionally `README.md`.
+- Core Voice Pack: 168 logical clips × 4 voices = 672 MP3 files.
+- Course Voice Pack: 79 logical clips × 4 voices = 316 MP3 files.
+- Total: 988 MP3 files.
+
+The application no longer guesses voice paths. It uses exactly:
+
+`assets/voices/core/<lang>/<gender>/<category>/<id>.mp3`
+
+`assets/voices/course/<lang>/<gender>/<category>/<id>.mp3`
+
+The categories and IDs are generated into `js/audio-catalog.js` directly from
+`generate_voicepack.py` and `generate_course_voicepack.py`.
+
+## Course narration usage
+
+Lesson 1 uses the general course welcome + daily guidance + the specific Lesson 1 intro.
+Later lessons use their own specific intros/outros and relevant Core transitions.
+Operational lessons use the full nomenclature clips and the Course operational explanations.
+
+No generic lesson narration is substituted for a missing specific clip.
+
+## Timing
+
+Character familiarization:
+CW → pause → spoken/reveal → short pause → CW confirmation → 0.62 s → courtesy check → 0.82 s → next.
+
+All lessons remain freely selectable. Completion is local progress only.
