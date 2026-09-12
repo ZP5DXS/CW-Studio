@@ -1,15 +1,37 @@
-import {VoiceEngine} from './voice-engine.js?v=12';
-import {Playback} from './playback.js?v=12';
-import {VisualEngine} from './visual-engine.js?v=12';
-import {COURSE,buildLesson} from './course-engine.js?v=12';
-import {buildCustom} from './session-builder.js?v=12';
-import {exportWav,exportMp3,download} from './export-engine.js?v=12';
-import {exportVideo} from './video-export.js?v=12';
+import {VoiceEngine} from './voice-engine.js?v=13';
+import {Playback} from './playback.js?v=13';
+import {VisualEngine} from './visual-engine.js?v=13';
+import {COURSE,buildLesson} from './course-engine.js?v=13';
+import {buildCustom} from './session-builder.js?v=13';
+import {exportWav,exportMp3,download} from './export-engine.js?v=13';
+import {exportVideo} from './video-export.js?v=13';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 window.addEventListener('error',e=>{const el=document.querySelector('#assetStatus');if(el){el.textContent=`Startup error: ${e.message}`;el.classList.add('warning')}console.error(e.error||e.message)});
 window.addEventListener('unhandledrejection',e=>{const el=document.querySelector('#assetStatus');if(el){el.textContent=`Startup error: ${e.reason?.message||e.reason||'unknown error'}`;el.classList.add('warning')}console.error(e.reason)});
 const voice=new VoiceEngine();const playback=new Playback(voice),visual=new VisualEngine($('#visualCanvas'));
+
+function setLoadingUI(active,percent=0,message='Preparing…',kicker='LOADING LESSON'){
+  const overlay=$('#loadingOverlay');
+  if(!overlay)return;
+  const p=Math.max(0,Math.min(1,Number(percent)||0));
+  overlay.classList.toggle('hidden',!active);
+  $('#loadingKicker').textContent=kicker;
+  $('#loadingPercent').textContent=`${Math.round(p*100)}%`;
+  $('#loadingMessage').textContent=String(message||'');
+  $('#loadingBar').style.width=`${Math.round(p*100)}%`;
+}
+function loadingStatus(text,prefix='Loading lesson',kicker='LOADING LESSON'){
+  const s=String(text||'');
+  const m=s.match(/(\d+)\/(\d+)/);
+  let pct=.08;
+  if(m)pct=Math.max(0,Math.min(1,Number(m[1])/Math.max(1,Number(m[2]))));
+  else if(/ready|complete|rendered/i.test(s))pct=1;
+  setLoadingUI(true,pct,`${prefix} · ${s}`,kicker);
+  $('#assetStatus').textContent=`CW Studio v1.3 · ${s}`;
+}
+function stopLoadingUI(){setLoadingUI(false,1,'','')}
+
 voice.init().catch(err=>console.warn('Voice init:',err));
 let currentLesson=Number(localStorage.getItem('cwStudio.currentLesson')||1),timeline=null,wizardStep=1,selectedModes=new Set(['familiarization','recognition']),selectedContents=new Set(['letters']),selectedDuration=900;
 const completed=new Set(JSON.parse(localStorage.getItem('cwStudio.completedLessons')||'[]'));
@@ -28,41 +50,44 @@ async function loadLesson(n){
   const label=`LESSON ${String(currentLesson).padStart(2,'0')}`;
   $('#statusLabel').textContent=label;
   $('#currentLessonLabel').textContent=`Lesson ${String(currentLesson).padStart(2,'0')}`;
-  $('#assetStatus').textContent=`CW Studio v1.2 · loading lesson ${String(currentLesson).padStart(2,'0')}…`;
+  $('#assetStatus').textContent=`CW Studio v1.3 · loading lesson ${String(currentLesson).padStart(2,'0')}…`;
+  setLoadingUI(true,.03,`Loading lesson ${String(currentLesson).padStart(2,'0')}…`,'LOADING LESSON');
 
   const controls=['#playBtn','#previewBtn','#wavBtn','#mp3Btn','#videoBtn'];
   controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=true});
 
   let success=false;
   try{
-    await voice.discover(s=>{$('#assetStatus').textContent='CW Studio v1.2 · '+s});
+    await voice.discover(s=>loadingStatus(s,'Loading lesson'));
     const roots=voice.roots();
 
     if(!roots.core || !roots.course){
       throw new Error(`Voice indexes not found. Core: ${roots.core||'not found'} · Course: ${roots.course||'not found'}`);
     }
 
-    $('#assetStatus').textContent=`CW Studio v1.2 · Core found: ${roots.core} · Course found: ${roots.course} · preparing lesson…`;
+    $('#assetStatus').textContent=`CW Studio v1.3 · Core found: ${roots.core} · Course found: ${roots.course} · preparing lesson…`;
 
     timeline=await buildLesson(currentLesson,{
       lang:$('#languageSelect').value,
       gender:$('#voiceSelect').value,
       voice,
-      onStatus:s=>{$('#assetStatus').textContent='CW Studio v1.2 · '+s}
+      onStatus:s=>loadingStatus(s,'Loading lesson','LOADING LESSON')
     });
 
     renderLessons();
     drawLoop(0);
     const r=voice.roots();
-    $('#assetStatus').textContent=`CW Studio v1.2 · lesson ${String(currentLesson).padStart(2,'0')} ready · Core: ${r.core} (${r.coreClips}) · Course: ${r.course} (${r.courseClips})`;
+    $('#assetStatus').textContent=`CW Studio v1.3 · lesson ${String(currentLesson).padStart(2,'0')} ready · Core: ${r.core} (${r.coreClips}) · Course: ${r.course} (${r.courseClips})`;
     $('#assetStatus').classList.remove('warning');
+    stopLoadingUI();drawLoop(0);
     success=true;
   }catch(err){
     console.error(err);
     timeline=null;
     drawLoop(0);
-    $('#assetStatus').textContent=`CW Studio v1.2 · could not load lesson: ${err.message||err}`;
+    $('#assetStatus').textContent=`CW Studio v1.3 · could not load lesson: ${err.message||err}`;
     $('#assetStatus').classList.add('warning');
+    stopLoadingUI();
   }finally{
     controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=!success});
   }
@@ -72,12 +97,16 @@ function renderLessons(){
   $('#lessonGrid').innerHTML=COURSE.map(l=>`<article class="lesson ${l.lesson===currentLesson?'current':''} ${completed.has(l.lesson)?'completed':''}" data-lesson="${l.lesson}"><div class="lesson-top"><div class="n">LESSON ${String(l.lesson).padStart(2,'0')}</div><span class="lesson-check">${completed.has(l.lesson)?'✓':''}</span></div><h3>${l.newItems.length?l.newItems.join(' · '):l.focus}</h3><p>${l.focus}<br>${l.charWpm} WPM · ${l.effectiveWpm} effective</p></article>`).join('');
   $$('.lesson').forEach(el=>{el.classList.remove('locked');el.disabled=false;el.onclick=()=>loadLesson(Number(el.dataset.lesson))});
   $('#prevLessonBtn').disabled=currentLesson===1;$('#nextLessonBtn').disabled=currentLesson===20;
-  $('#courseProgressText').textContent=`${completed.size} / 20 completed`;$('#courseProgressBar').style.width=`${completed.size/20*100}%`
+  $('#courseProgressText').textContent=`${completed.size} / 20 completed`;$('#courseProgressBar').style.width=`${completed.size/20*100}%`;
+  requestAnimationFrame(()=>$('#lessonGrid .lesson.current')?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}))
 }
 function completeCurrent(){if(timeline?.meta?.kind!=='course')return;completed.add(currentLesson);localStorage.setItem('cwStudio.completedLessons',JSON.stringify([...completed].sort((a,b)=>a-b)));renderLessons()}
 
 $$('.tab').forEach(b=>b.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');$$('.panel').forEach(x=>x.classList.remove('active'));$('#'+b.dataset.tab+'Panel').classList.add('active')});
 $('#prevLessonBtn').onclick=()=>loadLesson(currentLesson-1);$('#nextLessonBtn').onclick=()=>loadLesson(currentLesson+1);
+$('#carouselPrev').onclick=()=>$('#lessonGrid').scrollBy({left:-Math.max(280,$('#lessonGrid').clientWidth*.72),behavior:'smooth'});
+$('#carouselNext').onclick=()=>$('#lessonGrid').scrollBy({left: Math.max(280,$('#lessonGrid').clientWidth*.72),behavior:'smooth'});
+
 $('#languageSelect').onchange=()=>timeline?.meta?.kind==='course'&&loadLesson(currentLesson);$('#voiceSelect').onchange=()=>timeline?.meta?.kind==='course'&&loadLesson(currentLesson);
 
 const bonuses=[['100 Common Words','Build word-level recognition'],['100 Real Callsigns','Real-world callsign retention'],['100 Radio Words','Operational vocabulary'],['100 Numbers','Numbers in radio contexts'],['100 CW Abbreviations','Common operating shorthand'],['QSO Head Copy','Progressive complete exchanges'],['Endless Head Copy','Continuous listening']];
@@ -103,14 +132,14 @@ $$('.duration-choice').forEach(b=>b.onclick=()=>{selectedDuration=+b.dataset.dur
 
 $('#buildSessionBtn').onclick=()=>{timeline=buildCustom({familiarization:selectedModes.has('familiarization'),recognition:selectedModes.has('recognition'),marathon:selectedModes.has('marathon'),contents:[...selectedContents],customText:$('#customText').value,wpm:+$('#wpmRange').value,eff:+$('#effRange').value,tone:+$('#toneRange').value,delay:+$('#delayRange').value,variableRecognition:$('#variableRecognition').checked,toneVariation:$('#toneVariation').checked,duration:selectedDuration,seed:$('#seedInput').value});$('#statusLabel').textContent='CUSTOM SESSION';drawLoop(0)};
 
-async function play(limit=null){if(!timeline){$('#assetStatus').textContent='CW Studio v1.2 · select a loaded lesson first';return}
-  $('#assetStatus').textContent='CW Studio v1.2 · preparing audio…';
+async function play(limit=null){stopLoadingUI();if(!timeline){$('#assetStatus').textContent='CW Studio v1.3 · select a loaded lesson first';return}
+  $('#assetStatus').textContent='CW Studio v1.3 · preparing audio…';
   await playback.play(timeline,{
     lang:$('#languageSelect').value,
     gender:$('#voiceSelect').value,
     tone:+$('#toneRange').value,
     limit,
-    onStatus:(s)=>{ $('#assetStatus').textContent='CW Studio v1.2 · '+s; },
+    onStatus:(s)=>{ $('#assetStatus').textContent='CW Studio v1.3 · '+s; },
     onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
     onEnd:()=>{drawLoop(limit||timeline.duration);if(!limit)completeCurrent()}
   })
@@ -119,51 +148,41 @@ $('#playBtn').onclick=()=>play();$('#previewBtn').onclick=()=>play(30);$('#stopB
 $('#wavBtn').onclick=async()=>{if(!timeline)return;
   const btn=$('#wavBtn'),old=btn.textContent;
   btn.disabled=true;btn.textContent='Preparing WAV…';
-  $('#assetStatus').textContent='CW Studio v1.2 · preparing WAV…';
+  $('#assetStatus').textContent='CW Studio v1.3 · preparing WAV…';setLoadingUI(true,.04,'Preparing WAV…','EXPORTING AUDIO');
   try{
     const b=await exportWav(timeline,voice,{
       lang:$('#languageSelect').value,
       gender:$('#voiceSelect').value,
       tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent='CW Studio v1.2 · '+s}
+      onStatus:s=>loadingStatus(s,'Exporting audio','EXPORTING AUDIO')
     },meta());
     btn.textContent='Downloading…';
     download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.wav`);
-    $('#assetStatus').textContent='CW Studio v1.2 · WAV ready';
+    $('#assetStatus').textContent='CW Studio v1.3 · WAV ready';stopLoadingUI();drawLoop(0);
   }catch(e){
-    console.error(e);$('#assetStatus').textContent=`CW Studio v1.2 · WAV error: ${e.message||e}`;$('#assetStatus').classList.add('warning');
+    console.error(e);$('#assetStatus').textContent=`CW Studio v1.3 · WAV error: ${e.message||e}`;$('#assetStatus').classList.add('warning');stopLoadingUI();
   }finally{btn.disabled=false;btn.textContent=old}
 };
 $('#mp3Btn').onclick=async()=>{if(!timeline)return;
   const btn=$('#mp3Btn'),old=btn.textContent;
   btn.disabled=true;btn.textContent='Preparing MP3…';
-  $('#assetStatus').textContent='CW Studio v1.2 · preparing MP3…';
+  $('#assetStatus').textContent='CW Studio v1.3 · preparing MP3…';setLoadingUI(true,.04,'Preparing MP3…','EXPORTING AUDIO');
   try{
     const b=await exportMp3(timeline,voice,{
       lang:$('#languageSelect').value,
       gender:$('#voiceSelect').value,
       tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent='CW Studio v1.2 · '+s}
+      onStatus:s=>loadingStatus(s,'Exporting audio','EXPORTING AUDIO')
     },meta());
     btn.textContent='Downloading…';
     download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.mp3`);
-    $('#assetStatus').textContent='CW Studio v1.2 · MP3 ready';
+    $('#assetStatus').textContent='CW Studio v1.3 · MP3 ready';stopLoadingUI();drawLoop(0);
   }catch(e){
-    console.error(e);$('#assetStatus').textContent=`CW Studio v1.2 · MP3 error: ${e.message||e}`;$('#assetStatus').classList.add('warning');
+    console.error(e);$('#assetStatus').textContent=`CW Studio v1.3 · MP3 error: ${e.message||e}`;$('#assetStatus').classList.add('warning');stopLoadingUI();
   }finally{btn.disabled=false;btn.textContent=old}
 };
-$('#videoBtn').onclick=async()=>{if(!timeline)return;const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;try{const b=await exportVideo(timeline,voice,visual,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value,onProgress:p=>btn.textContent=`Video ${Math.round(p*100)}%`});download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`)}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;drawLoop(0)}};
+$('#videoBtn').onclick=async()=>{if(!timeline)return;const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;try{const b=await exportVideo(timeline,voice,visual,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value,onProgress:p=>{btn.textContent=`Video ${Math.round(p*100)}%`;setLoadingUI(true,p,`Rendering video · ${Math.round(p*100)}%`,'EXPORTING VIDEO')}});download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`)}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;stopLoadingUI();drawLoop(0)}};
 
 renderLessons();
-$('#assetStatus').textContent='CW Studio v1.2 · interface ready';
-setTimeout(()=>{
-  loadLesson(currentLesson).then(()=>{
-    const r=voice.roots();
-    $('#assetStatus').textContent=`CW Studio v1.2 · ${r.core||r.course?'audio path resolved':'lesson ready; voice will resolve when played'}${r.core?` · Core: ${r.core}`:''}${r.course?` · Course: ${r.course}`:''}`;
-    $('#assetStatus').classList.remove('warning');
-  }).catch(err=>{
-    console.error(err);
-    $('#assetStatus').textContent=`CW Studio v1.2 · lesson UI ready · audio issue: ${err.message||err}`;
-    $('#assetStatus').classList.add('warning');
-  });
-},0);
+$('#assetStatus').textContent='CW Studio v1.3 · interface ready';
+setTimeout(()=>loadLesson(currentLesson),0);

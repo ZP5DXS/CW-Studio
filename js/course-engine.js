@@ -1,5 +1,5 @@
-import {Timeline} from './timeline.js?v=12';
-import {tokenDuration,wordDuration} from './morse-engine.js?v=12';
+import {Timeline} from './timeline.js?v=13';
+import {tokenDuration,wordDuration} from './morse-engine.js?v=13';
 
 export const COURSE=[
 [1,'HEAR',['T','E','A'],6,'Discover complete CW sounds'],
@@ -47,9 +47,59 @@ function learnedFor(n){
 function rng(seed){let h=2166136261;for(const ch of seed)h=Math.imul(h^ch.charCodeAt(0),16777619);return()=>((h=Math.imul(h^(h>>>13),2246822507))>>>0)/4294967296}
 function pickChars(set,count,r){let s='';for(let i=0;i<count;i++)s+=set[Math.floor(r()*set.length)];return s}
 
+
+function voiceCard(id,tl,lang){
+  const es=lang==='es';
+  const cfg=tl.meta?.cfg||{};
+  const lesson=tl.meta?.lesson||1;
+  const lessonNo=String(lesson).padStart(2,'0');
+  const fresh=(cfg.newItems||[]).join(' · ');
+
+  const cards={
+    course_welcome:[es?'LEARN CW':'LEARN CW',es?'Aprende por el sonido, no por puntos y rayas.':'Learn by sound, not dots and dashes.','course'],
+    course_daily_guidance:[es?'UNA SESIÓN A LA VEZ':'ONE SESSION AT A TIME',es?'Breve, enfocada y constante.':'Short, focused and consistent.','clock'],
+    familiarization_intro:[es?'FAMILIARIZACIÓN':'FAMILIARIZATION',es?'Escucha → mira → nómbralo → escucha otra vez':'Hear → see → name it → hear it again','familiarization'],
+    familiarization_short:[es?'FAMILIARIZACIÓN':'FAMILIARIZATION',es?'Escucha el carácter completo.':'Hear the complete character.','familiarization'],
+    recognition_intro:[es?'RECONOCIMIENTO':'RECOGNITION',es?'Escucha primero. Responde antes de la voz.':'Hear it first. Answer before the voice.','recognition'],
+    recognition_say_before_answer:[es?'RESPONDE PRIMERO':'ANSWER FIRST',es?'Di el carácter antes de escuchar la respuesta.':'Say the character before hearing the answer.','recognition'],
+    less_visual_help:[es?'MENOS AYUDA VISUAL':'LESS VISUAL HELP',es?'Confía cada vez más en tu oído.':'Trust your ear more and more.','focus'],
+    begin_review:[es?'REPASO':'REVIEW',es?'Activamos lo que ya conoces.':'Wake up what you already know.','review'],
+    new_characters:[es?'NUEVOS SONIDOS':'NEW SOUNDS',fresh||cfg.focus,'new'],
+    groups_intro:[es?'GRUPOS':'GROUPS',es?'Escucha la secuencia completa.':'Hear the complete sequence.','groups'],
+    marathon_intro:[es?'ESCUCHA CONTINUA':'CONTINUOUS LISTENING',es?'Mantén el flujo y deja pasar los errores.':'Stay with the flow and let mistakes go.','flow'],
+    numbers:[es?'NÚMEROS':'NUMBERS',es?'El mismo principio: sonido completo.':'Same principle: one complete sound.','numbers'],
+    letters_numbers:[es?'LETRAS + NÚMEROS':'LETTERS + NUMBERS',es?'Ahora empezamos a mezclarlos.':'Now we begin mixing them.','mix'],
+    callsigns:[es?'INDICATIVOS':'CALLSIGNS',es?'Escucha y retén la unidad completa.':'Hear and retain the complete unit.','callsign'],
+    qso_fragments:[es?'CONSTRUYENDO UN QSO':'BUILDING A QSO',es?'Llamada · reporte · información · cierre':'Call · report · information · close','qso'],
+    qso_complete:[es?'QSO COMPLETO':'COMPLETE QSO',es?'Ahora escucha el intercambio como una conversación.':'Now hear the exchange as a conversation.','qso'],
+    lesson_consolidation:[es?'CONSOLIDAR':'CONSOLIDATE',es?'Nada nuevo. Hacemos más fuerte lo aprendido.':'Nothing new. We strengthen what you know.','review'],
+    milestone_all_letters:[es?'A–Z COMPLETO':'A–Z COMPLETE',es?'Ya conoces todas las letras.':'You now know every letter.','milestone'],
+    milestone_numbers_begin:[es?'NUEVA ETAPA':'NEW STAGE',es?'Comenzamos con números.':'We begin with numbers.','milestone'],
+    milestone_callsigns_begin:[es?'RADIO REAL':'REAL RADIO',es?'Empezamos a escuchar indicativos completos.':'We begin hearing complete callsigns.','milestone'],
+    milestone_operating_begin:[es?'OPERACIÓN CW':'CW OPERATING',es?'Los sonidos empiezan a convertirse en comunicación.':'Sounds begin turning into communication.','milestone'],
+    first_complete_call:[es?'PRIMERA LLAMADA COMPLETA':'FIRST COMPLETE CALL',es?'Ya puedes reconocer la estructura.':'You can recognize the structure.','milestone'],
+    first_complete_qso:[es?'QSO COMPLETO':'COMPLETE QSO',es?'Ya seguiste la estructura completa.':'You followed the complete structure.','milestone'],
+    headcopy_transition:[es?'HEAD COPY':'HEAD COPY',es?'Escucha ideas y datos, no caracteres aislados.':'Hear ideas and data, not isolated characters.','headcopy'],
+    course_final_message:[es?'YA ESTÁS ESCUCHANDO CW':'YOU ARE LISTENING TO CW',es?'Ahora empieza la parte divertida: usarlo en el aire.':'Now the fun part begins: use it on the air.','finish']
+  };
+
+  if(/^lesson_\d\d_intro$/.test(id)){
+    return {title:`${es?'LECCIÓN':'LESSON'} ${lessonNo}`,subtitle:fresh?`${fresh} · ${cfg.focus}`:cfg.focus,graphic:'lesson'};
+  }
+  if(/^lesson_\d\d_outro$/.test(id)){
+    return {title:es?'LECCIÓN COMPLETADA':'LESSON COMPLETE',subtitle:cfg.focus,graphic:'finish'};
+  }
+  if(/_full$/.test(id)||/_explain$/.test(id)){
+    const concept=id.replace(/_(full|explain)$/,'').toUpperCase();
+    return {title:concept,subtitle:es?'Significado y uso en CW':'Meaning and use in CW',graphic:'concept'};
+  }
+  const v=cards[id];
+  return v?{title:v[0],subtitle:v[1],graphic:v[2]}:{title:'MORSE PRACTICE',subtitle:es?'Instrucción guiada':'Guided instruction',graphic:'voice'};
+}
+
 async function addVoice(tl,t,voice,id,lang,gender,gap=T.narrationGap){
   const d=await voice.requireDuration(id,lang,gender);
-  tl.add('voice',t,d,{id,required:true});
+  tl.add('voice',t,d,{id,required:true,visual:voiceCard(id,tl,lang)});
   return t+d+gap;
 }
 
