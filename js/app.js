@@ -1,10 +1,10 @@
-import {VoiceEngine} from './voice-engine.js';
-import {Playback} from './playback.js';
-import {VisualEngine} from './visual-engine.js';
-import {COURSE,buildLesson} from './course-engine.js';
-import {buildCustom} from './session-builder.js';
-import {exportWav,exportMp3,download} from './export-engine.js';
-import {exportVideo} from './video-export.js';
+import {VoiceEngine} from './voice-engine.js?v=4';
+import {Playback} from './playback.js?v=4';
+import {VisualEngine} from './visual-engine.js?v=4';
+import {COURSE,buildLesson} from './course-engine.js?v=4';
+import {buildCustom} from './session-builder.js?v=4';
+import {exportWav,exportMp3,download} from './export-engine.js?v=4';
+import {exportVideo} from './video-export.js?v=4';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const voice=new VoiceEngine();await voice.init();const playback=new Playback(voice),visual=new VisualEngine($('#visualCanvas'));
@@ -58,5 +58,5 @@ $('#wavBtn').onclick=async()=>{const b=await exportWav(timeline,voice,{lang:$('#
 $('#mp3Btn').onclick=async()=>{const b=await exportMp3(timeline,voice,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value},meta());download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.mp3`)};
 $('#videoBtn').onclick=async()=>{const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;try{const b=await exportVideo(timeline,voice,visual,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value,onProgress:p=>btn.textContent=`Video ${Math.round(p*100)}%`});download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`)}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;drawLoop(0)}};
 
-const probe=await voice.probe($('#languageSelect').value,$('#voiceSelect').value);$('#assetStatus').textContent=probe.core&&probe.course?`Voice packs ready · Core: ${probe.coreRoot} · Course: ${probe.courseRoot}`:`Voice packs not fully detected · Core: ${probe.coreRoot||'not found'} · Course: ${probe.courseRoot||'not found'}`;$('#assetStatus').classList.toggle('warning',!(probe.core&&probe.course));
+const probe=await voice.probe($('#languageSelect').value,$('#voiceSelect').value);$('#assetStatus').textContent=probe.core&&probe.course?`Voice packs ready · Core: ${probe.coreRoot} · Course: ${probe.courseRoot}`:`Voice check · Core ${probe.core?'OK':'not found'} · Course ${probe.course?'OK':'not found'} · automatic multi-path lookup enabled`;$('#assetStatus').classList.toggle('warning',!(probe.core&&probe.course));
 await loadLesson(currentLesson);
