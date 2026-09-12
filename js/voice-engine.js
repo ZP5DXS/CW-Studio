@@ -1,78 +1,45 @@
-// CW Studio v1.1
-// Resolver based on the JSON indexes produced by the two Python generators.
-// It does NOT assume that the pack folders are named "core" and "course".
+// CW Studio v1.2
+// Exact resolver for the repository layout confirmed from PowerShell.
+//
+// IMPORTANT:
+//   Core Voice Pack lives in:   assets/voices/course/
+//   Course Voice Pack lives in: assets/voices/core/
+//
+// This looks inverted by folder name, but it is the ACTUAL repository layout.
+// We deliberately follow the JSON indexes rather than renaming any audio files.
+
 export class VoiceEngine{
   constructor(){
     this.cache=new Map();
     this.durationCache=new Map();
     this.decodeCtx=null;
+    this.coreRoot='assets/voices/course';
+    this.courseRoot='assets/voices/core';
     this.coreIndex=null;
     this.courseIndex=null;
-    this.coreRoot=null;
-    this.courseRoot=null;
     this.discoveryDone=false;
     this.lastResolved=null;
     this.lastMissing=null;
-
-    this.coreRoots=[
-      'assets/voices/core',
-      'assets/voices/morse_practice_voicepack',
-      'assets/voices/morse-practice-voicepack',
-      'assets/voices/practice_voicepack',
-      'assets/voices/practice-voicepack',
-      'assets/voices/practice voice pack',
-      'assets/voices/Practice Voice Pack',
-      'assets/voices'
-    ];
-
-    this.courseRoots=[
-      'assets/voices/course',
-      'assets/voices/morse_practice_course_voicepack',
-      'assets/voices/morse-practice-course-voicepack',
-      'assets/voices/course_voicepack',
-      'assets/voices/course-voicepack',
-      'assets/voices/course voice pack',
-      'assets/voices/Course Voice Pack',
-      'assets/voices'
-    ];
   }
 
   async init(){ return true; }
 
   async fetchJson(url){
-    try{
-      const r=await fetch(url,{cache:'no-store'});
-      if(!r.ok)return null;
-      return await r.json();
-    }catch{return null}
+    const r=await fetch(url,{cache:'no-store'});
+    if(!r.ok)throw new Error(`${url} → HTTP ${r.status}`);
+    return await r.json();
   }
 
   async discover(onStatus=()=>{}){
     if(this.discoveryDone)return this.roots();
+
+    onStatus('loading Core voice index…');
+    this.coreIndex=await this.fetchJson(`${this.coreRoot}/voice_index.json`);
+
+    onStatus('loading Course voice index…');
+    this.courseIndex=await this.fetchJson(`${this.courseRoot}/course_voice_index.json`);
+
     this.discoveryDone=true;
-
-    let i=0;
-    for(const root of this.coreRoots){
-      i++; onStatus(`locating Core Voice Pack ${i}/${this.coreRoots.length}`);
-      const j=await this.fetchJson(`${root}/voice_index.json`);
-      if(j && typeof j==='object'){
-        this.coreIndex=j;
-        this.coreRoot=root;
-        break;
-      }
-    }
-
-    i=0;
-    for(const root of this.courseRoots){
-      i++; onStatus(`locating Course Voice Pack ${i}/${this.courseRoots.length}`);
-      const j=await this.fetchJson(`${root}/course_voice_index.json`);
-      if(j && typeof j==='object'){
-        this.courseIndex=j;
-        this.courseRoot=root;
-        break;
-      }
-    }
-
     return this.roots();
   }
 
@@ -113,7 +80,7 @@ export class VoiceEngine{
 
     const url=await this.path(id,lang,gender);
     if(!url){
-      this.lastMissing={id,url:null,reason:'clip not found in loaded JSON indexes'};
+      this.lastMissing={id,url:null,reason:'clip ID absent from both JSON indexes'};
       return null;
     }
 
@@ -143,7 +110,7 @@ export class VoiceEngine{
     const d=await this.duration(id,lang,gender);
     if(d>0)return d;
     const url=await this.path(id,lang,gender);
-    throw new Error(`Missing voice clip "${id}"${url?` at ${url}`:' (not found in voice indexes)'}`);
+    throw new Error(`Missing voice clip "${id}"${url?` at ${url}`:' (ID not found in JSON indexes)'}`);
   }
 
   async preflight(ids,lang,gender,onStatus=()=>{}){
@@ -152,12 +119,14 @@ export class VoiceEngine{
     const ctx=await this.ensureDecodeCtx();
     const missing=[];
     let done=0;
+
     for(const id of unique){
       done++;
       onStatus(`checking lesson audio ${done}/${unique.length} · ${id}`);
       const b=await this.buffer(ctx,id,lang,gender);
       if(!b)missing.push({id,url:await this.path(id,lang,gender)});
     }
+
     return {ok:missing.length===0,total:unique.length,missing};
   }
 
