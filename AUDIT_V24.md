@@ -1,4 +1,4 @@
-# CW Studio v2.4 — Logic & Content AUDIT
+# CW Studio v2.4 — Logic & Content Audit
 
 ## Status
 Stable-candidate architecture. This audit focuses on whether UI labels, narration, timelines and exported media actually do what they promise.

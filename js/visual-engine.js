@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS} from './morse-engine.js?v=32';
-import {mnemonicFor,mnemonicEntries} from './mnemonics.js?v=32';
+import {MORSE,PROSIGNS} from './morse-engine.js?v=33';
+import {mnemonicFor,mnemonicEntries} from './mnemonics.js?v=33';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -125,13 +125,20 @@ export class VisualEngine{
 
   async preloadMnemonics(lang=this.language,onStatus=()=>{}){
     const entries=mnemonicEntries(lang);
-    let done=0;
-    for(const rec of entries){
-      await this.loadMnemonic(rec.char,lang);
-      done++;
-      onStatus(`mnemonics ${done}/${entries.length}`);
-    }
-    return {loaded:entries.length-this.mnemonicFailures.size,total:entries.length};
+    let done=0,cursor=0;
+    const workers=Math.min(8,Math.max(1,entries.length));
+    const worker=async()=>{
+      while(cursor<entries.length){
+        const i=cursor++;
+        const rec=entries[i];
+        await this.loadMnemonic(rec.char,lang);
+        done++;
+        onStatus(`mnemonics ${done}/${entries.length}`);
+      }
+    };
+    await Promise.all(Array.from({length:workers},()=>worker()));
+    const failed=entries.filter(rec=>this.mnemonicFailures.has(this.mnemonicKey(rec.char,lang))).length;
+    return {loaded:entries.length-failed,total:entries.length,failed};
   }
 
   mnemonicImage(char,lang=this.language){

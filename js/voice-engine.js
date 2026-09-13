@@ -118,15 +118,19 @@ export class VoiceEngine{
     const unique=[...new Set(ids.filter(Boolean))];
     const ctx=await this.ensureDecodeCtx();
     const missing=[];
-    let done=0;
-
-    for(const id of unique){
-      done++;
-      onStatus(`checking lesson audio ${done}/${unique.length} · ${id}`);
-      const b=await this.buffer(ctx,id,lang,gender);
-      if(!b)missing.push({id,url:await this.path(id,lang,gender)});
-    }
-
+    let done=0,cursor=0;
+    const workers=Math.min(5,Math.max(1,unique.length));
+    const worker=async()=>{
+      while(cursor<unique.length){
+        const i=cursor++;
+        const id=unique[i];
+        const b=await this.buffer(ctx,id,lang,gender);
+        if(!b)missing.push({id,url:await this.path(id,lang,gender)});
+        done++;
+        onStatus(`checking lesson audio ${done}/${unique.length} · ${id}`);
+      }
+    };
+    await Promise.all(Array.from({length:workers},()=>worker()));
     return {ok:missing.length===0,total:unique.length,missing};
   }
 

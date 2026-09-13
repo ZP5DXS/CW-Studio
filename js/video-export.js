@@ -1,6 +1,6 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=32';
-import {renderOffline} from './export-engine.js?v=32';
-import {VisualEngine} from './visual-engine.js?v=32';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=33';
+import {renderOffline} from './export-engine.js?v=33';
+import {VisualEngine} from './visual-engine.js?v=33';
 
 const MEDIABUNNY_URL='https://cdn.jsdelivr.net/npm/mediabunny@1.56.1/+esm';
 
