@@ -1,5 +1,5 @@
-import {Timeline} from './timeline.js?v=16';
-import {tokenDuration,wordDuration} from './morse-engine.js?v=16';
+import {Timeline} from './timeline.js?v=17';
+import {tokenDuration,wordDuration} from './morse-engine.js?v=17';
 
 export const COURSE=[
 [1,'HEAR',['T','E','A'],6,'Discover complete CW sounds'],
@@ -216,9 +216,10 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
       t+=d+T.afterFirstCw;
 
       const vd=await voice.requireDuration(id,lang,gender);
-      tl.add('reveal',t,vd+T.revealTail,{text:c,mnemonic:true,lang});
+      const visualDur=Math.max(2.20,vd+.55);
+      tl.add('reveal',t,visualDur,{text:c,mnemonic:true,lang});
       tl.add('charVoice',t,vd,{char:c});
-      t+=vd+T.afterVoice;
+      t+=visualDur+.12;
 
       t=addConfirmationCw(tl,t,c,wpm,cfg.effectiveWpm,'familiarization-confirmation');
       t+=T.beforeChime;
@@ -226,6 +227,8 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
     }
   }
 
+  tl.add('neutral',t,.34,{});
+  t+=.34;
   t=await addSectionAudio(tl,t,plan,'recognition',voice,lang,gender);
 
   const rounds=lesson<10?30:lesson<14?36:24;
@@ -241,7 +244,7 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
     if(lesson<=13&&text.length===1){
       const id=`char_${String(text).toLowerCase()}`;
       const vd=await voice.requireDuration(id,lang,gender);
-      tl.add('reveal',t,vd+T.revealTail,{text,lang});
+      tl.add('reveal',t,Math.max(.9,vd+T.revealTail),{text,lang,mnemonic:false});
       tl.add('charVoice',t,vd,{char:text});
       t+=vd+T.afterVoice;
       t=addConfirmationCw(tl,t,text,wpm,cfg.effectiveWpm);

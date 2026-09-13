@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS,unitSeconds} from './morse-engine.js?v=16';
-import {mnemonicFor} from './mnemonics.js?v=16';
+import {MORSE,PROSIGNS,unitSeconds} from './morse-engine.js?v=17';
+import {mnemonicFor} from './mnemonics.js?v=17';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -53,7 +53,7 @@ export class VisualEngine{
   }
   shapeLine(w,h){return [{x:w*.16,y:h*.66},{x:w*.84,y:h*.66}]}
   shapeMouth(time,w,h){
-    const e=this.voiceEnergy(),cx=w/2,cy=h*.66,ww=w*.52,N=130,top=[],bottom=[];
+    const e=this.voiceEnergy(),cx=w/2,cy=h*.66,ww=w*.72,N=130,top=[],bottom=[];
     const open=12+e*92;
     for(let i=0;i<N;i++){
       const xN=-1+2*i/(N-1),edge=Math.pow(Math.max(0,1-xN*xN),.62),x=cx+xN*ww/2;
@@ -82,21 +82,54 @@ export class VisualEngine{
   shapeWaves(w,h){const cx=w/2,cy=h*.66,p=[];for(const r of [32,54,78,105])p.push(...circle(cx,cy,r,55,-1.05,1.05));return p}
   shapeCw(event,w,h){
     const text=String(event?.data?.text||'').toUpperCase(),patterns=[];
-    for(const c of text){if(c===' '){patterns.push('gap');continue}const pat=PROSIGNS[c]||MORSE[c];if(pat)patterns.push(...pat.split(''),'charGap')}
-    while(patterns.at(-1)==='charGap')patterns.pop();
-    let units=0;for(const s of patterns){units+=s==='.'?1:s==='-'?3:s==='gap'?7:2}
+    for(const c of text){
+      if(c===' '){patterns.push('wordGap');continue}
+      const pat=PROSIGNS[c]||MORSE[c];
+      if(pat)patterns.push(...pat.split(''),'charGap');
+    }
+    while(['charGap','wordGap'].includes(patterns.at(-1)))patterns.pop();
+
+    let units=0;
+    for(const s of patterns)units+=s==='.'?1:s==='-'?3:s==='wordGap'?7:3;
     units=Math.max(units,1);
-    const maxW=w*.58,unit=Math.min(28,maxW/units),total=units*unit,left=(w-total)/2,base=h*.70,high=h*.58,p=[];
-    let x=left;p.push({x,y:base});
+
+    const maxW=w*.80;
+    const unit=Math.min(32,maxW/units);
+    const total=units*unit;
+    let x=(w-total)/2;
+    const base=h*.70, high=h*.56, pts=[{x,y:base}];
+
     for(const s of patterns){
       if(s==='.'||s==='-'){
-        const ww=(s==='.'?1:3)*unit;p.push({x,y:base},{x,y:high},{x:x+ww,y:high},{x:x+ww,y:base});x+=ww;
-      }else{x+=(s==='gap'?7:2)*unit;p.push({x,y:base})}
+        const ww=(s==='.'?1:3)*unit;
+        pts.push({x,y:base},{x,y:high},{x:x+ww,y:high},{x:x+ww,y:base});
+        x+=ww;
+      }else{
+        x+=(s==='wordGap'?7:3)*unit;
+        pts.push({x,y:base});
+      }
     }
-    return p;
+    return pts;
   }
+  shapeFlow(event,time,w,h){
+    const left=w*.08,right=w*.92,cy=h*.67,pts=[],N=180;
+    const text=String(event?.data?.text||'');
+    const complexity=Math.min(7,2+text.length*.18);
+    for(let i=0;i<N;i++){
+      const u=i/(N-1);
+      const env=Math.sin(Math.PI*u);
+      const drift=(u-.5)*22;
+      const y=cy
+        + Math.sin(u*TAU*(1.15+complexity*.08)-time*3.2)*22*env
+        + Math.sin(u*TAU*(3.2+complexity*.12)+time*2.1)*7*env
+        + drift*.08;
+      pts.push({x:left+u*(right-left),y});
+    }
+    return pts;
+  }
+
   icon(shape,w,h){
-    const cx=w/2,cy=h*.66,s=Math.min(w,h)/6.2;
+    const cx=w/2,cy=h*.66,s=Math.min(w,h)/4.9;
     const P=(a)=>poly(cx,cy,s,a);
     switch(shape){
       case 'bow': return concat(P([[-.85,.65],[-.62,.15],[-.38,-.35],[0,-.65],[.38,-.35],[.62,.15],[.85,.65]]),P([[-.85,.65],[.85,.65]]),P([[.12,.58],[.76,.02],[.45,.02],[.76,.02],[.64,.28]]));
@@ -159,6 +192,7 @@ export class VisualEngine{
     if(shape==='none')return [];
     if(shape==='mouth')return this.shapeMouth(time,w,h);
     if(shape==='cw')return this.shapeCw(event,w,h);
+    if(shape==='flow')return this.shapeFlow(event,time,w,h);
     if(shape==='clock')return this.shapeClock(w,h);
     if(shape==='qso'||shape==='headcopy')return this.shapeQso(time,w,h);
     if(shape==='recognition'||shape==='focus')return this.shapeTarget(w,h);
@@ -168,6 +202,31 @@ export class VisualEngine{
     }
     return this.shapeWaves(w,h);
   }
+  drawMouthRibs(time,w,h){
+    const ctx=this.x,e=this.smoothedEnergy||.05,cx=w/2,cy=h*.66,ww=w*.72;
+    ctx.save();
+    ctx.lineCap='round';
+    const ribs=34;
+    for(let i=0;i<ribs;i++){
+      const u=i/(ribs-1),xN=-1+2*u,edge=Math.pow(Math.max(0,1-xN*xN),.72);
+      const x=cx+xN*ww/2;
+      const core=Math.pow(Math.max(0,1-Math.abs(xN)),1.25);
+      const open=(14+e*96)*edge;
+      const top=cy-open*.43;
+      const bot=cy+open*.50;
+      ctx.beginPath();
+      ctx.moveTo(x,top);
+      const wobble=Math.sin(i*.67+time*11)*e*4*edge;
+      ctx.quadraticCurveTo(x+wobble,cy,x,bot);
+      ctx.strokeStyle=`rgba(121,229,255,${.08+.48*core})`;
+      ctx.lineWidth=.65+1.9*core;
+      ctx.shadowBlur=4+14*core;
+      ctx.shadowColor='#79e5ff';
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   drawLivingLine(points,time){
     if(!points?.length)return;
     const ctx=this.x,p=resample(points,220);
@@ -198,12 +257,15 @@ export class VisualEngine{
         shapeEvent=e;
       }
       if(e.type==='charVoice'){main=e.data.char||'';sub='';shape='mouth';shapeEvent=e}
-      if(e.type==='cw'){main='';sub='';shape='cw';shapeEvent=e}
+      if(e.type==='cw'){
+        main='';sub='';shape=(e.data.mode==='familiarization'||e.data.mode==='familiarization-confirmation')?'cw':'flow';shapeEvent=e
+      }
       if(e.type==='reveal'){
         main=e.data.text||'';shape=e.data.mnemonic?'mnemonic':'recognition';shapeEvent=e;
         if(e.data.mnemonic){const m=mnemonicFor(e.data.text,e.data.lang||this.language);mnemonicLabel=m?.word||''}
       }
       if(e.type==='check'){main='✓';sub='';shape='recognition';shapeEvent=e}
+      if(e.type==='neutral'){main='';sub='';shape='none';shapeEvent=e}
     }
 
     if(shape!=='none'){
@@ -212,10 +274,12 @@ export class VisualEngine{
         this.prevShape=this.lastRendered?.length?this.lastRendered.map(p=>({...p})):target;
         this.shapeStart=performance.now();this.shapeName=shape;
       }
-      const morphMs=shape==='cw'?85:shape==='mouth'?150:320;
+      const morphMs=shape==='cw'?35:shape==='flow'?90:shape==='mouth'?110:240;
       const m=ease(clamp((performance.now()-this.shapeStart)/morphMs,0,1));
       const points=target.map((p,i)=>({x:lerp(this.prevShape?.[i]?.x??p.x,p.x,m),y:lerp(this.prevShape?.[i]?.y??p.y,p.y,m)}));
-      this.lastRendered=points;this.drawLivingLine(points,time);
+      this.lastRendered=points;
+      if(shape==='mouth')this.drawMouthRibs(time,w,h);
+      this.drawLivingLine(points,time);
     }else{
       this.shapeName='none';this.lastRendered=null;
     }

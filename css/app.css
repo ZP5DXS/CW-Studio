@@ -111,3 +111,12 @@ main{width:100%;display:block}
   .visual-wrap{height:min(78vh,900px)!important;aspect-ratio:auto!important}
   .visual-wrap canvas{object-fit:contain;background:#020406}
 }
+
+/* v1.7 visual polish */
+.asset-status{display:none!important}
+.asset-status.active{display:block!important;margin-top:8px;opacity:.75;font-size:11px}
+.visual-wrap canvas{width:100%!important;height:100%!important}
+.visual-wrap{overflow:hidden}
+@media(min-width:1200px){
+  .visual-wrap{height:min(80vh,980px)!important}
+}
