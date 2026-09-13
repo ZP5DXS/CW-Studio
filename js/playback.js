@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=23';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=24';
 
 export class Playback{
   constructor(voice){

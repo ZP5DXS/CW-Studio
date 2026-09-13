@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS} from './morse-engine.js?v=23';
-import {mnemonicFor} from './mnemonics.js?v=23';
+import {MORSE,PROSIGNS} from './morse-engine.js?v=24';
+import {mnemonicFor} from './mnemonics.js?v=24';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -50,9 +50,11 @@ export class VisualEngine{
     this.prevShape=null;
     this.lastRendered=null;
     this.lastSize='';
+    this.offlineAudio=null;
   }
 
   setLanguage(l){this.language=l||'es'}
+  setOfflineAudio(buffer){this.offlineAudio=buffer||null}
   setAnalyser(a){
     this.audioAnalyser=a;
     if(a)this.wave=new Uint8Array(a.fftSize);
@@ -112,14 +114,32 @@ export class VisualEngine{
 
   voiceLine(time,w,h){
     const left=w*.035,right=w*.965,cy=h*.67,N=220;
-    const e=this.voiceEnergy();
+    let e=this.voiceEnergy();
     const out=[];
+    let offline=null,rate=0,start=0,windowSize=0;
+
+    if(this.offlineAudio){
+      offline=this.offlineAudio.getChannelData(0);
+      rate=this.offlineAudio.sampleRate;
+      const centerSample=Math.floor(Math.max(0,time)*rate);
+      windowSize=Math.min(4096,Math.max(512,Math.floor(rate*.035)));
+      start=Math.max(0,Math.min(offline.length-windowSize,centerSample-Math.floor(windowSize/2)));
+      let sum=0;
+      for(let i=0;i<windowSize;i+=8){const q=offline[start+i]||0;sum+=q*q}
+      e=clamp(Math.sqrt(sum/Math.max(1,windowSize/8))*5.0,0,1);
+    }
+
     for(let i=0;i<N;i++){
       const u=i/(N-1);
       const x=left+u*(right-left);
       const center=Math.pow(Math.sin(Math.PI*u),.82);
-      const wi=Math.floor(u*(this.wave.length-1));
-      const raw=this.audioAnalyser?((this.wave[wi]-128)/128):Math.sin(u*TAU*2+time*3)*.04;
+      let raw;
+      if(offline){
+        raw=offline[start+Math.min(windowSize-1,Math.floor(u*(windowSize-1)))]||0;
+      }else{
+        const wi=Math.floor(u*(this.wave.length-1));
+        raw=this.audioAnalyser?((this.wave[wi]-128)/128):Math.sin(u*TAU*2+time*3)*.04;
+      }
       const harmonics=Math.sin(u*TAU*6-time*8)*.12+Math.sin(u*TAU*11+time*5)*.06;
       const amp=(34+158*e)*center;
       const y=cy+(raw*.86+harmonics*e*.34)*amp;

@@ -1,5 +1,5 @@
-import {Timeline} from './timeline.js?v=23';
-import {tokenDuration,wordDuration} from './morse-engine.js?v=23';
+import {Timeline} from './timeline.js?v=24';
+import {tokenDuration,wordDuration} from './morse-engine.js?v=24';
 
 export const COURSE=[
 [1,'HEAR',['T','E','A'],6,'Discover complete CW sounds'],
@@ -218,6 +218,7 @@ export function requiredLessonVoiceIds(lesson){
   const ids=[specificIntro(lesson),specificOutro(lesson)];
   if(lesson===1)ids.push('course_welcome','course_daily_guidance','familiarization_intro','recognition_intro');
   if(lesson>=2&&lesson<=9)ids.push('begin_review','new_characters','familiarization_short');
+  if(lesson>=3&&lesson<=13)ids.push('groups_intro');
   if(lesson===6)ids.push('recognition_say_before_answer');
   if(lesson===7)ids.push('less_visual_help');
   if(lesson===10)ids.push('lesson_consolidation','groups_intro','marathon_intro','no_response_required','milestone_all_letters');
