@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=22';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=23';
 
 export async function exportVideo(tl,voice,visual,{lang='es',gender='female',tone=700,fps=30,onProgress=()=>{}}={}){
   if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream)throw new Error('Video export is not supported by this browser.');

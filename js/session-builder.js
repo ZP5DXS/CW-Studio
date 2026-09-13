@@ -1,4 +1,4 @@
-import {Timeline} from './timeline.js?v=22';import {tokenDuration,wordDuration} from './morse-engine.js?v=22';
+import {Timeline} from './timeline.js?v=23';import {tokenDuration,wordDuration} from './morse-engine.js?v=23';
 const LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ',NUMBERS='0123456789';
 const ABBR=['TNX','FER','PSE','AGN','FB','GM','GA','GE','WX','ANT','RIG'],CALLS=['ZP5DXS','W1AW','K1ABC','LU1ABC','PY2XYZ','JA1ABC','DL4ABC','EA7XYZ'];
 const PROSIGNS=['BT','AR','SK','KN'],PUNCT=['?','/'];
@@ -48,7 +48,16 @@ export function buildCustom(o){
       tl.add('cw',t,d,{text:item,wpm:o.wpm,eff:o.eff,mode:'familiarization-confirmation'});
       t+=d+.22;
       tl.add('neutral',t,.20,{});
-      t+=1.0;
+      t+=.20;
+
+      // Custom sessions deliberately do NOT inherit the course chime by default.
+      // The learner can enable it in Advanced when a stronger separator is useful.
+      if(o.courtesyChime){
+        tl.add('check',t,.18,{label:'NEXT'});
+        t+=1.00;
+      }else{
+        t+=.80;
+      }
     }
   }
 

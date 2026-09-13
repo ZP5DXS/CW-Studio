@@ -12,7 +12,7 @@
   <header class="topbar">
     <div class="brand">
       <div class="eyebrow">MORSE PRACTICE</div>
-      <h1>CW Studio <span class="version-badge">v2.2</span></h1>
+      <h1>CW Studio <span class="version-badge">v2.3</span></h1>
     </div>
 
     <div class="voice-console">
@@ -26,14 +26,14 @@
           <span class="voice-orb"><i></i><i></i><i></i></span>
           <span>
             <strong id="voiceFemaleName">AURA</strong>
-            <small id="voiceFemaleMeta">ES · VOZ CÁLIDA</small>
+            
           </span>
         </button>
         <button class="voice-pill" data-gender="male">
           <span class="voice-orb"><i></i><i></i><i></i></span>
           <span>
             <strong id="voiceMaleName">NEXO</strong>
-            <small id="voiceMaleMeta">ES · VOZ SERENA</small>
+            
           </span>
         </button>
       </div>
@@ -88,7 +88,7 @@
         </div>
       </div>
 
-      <div id="assetStatus" class="asset-status">CW Studio v2.2</div>
+      <div id="assetStatus" class="asset-status">CW Studio v2.3</div>
     </section>
 
     <section id="coursePanel" class="panel active">
@@ -157,6 +157,7 @@
             <label><span data-i18n="answerDelay">Tiempo de respuesta</span> <span><span id="delayValue">1.5</span>s</span><input id="delayRange" type="range" min="0.5" max="4" step="0.1" value="1.5"></label>
             <label class="inline-check"><input id="variableRecognition" type="checkbox"> <span data-i18n="variableSpeed">Reconocimiento a velocidad variable</span></label>
             <label class="inline-check"><input id="randomOrder" type="checkbox" checked> <span data-i18n="randomOrder">Orden aleatorio de caracteres y números</span></label>
+            <label class="inline-check"><input id="courtesyChime" type="checkbox"> <span data-i18n="courtesyChime">Tono de cortesía entre caracteres</span></label>
             <label class="inline-check"><input id="toneVariation" type="checkbox"> <span data-i18n="toneVariation">Variación leve de tono</span></label>
           </div>
         </section>
@@ -203,6 +204,6 @@
     </section>
   </main>
 </div>
-<script type="module" src="js/app.js?v=22"></script>
+<script type="module" src="js/app.js?v=23"></script>
 </body>
 </html>
