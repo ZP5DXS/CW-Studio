@@ -279,3 +279,42 @@ main{width:100%!important;max-width:none!important}
   .footer-links{width:100%}
   .footer-link{flex:1}
 }
+
+/* v3.5 — video render telemetry */
+.render-telemetry{
+  width:min(760px,82%);
+  margin:10px auto 14px;
+  display:grid;
+  grid-template-columns:1.45fr 1fr 1fr 1.2fr;
+  gap:10px;
+}
+.render-telemetry.hidden{display:none}
+.render-metric{
+  min-width:0;
+  padding:10px 12px;
+  border:1px solid rgba(121,229,255,.13);
+  border-radius:11px;
+  background:rgba(5,13,19,.42);
+  text-align:left;
+}
+.render-metric span{
+  display:block;
+  color:#eefaff;
+  font-size:13px;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.render-metric small{
+  display:block;
+  margin-top:3px;
+  color:#6f8998;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.14em;
+}
+@media(max-width:760px){
+  .render-telemetry{grid-template-columns:1fr 1fr;width:min(92%,560px)}
+}

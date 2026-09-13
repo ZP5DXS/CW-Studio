@@ -1,10 +1,10 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=34';
-import {renderOffline} from './export-engine.js?v=34';
-import {VisualEngine} from './visual-engine.js?v=34';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=35';
+import {renderOffline} from './export-engine.js?v=35';
+import {VisualEngine} from './visual-engine.js?v=35';
 
 const MEDIABUNNY_URL='https://cdn.jsdelivr.net/npm/mediabunny@1.56.1/+esm';
 
-async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,onProgress=()=>{},onStage=()=>{}}={}){
+async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,onProgress=()=>{},onStage=()=>{},onTelemetry=()=>{}}={}){
   if(!('VideoEncoder' in window)||!('AudioEncoder' in window))throw new Error('WebCodecs unavailable');
 
   onStage('audio');
@@ -47,12 +47,38 @@ async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,on
 
   const audioPromise=audioSource.add(audio).then(()=>audioSource.close());
   const totalFrames=Math.ceil(tl.duration*fps);
+  const renderStarted=performance.now();
+  let lastTelemetry=0;
 
   for(let frame=0;frame<totalFrames;frame++){
     const ts=frame/fps;
     renderer.draw(ts,tl);
     await videoSource.add(ts,1/fps,{keyFrame:frame%(fps*4)===0});
-    if(frame%8===0||frame===totalFrames-1)onProgress(.24+.68*(frame+1)/totalFrames);
+    if(frame%8===0||frame===totalFrames-1){
+      const completed=frame+1;
+      const progress=completed/totalFrames;
+      onProgress(.24+.68*progress);
+
+      const now=performance.now();
+      if(now-lastTelemetry>220 || frame===totalFrames-1){
+        lastTelemetry=now;
+        const elapsed=Math.max(.001,(now-renderStarted)/1000);
+        const processedSeconds=completed/fps;
+        const realtime=processedSeconds/elapsed;
+        const remainingSeconds=realtime>0?(tl.duration-processedSeconds)/realtime:null;
+        onTelemetry({
+          mode:'fast',
+          processedSeconds,
+          totalSeconds:tl.duration,
+          completedFrames:completed,
+          totalFrames,
+          realtime,
+          etaSeconds:remainingSeconds,
+          elapsedSeconds:elapsed,
+          calibrated:elapsed>=2.2 && completed>=Math.min(totalFrames,48)
+        });
+      }
+    }
   }
 
   videoSource.close();
@@ -66,7 +92,7 @@ async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,on
   return new Blob([target.buffer],{type:'video/mp4'});
 }
 
-async function exportRealtime(tl,voice,visual,{lang='es',gender='female',tone=700,fps=30,onProgress=()=>{},onStage=()=>{}}={}){
+async function exportRealtime(tl,voice,visual,{lang='es',gender='female',tone=700,fps=30,onProgress=()=>{},onStage=()=>{},onTelemetry=()=>{}}={}){
   onStage('compatibility');
   await visual.preloadMnemonics(lang);
   if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream)throw new Error('Video export is not supported by this browser.');
@@ -96,11 +122,34 @@ async function exportRealtime(tl,voice,visual,{lang='es',gender='female',tone=70
   rec.ondataavailable=e=>{if(e.data.size)parts.push(e.data)};
   const done=new Promise((resolve,reject)=>{rec.onerror=e=>reject(e.error||e);rec.onstop=()=>resolve(new Blob(parts,{type:mimeType||'video/webm'}))});
   rec.start(1000);
-  let raf;
+  let raf,lastTelemetry=0;
+  const wallStarted=performance.now();
   const draw=()=>{
     const t=Math.max(0,ctx.currentTime-base);
     visual.draw(Math.min(t,tl.duration),tl);
-    onProgress(Math.min(1,t/tl.duration));
+    const progress=Math.min(1,t/tl.duration);
+    onProgress(progress);
+
+    const now=performance.now();
+    if(now-lastTelemetry>300 || t>=tl.duration){
+      lastTelemetry=now;
+      const elapsed=Math.max(.001,(now-wallStarted)/1000);
+      const processed=Math.min(t,tl.duration);
+      const realtime=processed/elapsed;
+      const eta=realtime>0?(tl.duration-processed)/realtime:null;
+      onTelemetry({
+        mode:'compatibility',
+        processedSeconds:processed,
+        totalSeconds:tl.duration,
+        completedFrames:Math.min(Math.round(processed*fps),Math.ceil(tl.duration*fps)),
+        totalFrames:Math.ceil(tl.duration*fps),
+        realtime,
+        etaSeconds:eta,
+        elapsedSeconds:elapsed,
+        calibrated:elapsed>=2.2
+      });
+    }
+
     if(t<tl.duration+.05)raf=requestAnimationFrame(draw);
     else{cancelAnimationFrame(raf);setTimeout(()=>rec.stop(),120)}
   };
