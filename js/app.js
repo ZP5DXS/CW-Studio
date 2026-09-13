@@ -1,11 +1,11 @@
-import {VoiceEngine} from './voice-engine.js?v=18';
-import {Playback} from './playback.js?v=18';
-import {VisualEngine} from './visual-engine.js?v=18';
-import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=18';
-import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=18';
-import {buildCustom} from './session-builder.js?v=18';
-import {exportWav,exportMp3,download} from './export-engine.js?v=18';
-import {exportVideo} from './video-export.js?v=18';
+import {VoiceEngine} from './voice-engine.js?v=19';
+import {Playback} from './playback.js?v=19';
+import {VisualEngine} from './visual-engine.js?v=19';
+import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=19';
+import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=19';
+import {buildCustom} from './session-builder.js?v=19';
+import {exportWav,exportMp3,download} from './export-engine.js?v=19';
+import {exportVideo} from './video-export.js?v=19';
 
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
@@ -60,6 +60,7 @@ const visual=new VisualEngine($('#visualCanvas'));
 
 let currentLesson=Number(localStorage.getItem('cwStudio.currentLesson')||1);
 let timeline=null;
+let currentPosition=0;
 let wizardStep=1;
 let selectedModes=new Set(['familiarization','recognition']);
 let selectedContents=new Set(['letters']);
@@ -120,7 +121,7 @@ function loadingStatus(text,prefix='',kicker=tr('loading')){
   const m=s.match(/(\d+)\/(\d+)/);
   const p=m?Number(m[1])/Math.max(1,Number(m[2])):(/ready|complete|rendered/i.test(s)?1:.08);
   setLoading(true,p,`${prefix}${prefix?' · ':''}${s}`,kicker);
-  $('#assetStatus').textContent=`CW Studio v1.8 · ${s}`;$('#assetStatus').classList.add('active');
+  $('#assetStatus').textContent=`CW Studio v1.9 · ${s}`;$('#assetStatus').classList.add('active');
 }
 function stopLoading(){setLoading(false,1,'','')}
 
@@ -129,9 +130,10 @@ function fmt(s){
   return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
 }
 function drawLoop(t=0){
+  currentPosition=Math.max(0,t||0);
   if(!timeline){$('#timeLabel').textContent='00:00 / 00:00';return}
-  visual.draw(t,timeline);
-  $('#timeLabel').textContent=`${fmt(t)} / ${fmt(timeline.duration)}`;
+  visual.draw(currentPosition,timeline);
+  $('#timeLabel').textContent=`${fmt(currentPosition)} / ${fmt(timeline.duration)}`;
 }
 function meta(){
   return {
@@ -172,6 +174,7 @@ async function loadLesson(n){
   playback.stop();resetPlayButton();
   $('#lessonEndActions').classList.add('hidden');
   timeline=null;
+  currentPosition=0;
 
   $('#statusLabel').textContent=`${tr('lesson')} ${String(currentLesson).padStart(2,'0')}`;
   setLoading(true,.03,`${tr('loading')} ${String(currentLesson).padStart(2,'0')}…`,tr('loading'));
@@ -195,7 +198,7 @@ async function loadLesson(n){
     success=true;
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v1.8 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v1.9 · ${err.message||err}`;$('#assetStatus').classList.add('active');
     $('#assetStatus').classList.add('warning');
     timeline=null;
     stopLoading();
@@ -206,17 +209,19 @@ async function loadLesson(n){
 
 async function loadBonus(id){
   playback.stop();resetPlayButton();timeline=null;
+  currentPosition=0;
   $('#lessonEndActions').classList.add('hidden');
   setLoading(true,.03,'Head Copy…',lang()==='es'?'CARGANDO HEAD COPY':'LOADING HEAD COPY');
   controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=true});
   try{
     await voice.discover(s=>loadingStatus(s,'',lang()==='es'?'CARGANDO HEAD COPY':'LOADING HEAD COPY'));
-    visual.setLanguage(lang());timeline=await buildHeadCopy(id,{lang:lang(),gender:$('#voiceSelect').value,voice,wpm:15,eff:12,onStatus:s=>loadingStatus(s,'',lang()==='es'?'CARGANDO HEAD COPY':'LOADING HEAD COPY')});
+    visual.setLanguage(lang());currentPosition=0;
+    timeline=await buildHeadCopy(id,{lang:lang(),gender:$('#voiceSelect').value,voice,wpm:15,eff:12,onStatus:s=>loadingStatus(s,'',lang()==='es'?'CARGANDO HEAD COPY':'LOADING HEAD COPY')});
     visual.setLanguage(lang());drawLoop(0);renderBonuses();stopLoading();
     controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=false});
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
-    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v1.8 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
+    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v1.9 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
   }
 }
 
@@ -316,7 +321,8 @@ $$('.duration-choice').forEach(b=>b.onclick=()=>{
 });
 
 $('#buildSessionBtn').onclick=()=>{
-  visual.setLanguage(lang());timeline=buildCustom({
+  visual.setLanguage(lang());currentPosition=0;
+  timeline=buildCustom({
     lang:lang(),
     familiarization:selectedModes.has('familiarization'),
     recognition:selectedModes.has('recognition'),
@@ -350,7 +356,7 @@ function resetPlayButton(){
   $('#playBtn').dataset.state='play';
 }
 async function togglePlay(){
-  if(!timeline){$('#assetStatus').textContent='CW Studio v1.8 · no session loaded';return}
+  if(!timeline){$('#assetStatus').textContent='CW Studio v1.9 · no session loaded';return}
   if(playback.isPlaying()){
     if(playback.isPaused()){
       await playback.resume();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
@@ -360,11 +366,11 @@ async function togglePlay(){
     return;
   }
   stopLoading();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
-  $('#assetStatus').textContent='CW Studio v1.8 · preparing audio…';
+  $('#assetStatus').textContent='CW Studio v1.9 · preparing audio…';
   try{
     await playback.play(timeline,{
-      lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.8 · ${s}`},
+      lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,startAt:currentPosition,
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.9 · ${s}`},
       onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
       onEnd:()=>{
         resetPlayButton();drawLoop(timeline.duration);
@@ -372,7 +378,7 @@ async function togglePlay(){
       }
     });
   }catch(err){
-    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v1.8 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
+    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v1.9 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
   }
 }
 $('#playBtn').onclick=()=>togglePlay();
@@ -385,6 +391,62 @@ $('#fullscreenBtn').onclick=async()=>{
 };
 
 
+
+async function seekTo(seconds){
+  if(!timeline)return;
+  const wasPlaying=playback.isPlaying();
+  const wasPaused=playback.isPaused();
+
+  playback.stop();
+  resetPlayButton();
+
+  currentPosition=Math.max(0,Math.min(timeline.duration,seconds));
+  drawLoop(currentPosition);
+
+  if(wasPlaying&&!wasPaused&&currentPosition<timeline.duration-.05){
+    $('#playBtn').textContent=tr('pause');
+    $('#playBtn').dataset.state='pause';
+    try{
+      await playback.play(timeline,{
+        lang:lang(),
+        gender:$('#voiceSelect').value,
+        tone:+$('#toneRange').value,
+        startAt:currentPosition,
+        onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.9 · ${s}`},
+        onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
+        onEnd:()=>{
+          resetPlayButton();
+          drawLoop(timeline.duration);
+          if(timeline?.meta?.kind==='course'){
+            completeCurrent();
+            $('#lessonEndActions').classList.remove('hidden');
+          }
+        }
+      });
+    }catch(err){
+      resetPlayButton();
+      console.error(err);
+    }
+  }else if(wasPaused){
+    $('#playBtn').textContent=tr('resume');
+    $('#playBtn').dataset.state='resume';
+  }
+}
+
+$('#visualCanvas').addEventListener('pointerdown',e=>{
+  if(!timeline)return;
+  const rect=e.currentTarget.getBoundingClientRect();
+  const y=e.clientY-rect.top;
+  // Only the lower progress-zone behaves like a video seek bar.
+  if(y<rect.height*.88)return;
+
+  const x=e.clientX-rect.left;
+  const left=rect.width*.035;
+  const right=rect.width*.965;
+  const ratio=Math.max(0,Math.min(1,(x-left)/(right-left)));
+  seekTo(ratio*timeline.duration);
+});
+
 async function exportAudio(kind){
   if(!timeline)return;
   const btn=kind==='wav'?$('#wavBtn'):$('#mp3Btn');
@@ -394,7 +456,7 @@ async function exportAudio(kind){
   try{
     const options={
       lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.8 · ${s}`},
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.9 · ${s}`},
       onProgress:p=>setLoading(true,p,`${Math.round(p*100)}%`,tr('exportAudio'))
     };
     const blob=kind==='wav'?await exportWav(timeline,voice,options,meta()):await exportMp3(timeline,voice,options,meta());
@@ -402,7 +464,7 @@ async function exportAudio(kind){
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v1.8 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v1.9 · ${err.message||err}`;$('#assetStatus').classList.add('active');
     $('#assetStatus').classList.add('warning');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
@@ -422,7 +484,7 @@ $('#videoBtn').onclick=async()=>{
     download(blob,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`);
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v1.8 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v1.9 · ${err.message||err}`;$('#assetStatus').classList.add('active');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
   }

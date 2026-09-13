@@ -141,3 +141,42 @@ main{width:100%;display:block}
     aspect-ratio:16/9!important;
   }
 }
+
+/* v1.9 — player geometry + seek */
+html,body{width:100%;overflow-x:hidden}
+.app-shell{width:100vw!important;max-width:none!important;margin:0!important}
+main{width:100%!important;max-width:none!important}
+.player-section{width:100%!important;max-width:none!important}
+.visual-wrap{
+  width:100%!important;
+  max-width:none!important;
+  height:auto!important;
+  aspect-ratio:16/9!important;
+  min-height:0!important;
+  max-height:none!important;
+}
+.visual-wrap canvas{
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+  object-fit:fill!important;
+  cursor:default;
+}
+.visual-wrap canvas:hover{cursor:default}
+.visual-wrap::after{
+  content:'';
+  position:absolute;
+  left:3.5%;
+  right:3.5%;
+  bottom:0;
+  height:12%;
+  cursor:pointer;
+  pointer-events:none;
+}
+@media(min-width:1200px){
+  .visual-wrap{
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:16/9!important;
+  }
+}
