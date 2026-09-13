@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS} from './morse-engine.js?v=36';
-import {mnemonicFor,mnemonicEntries} from './mnemonics.js?v=36';
+import {MORSE,PROSIGNS} from './morse-engine.js?v=37';
+import {mnemonicFor,mnemonicEntries} from './mnemonics.js?v=37';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -596,6 +596,27 @@ export class VisualEngine{
     ctx.restore();
   }
 
+  drawNumericMnemonic(char,w,h){
+    const ctx=this.x;
+    const n=String(char||'');
+    ctx.save();
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+
+    const size=Math.min(w*.22,h*.28);
+    ctx.font=`900 ${size}px system-ui`;
+    ctx.fillStyle='#f3f8ff';
+    ctx.shadowBlur=26;
+    ctx.shadowColor='rgba(121,229,255,.45)';
+    ctx.fillText(n,w/2,h*.34);
+
+    ctx.shadowBlur=0;
+    ctx.fillStyle='rgba(121,229,255,.72)';
+    ctx.font='800 11px system-ui';
+    ctx.fillText(this.language==='es'?'ESCUCHÁ EL RITMO':'HEAR THE RHYTHM',w/2,h*.47);
+    ctx.restore();
+  }
+
   drawProgress(time,timeline,w,h){
     const prog=timeline?.duration?clamp(time/timeline.duration,0,1):0;
     const x=w*.035,y=h-18,width=w*.93;
@@ -639,13 +660,21 @@ export class VisualEngine{
 
     let mnemonicAsset=null;
     if(mnemonicEv){
-      shapeName='mnemonic';
+      const token=String(mnemonicEv.data.text||'').toUpperCase();
       const mLang=mnemonicEv.data.lang||this.language;
-      // Noto asset is now the visual mnemonic. The Living Line itself stays
-      // continuous underneath and visually feeds into the icon.
-      target=this.baseline(w,h);
-      mnemonicAsset={char:mnemonicEv.data.text,lang:mLang,event:mnemonicEv};
-      this.drawMnemonicText(mnemonicEv.data.text,mLang,w,h);
+
+      if(/^[0-9]$/.test(token)){
+        // Numbers use no semantic mnemonic image. The number itself is the
+        // visual anchor, while Morse is shown only through the Living Line/ECG.
+        shapeName='number';
+        target=cwEv ? this.cwLine(cwEv,w,h) : this.baseline(w,h);
+        this.drawNumericMnemonic(token,w,h);
+      }else{
+        shapeName='mnemonic';
+        target=this.baseline(w,h);
+        mnemonicAsset={char:token,lang:mLang,event:mnemonicEv};
+        this.drawMnemonicText(token,mLang,w,h);
+      }
     }else if(voiceEv||charVoiceEv){
       shapeName='voice';
       target=this.voiceLine(time,w,h);
@@ -693,7 +722,7 @@ export class VisualEngine{
       this.shapeName=shapeName;
     }
 
-    const morphMs=shapeName==='mnemonic'?220:shapeName==='voice'?90:shapeName==='cw'?40:shapeName==='flow'?90:120;
+    const morphMs=shapeName==='mnemonic'?220:shapeName==='number'?55:shapeName==='voice'?90:shapeName==='cw'?40:shapeName==='flow'?90:120;
     const m=ease(clamp((performance.now()-this.shapeStart)/morphMs,0,1));
     const points=targetRes.map((p,i)=>({
       x:lerp(this.prevShape?.[i]?.x??p.x,p.x,m),
