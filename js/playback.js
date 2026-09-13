@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=351';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=36';
 
 export class Playback{
   constructor(voice){
@@ -64,9 +64,6 @@ export class Playback{
     this.ctx=ctx;
     try{await ctx.resume()}catch{}
 
-    // Keep synthesized CW/check tones and spoken voice on separate buses.
-    // Short English letter names (B, S, F, etc.) are especially sensitive to
-    // aggressive compression; send voice directly to the analyser/output.
     const cwBus=ctx.createGain();
     cwBus.gain.value=.85;
 
@@ -88,10 +85,12 @@ export class Playback{
     this.analyser=analyser;
 
     const from=Math.max(0,Math.min(startAt||0,tl.duration));
-    const endAt=Math.min(limit||tl.duration,tl.duration);
+    const endAt=Math.min(limit??tl.duration,tl.duration);
     this.startAt=from;
     this.current=from;
 
+    // Voice clips are few and reusable. Decode them once, but NEVER build the
+    // entire CW oscillator graph up front for a long session.
     const needed=new Map();
     for(const e of tl.events){
       if(e.start>=endAt)continue;
@@ -105,62 +104,84 @@ export class Playback{
       }
     }
 
-    let i=0;
-    for(const id of needed.keys()){
-      i++;
-      onStatus(`loading audio ${i}/${needed.size} · ${id}`);
-      const b=await this.voice.buffer(ctx,id,lang,gender);
-      if(!b)throw new Error(`Unable to load ${id}`);
-      needed.set(id,b);
-    }
+    let loaded=0;
+    const ids=[...needed.keys()];
+    const workers=Math.min(5,Math.max(1,ids.length));
+    let cursor=0;
+    const loadWorker=async()=>{
+      while(cursor<ids.length){
+        const id=ids[cursor++];
+        const b=await this.voice.buffer(ctx,id,lang,gender);
+        if(!b)throw new Error(`Unable to load ${id}`);
+        needed.set(id,b);
+        loaded++;
+        onStatus(`loading audio ${loaded}/${ids.length} · ${id}`);
+      }
+    };
+    await Promise.all(Array.from({length:workers},()=>loadWorker()));
 
     try{await ctx.resume()}catch{}
-    const base=ctx.currentTime+.30;
+    const base=ctx.currentTime+.12;
     this.base=base;
     onStatus(`audio ready · ${needed.size} voice clips`);
 
-    for(const e of tl.events){
-      if(e.start>=endAt)continue;
-      const eventEnd=e.start+(e.duration||0);
-      if(eventEnd<from)continue;
+    const events=tl.events;
+    let nextIndex=0;
+    while(nextIndex<events.length && (events[nextIndex].start+(events[nextIndex].duration||0))<from)nextIndex++;
 
-      const when=base+Math.max(0,e.start-from);
+    // Rolling Web Audio scheduling:
+    // keep only ~40 s of future CW nodes scheduled, extending every few seconds.
+    // This turns 30/60/120-minute sessions into a constant-memory playback job.
+    const LOOKAHEAD=40;
+    const REFILL_AT=18;
+    let scheduledThrough=from;
 
-      if(e.type==='cw'){
-        // If seek lands inside an active CW element, skip that partial element and
-        // continue from the next scheduled event. This avoids malformed partial Morse.
-        if(e.start<from)continue;
-        scheduleText(ctx,cwBus,e.data.text,when,{
-          wpm:e.data.wpm||15,
-          effectiveWpm:e.data.eff||e.data.wpm||15,
-          tone:e.data.tone||tone,
-          amp:.30
-        });
-      }else if(e.type==='check'){
-        if(e.start<from)continue;
-        scheduleCheckTone(ctx,cwBus,when,{amp:.12});
-      }else if(e.type==='voice'||e.type==='charVoice'){
-        const id=e.type==='voice'
-          ?e.data.id
-          :`char_${String(e.data.char).toLowerCase()}`;
-        const b=needed.get(id);
-        if(!b)continue;
+    const scheduleWindow=(windowEnd)=>{
+      const target=Math.min(windowEnd,endAt);
+      while(nextIndex<events.length){
+        const e=events[nextIndex];
+        if(e.start>=target)break;
+        nextIndex++;
 
-        const s=ctx.createBufferSource();
-        s.buffer=b;
-        s.connect(voiceBus);
+        const eventEnd=e.start+(e.duration||0);
+        if(eventEnd<from)continue;
+        const when=base+Math.max(0,e.start-from);
 
-        if(e.start<from && eventEnd>from){
-          const offset=Math.min(b.duration-.01,Math.max(0,from-e.start));
-          s.start(base,offset);
-        }else if(e.start>=from){
-          s.start(when);
-        }else{
-          continue;
+        if(e.type==='cw'){
+          if(e.start<from)continue;
+          scheduleText(ctx,cwBus,e.data.text,when,{
+            wpm:e.data.wpm||15,
+            effectiveWpm:e.data.eff||e.data.wpm||15,
+            tone:e.data.tone||tone,
+            amp:.30
+          });
+        }else if(e.type==='check'){
+          if(e.start<from)continue;
+          scheduleCheckTone(ctx,cwBus,when,{amp:.12});
+        }else if(e.type==='voice'||e.type==='charVoice'){
+          const id=e.type==='voice'
+            ?e.data.id
+            :`char_${String(e.data.char).toLowerCase()}`;
+          const b=needed.get(id);
+          if(!b)continue;
+
+          const src=ctx.createBufferSource();
+          src.buffer=b;
+          src.connect(voiceBus);
+
+          if(e.start<from && eventEnd>from){
+            const offset=Math.min(b.duration-.01,Math.max(0,from-e.start));
+            src.start(base,offset);
+          }else if(e.start>=from){
+            src.start(when);
+          }
+          this.sources.push(src);
         }
-        this.sources.push(s);
       }
-    }
+      scheduledThrough=target;
+    };
+
+    scheduleWindow(from+LOOKAHEAD);
 
     this.ended=false;
     this.playing=true;
@@ -170,6 +191,10 @@ export class Playback{
       const t=Math.max(from,from+(ctx.currentTime-base));
       this.current=Math.min(t,endAt);
       onTick(this.current,analyser);
+
+      if(scheduledThrough<endAt && scheduledThrough-t<REFILL_AT){
+        scheduleWindow(t+LOOKAHEAD);
+      }
 
       if(t>=endAt+.05&&!this.ended){
         this.ended=true;

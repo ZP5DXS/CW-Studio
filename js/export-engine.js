@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=351';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=36';
 
 function ascii(s){return new TextEncoder().encode(s)}
 function concat(...parts){const n=parts.reduce((a,p)=>a+p.length,0),o=new Uint8Array(n);let x=0;for(const p of parts){o.set(p,x);x+=p.length}return o}
@@ -95,6 +95,86 @@ export async function renderOffline(tl,voice,{lang='es',gender='female',tone=700
     clearInterval(heartbeat);
   }
 }
+
+export async function renderOfflineSegment(tl,voice,start,duration,{
+  lang='es',gender='female',tone=700,onStatus=()=>{}
+}={}){
+  if(!Number.isFinite(start)||!Number.isFinite(duration)||duration<=0)throw new Error('Invalid audio segment.');
+
+  const sr=32000; // sufficient for CW/voice video soundtrack, substantially lower memory
+  const segmentStart=Math.max(0,start);
+  const segmentEnd=Math.min(tl.duration,segmentStart+duration);
+
+  // Render with overlap so events crossing a chunk boundary are captured cleanly.
+  const maxEventDur=Math.max(1,...tl.events.map(e=>Number(e.duration)||0));
+  const overlap=Math.min(30,Math.max(2,maxEventDur+0.5));
+  const renderStart=Math.max(0,segmentStart-overlap);
+  const renderEnd=Math.min(tl.duration+.25,segmentEnd+overlap);
+  const renderDuration=Math.max(.1,renderEnd-renderStart);
+
+  const ctx=new OfflineAudioContext(1,Math.ceil(renderDuration*sr),sr);
+  const cwBus=ctx.createGain();cwBus.gain.value=.82;
+  const voiceBus=ctx.createGain();voiceBus.gain.value=.92;
+  const comp=ctx.createDynamicsCompressor();
+  comp.threshold.value=-3;comp.ratio.value=6;comp.attack.value=.003;comp.release.value=.18;
+  cwBus.connect(comp).connect(ctx.destination);
+  voiceBus.connect(ctx.destination);
+
+  const relevant=tl.events.filter(e=>{
+    const end=e.start+(e.duration||0);
+    return e.start<renderEnd && end>renderStart;
+  });
+
+  const voiceIds=[...new Set(relevant
+    .filter(e=>e.type==='voice'||e.type==='charVoice')
+    .map(e=>e.type==='voice'?e.data.id:`char_${String(e.data.char).toLowerCase()}`))];
+  const voiceBuffers=new Map();
+
+  for(const id of voiceIds){
+    const b=await voice.buffer(ctx,id,lang,gender);
+    if(!b)throw new Error(`Required voice clip unavailable during video export: ${id}`);
+    voiceBuffers.set(id,b);
+  }
+
+  for(const e of relevant){
+    const local=e.start-renderStart;
+    if(e.type==='cw'){
+      if(local<0)continue; // overlap is chosen to make this rare for central content
+      scheduleText(ctx,cwBus,e.data.text,local,{
+        wpm:e.data.wpm||15,
+        effectiveWpm:e.data.eff||15,
+        tone:e.data.tone||tone,
+        amp:.30
+      });
+    }else if(e.type==='check'){
+      if(local>=0)scheduleCheckTone(ctx,cwBus,local,{amp:.14});
+    }else if(e.type==='voice'||e.type==='charVoice'){
+      const id=e.type==='voice'?e.data.id:`char_${String(e.data.char).toLowerCase()}`;
+      const b=voiceBuffers.get(id);
+      if(!b)continue;
+      const src=ctx.createBufferSource();src.buffer=b;src.connect(voiceBus);
+      if(local<0){
+        const off=Math.min(b.duration-.01,Math.max(0,-local));
+        if(off<b.duration-.01)src.start(0,off);
+      }else{
+        src.start(local);
+      }
+    }
+  }
+
+  const rendered=await ctx.startRendering();
+
+  // Extract exactly the requested central interval, dropping overlap.
+  const trimStart=Math.round((segmentStart-renderStart)*sr);
+  const wantedFrames=Math.max(1,Math.round((segmentEnd-segmentStart)*sr));
+  const available=Math.max(0,rendered.length-trimStart);
+  const frames=Math.min(wantedFrames,available);
+  const out=new AudioBuffer({length:frames,numberOfChannels:1,sampleRate:sr});
+  out.copyToChannel(rendered.getChannelData(0).subarray(trimStart,trimStart+frames),0);
+  onStatus(`audio segment ${segmentStart.toFixed(1)}-${segmentEnd.toFixed(1)}`);
+  return out;
+}
+
 export async function exportWav(tl,voice,o,meta={}){
   const b=await renderOffline(tl,voice,o);
   o?.onStatus?.('building WAV…');o?.onProgress?.(.82);

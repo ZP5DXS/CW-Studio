@@ -1,22 +1,21 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=351';
-import {renderOffline} from './export-engine.js?v=351';
-import {VisualEngine} from './visual-engine.js?v=351';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=36';
+import {renderOffline,renderOfflineSegment} from './export-engine.js?v=36';
+import {VisualEngine} from './visual-engine.js?v=36';
 
 const MEDIABUNNY_URL='https://cdn.jsdelivr.net/npm/mediabunny@1.56.1/+esm';
 
-async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,onProgress=()=>{},onStage=()=>{},onTelemetry=()=>{}}={}){
+async function exportFast(tl,voice,{
+  lang='es',gender='female',tone=700,fps=24,
+  onProgress=()=>{},onStage=()=>{},onTelemetry=()=>{},
+  fileWritable=null
+}={}){
   if(!('VideoEncoder' in window)||!('AudioEncoder' in window))throw new Error('WebCodecs unavailable');
 
-  onStage('audio');
-  const audio=await renderOffline(tl,voice,{
-    lang,gender,tone,
-    onStatus:()=>{},
-    onProgress:p=>onProgress(.02+p*.20)
-  });
-
+  const longMode=tl.duration>=15*60;
   onStage('encoder');
+
   const {
-    Output,Mp4OutputFormat,BufferTarget,CanvasSource,AudioBufferSource,Quality
+    Output,Mp4OutputFormat,BufferTarget,StreamTarget,CanvasSource,AudioBufferSource,Quality
   }=await import(MEDIABUNNY_URL);
 
   const canvas=document.createElement('canvas');
@@ -24,13 +23,18 @@ async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,on
   canvas.style.width='1280px';canvas.style.height='720px';
   const renderer=new VisualEngine(canvas);
   renderer.setLanguage(lang);
-  renderer.setOfflineAudio(audio);
-  // Video rendering is frame-driven and much faster than playback, so all
-  // mnemonic SVGs must be ready before frame 0.
   await renderer.preloadMnemonics(lang);
 
-  const target=new BufferTarget();
-  const output=new Output({format:new Mp4OutputFormat(),target});
+  // BufferTarget is intentionally kept only for smaller files. Mediabunny itself
+  // recommends StreamTarget for large output; long sessions write directly to disk.
+  const target=fileWritable
+    ? new StreamTarget(fileWritable,{chunked:true,chunkSize:4*1024*1024})
+    : new BufferTarget();
+
+  const output=new Output({
+    format:new Mp4OutputFormat(),
+    target
+  });
   const videoSource=new CanvasSource(canvas,{codec:'avc',quality:new Quality({bitrate:1400000})});
   const audioSource=new AudioBufferSource({codec:'aac',quality:new Quality({bitrate:128000})});
 
@@ -43,9 +47,32 @@ async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,on
   });
 
   await output.start();
-  onStage('render');
 
-  const audioPromise=audioSource.add(audio).then(()=>audioSource.close());
+  // AUDIO:
+  // short sessions: one offline buffer (fastest).
+  // long sessions: 60-second chunks, encoded and released progressively.
+  onStage('audio');
+  if(longMode){
+    const AUDIO_CHUNK=60;
+    for(let start=0;start<tl.duration;start+=AUDIO_CHUNK){
+      const dur=Math.min(AUDIO_CHUNK,tl.duration-start);
+      const chunk=await renderOfflineSegment(tl,voice,start,dur,{lang,gender,tone});
+      await audioSource.add(chunk);
+      onProgress(.02+.16*Math.min(1,(start+dur)/tl.duration));
+      await new Promise(r=>setTimeout(r,0));
+    }
+    audioSource.close();
+  }else{
+    const audio=await renderOffline(tl,voice,{
+      lang,gender,tone,onStatus:()=>{},
+      onProgress:p=>onProgress(.02+p*.16)
+    });
+    renderer.setOfflineAudio(audio);
+    await audioSource.add(audio);
+    audioSource.close();
+  }
+
+  onStage('render');
   const totalFrames=Math.ceil(tl.duration*fps);
   const renderStarted=performance.now();
   let lastTelemetry=0;
@@ -54,40 +81,41 @@ async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,on
     const ts=frame/fps;
     renderer.draw(ts,tl);
     await videoSource.add(ts,1/fps,{keyFrame:frame%(fps*4)===0});
+
     if(frame%8===0||frame===totalFrames-1){
       const completed=frame+1;
       const progress=completed/totalFrames;
-      onProgress(.24+.68*progress);
+      onProgress(.20+.74*progress);
 
       const now=performance.now();
-      if(now-lastTelemetry>220 || frame===totalFrames-1){
+      if(now-lastTelemetry>220||frame===totalFrames-1){
         lastTelemetry=now;
         const elapsed=Math.max(.001,(now-renderStarted)/1000);
         const processedSeconds=completed/fps;
         const realtime=processedSeconds/elapsed;
         const remainingSeconds=realtime>0?(tl.duration-processedSeconds)/realtime:null;
         onTelemetry({
-          mode:'fast',
-          processedSeconds,
-          totalSeconds:tl.duration,
-          completedFrames:completed,
-          totalFrames,
-          realtime,
-          etaSeconds:remainingSeconds,
-          elapsedSeconds:elapsed,
-          calibrated:elapsed>=2.2 && completed>=Math.min(totalFrames,48)
+          mode:fileWritable?'stream':'fast',
+          processedSeconds,totalSeconds:tl.duration,
+          completedFrames:completed,totalFrames,realtime,
+          etaSeconds:remainingSeconds,elapsedSeconds:elapsed,
+          calibrated:elapsed>=2.2&&completed>=Math.min(totalFrames,48)
         });
       }
+      // Yield occasionally so long exports don't freeze the page event loop.
+      if(frame%96===0)await new Promise(r=>setTimeout(r,0));
     }
   }
 
   videoSource.close();
-  await audioPromise;
   onStage('finalize');
-  onProgress(.94);
+  onProgress(.96);
   await output.finalize();
   onProgress(1);
 
+  if(fileWritable){
+    return {saved:true,type:'video/mp4'};
+  }
   if(!target.buffer)throw new Error('Video buffer was not produced');
   return new Blob([target.buffer],{type:'video/mp4'});
 }
