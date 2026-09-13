@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=33';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=34';
 
 export class Playback{
   constructor(voice){
@@ -64,8 +64,14 @@ export class Playback{
     this.ctx=ctx;
     try{await ctx.resume()}catch{}
 
-    const master=ctx.createGain();
-    master.gain.value=.85;
+    // Keep synthesized CW/check tones and spoken voice on separate buses.
+    // Short English letter names (B, S, F, etc.) are especially sensitive to
+    // aggressive compression; send voice directly to the analyser/output.
+    const cwBus=ctx.createGain();
+    cwBus.gain.value=.85;
+
+    const voiceBus=ctx.createGain();
+    voiceBus.gain.value=.92;
 
     const comp=ctx.createDynamicsCompressor();
     comp.threshold.value=-3;
@@ -76,7 +82,8 @@ export class Playback{
     const analyser=ctx.createAnalyser();
     analyser.fftSize=1024;
 
-    master.connect(comp).connect(analyser);
+    cwBus.connect(comp).connect(analyser);
+    voiceBus.connect(analyser);
     analyser.connect(destination||ctx.destination);
     this.analyser=analyser;
 
@@ -123,7 +130,7 @@ export class Playback{
         // If seek lands inside an active CW element, skip that partial element and
         // continue from the next scheduled event. This avoids malformed partial Morse.
         if(e.start<from)continue;
-        scheduleText(ctx,master,e.data.text,when,{
+        scheduleText(ctx,cwBus,e.data.text,when,{
           wpm:e.data.wpm||15,
           effectiveWpm:e.data.eff||e.data.wpm||15,
           tone:e.data.tone||tone,
@@ -131,7 +138,7 @@ export class Playback{
         });
       }else if(e.type==='check'){
         if(e.start<from)continue;
-        scheduleCheckTone(ctx,master,when,{amp:.12});
+        scheduleCheckTone(ctx,cwBus,when,{amp:.12});
       }else if(e.type==='voice'||e.type==='charVoice'){
         const id=e.type==='voice'
           ?e.data.id
@@ -141,7 +148,7 @@ export class Playback{
 
         const s=ctx.createBufferSource();
         s.buffer=b;
-        s.connect(master);
+        s.connect(voiceBus);
 
         if(e.start<from && eventEnd>from){
           const offset=Math.min(b.duration-.01,Math.max(0,from-e.start));
@@ -174,6 +181,6 @@ export class Playback{
       }
     },33);
 
-    return {ctx,analyser,base,endAt,master,startAt:from};
+    return {ctx,analyser,base,endAt,master:cwBus,voiceBus,startAt:from};
   }
 }

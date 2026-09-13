@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=33';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=34';
 
 function ascii(s){return new TextEncoder().encode(s)}
 function concat(...parts){const n=parts.reduce((a,p)=>a+p.length,0),o=new Uint8Array(n);let x=0;for(const p of parts){o.set(p,x);x+=p.length}return o}
@@ -21,11 +21,14 @@ export async function renderOffline(tl,voice,{lang='es',gender='female',tone=700
   // One mono 44.1 kHz offline graph. This is deliberately the same path for
   // Course, Custom and finite Head Copy timelines.
   const ctx=new OfflineAudioContext(1,frames,sr);
-  const master=ctx.createGain();
-  master.gain.value=.82;
+  const cwBus=ctx.createGain();
+  cwBus.gain.value=.82;
+  const voiceBus=ctx.createGain();
+  voiceBus.gain.value=.92;
   const comp=ctx.createDynamicsCompressor();
   comp.threshold.value=-3;comp.ratio.value=6;comp.attack.value=.003;comp.release.value=.18;
-  master.connect(comp).connect(ctx.destination);
+  cwBus.connect(comp).connect(ctx.destination);
+  voiceBus.connect(ctx.destination);
 
   const voiceEvents=tl.events.filter(e=>e.type==='voice'||e.type==='charVoice');
   const voiceBuffers=new Map();
@@ -51,20 +54,20 @@ export async function renderOffline(tl,voice,{lang='es',gender='female',tone=700
 
   for(const e of tl.events){
     if(e.type==='cw'){
-      scheduleText(ctx,master,e.data.text,e.start,{
+      scheduleText(ctx,cwBus,e.data.text,e.start,{
         wpm:e.data.wpm||15,
         effectiveWpm:e.data.eff||15,
         tone:e.data.tone||tone,
         amp:.30
       });
     }else if(e.type==='check'){
-      scheduleCheckTone(ctx,master,e.start,{amp:.14});
+      scheduleCheckTone(ctx,cwBus,e.start,{amp:.14});
     }else if(e.type==='voice'||e.type==='charVoice'){
       const id=e.type==='voice'?e.data.id:`char_${String(e.data.char).toLowerCase()}`;
       const b=voiceBuffers.get(id);
       const source=ctx.createBufferSource();
       source.buffer=b;
-      source.connect(master);
+      source.connect(voiceBus);
       source.start(e.start);
     }
   }

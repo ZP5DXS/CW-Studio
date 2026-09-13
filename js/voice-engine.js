@@ -8,6 +8,8 @@
 // This looks inverted by folder name, but it is the ACTUAL repository layout.
 // We deliberately follow the JSON indexes rather than renaming any audio files.
 
+const VOICE_ASSET_VERSION='20260913-en-atomic-1';
+
 export class VoiceEngine{
   constructor(){
     this.cache=new Map();
@@ -67,7 +69,12 @@ export class VoiceEngine{
   }
 
   async fetchDecode(url,ctx){
-    const r=await fetch(url,{cache:'force-cache'});
+    // Voice files keep stable filenames, so after regenerating MP3s a browser
+    // may otherwise serve an older cached clip indefinitely. Version the URL
+    // while still allowing normal caching within this build.
+    const sep=url.includes('?')?'&':'?';
+    const versioned=`${url}${sep}av=${encodeURIComponent(VOICE_ASSET_VERSION)}`;
+    const r=await fetch(versioned,{cache:'force-cache'});
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const arr=await r.arrayBuffer();
     return await ctx.decodeAudioData(arr.slice(0));
