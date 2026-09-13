@@ -1,4 +1,4 @@
-# Morse Practice · CW Studio v2.0
+# Morse Practice · CW Studio v2.1
 
 CW Studio is a free, browser-based environment for learning CW, building custom Morse practice sessions, producing long-form training audio/video, and continuing into Head Copy.
 
@@ -36,7 +36,7 @@ Free and open source. No ads.
 73.
 
 
-## v2.0 visual rules
+## v2.1 visual rules
 
 - The CW ECG/keying trace is intentionally used only during **Familiarization**.
 - Recognition, Marathon, QSO and Head Copy use a flowing Living Line instead, avoiding compressed rows of keying pulses for long words and callsigns.
@@ -46,7 +46,7 @@ Free and open source. No ads.
 - Production UI hides internal voice-pack/debug status after successful loading.
 
 
-## v2.0 Familiarization timing
+## v2.1 Familiarization timing
 
 The visual timing is now explicit:
 
@@ -64,7 +64,7 @@ Recognition begins only after a hard neutral visual boundary, so no Familiarizat
 The CW ECG is drawn over a full-width continuous baseline and is used only during Familiarization. Recognition / Marathon / QSO / Head Copy use the fluid Living Line.
 
 
-## v2.0 — One Line
+## v2.1 — One Line
 
 The visual system now follows one strict rule: **there is always one continuous luminous line**.
 
@@ -77,3 +77,13 @@ The visual system now follows one strict rule: **there is always one continuous 
 No second mouth outline, no stacked visual traces and no overlapping visual systems.
 
 The progress line is seekable like a video. Click/tap the lower timeline area to jump to a different point in the lesson or session. Spoken audio can resume from inside a voice clip; partial CW elements are skipped so Morse is never restarted in a malformed partial state.
+
+
+## v2.1
+
+- WAV / MP3 / Video exports now share the same control strip as Play / Stop / Fullscreen.
+- Custom letters and numbers are randomized by default using the session seed.
+- Advanced settings include **Random order** (enabled by default). Disable it for natural A→Z / 0→9 ordering.
+- The single-line voice waveform has substantially more amplitude while preserving the Living Line concept.
+- Multiple mnemonic silhouettes were redrawn as cleaner single-stroke pictograms.
+- Learn CW lesson-specific outro narration is part of the normal lesson timeline, so it plays both on the website and in exported audio/video. It is not export-only.

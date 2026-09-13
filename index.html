@@ -12,7 +12,7 @@
   <header class="topbar">
     <div class="brand">
       <div class="eyebrow">MORSE PRACTICE</div>
-      <h1>CW Studio <span class="version-badge">v2.0</span></h1>
+      <h1>CW Studio <span class="version-badge">v2.1</span></h1>
     </div>
 
     <div class="voice-console">
@@ -75,22 +75,20 @@
 
       <div class="transport transport-main">
         <button id="playBtn" class="primary" data-i18n="play">Reproducir</button>
-        <button id="stopBtn" data-i18n="stop">Detener</button><button id="fullscreenBtn" class="icon-btn" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>
+        <button id="stopBtn" data-i18n="stop">Detener</button>
+        <button id="fullscreenBtn" class="icon-btn" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>
         <div class="grow"></div>
+        <span class="export-label" data-i18n="export">EXPORTAR</span>
+        <button id="wavBtn">WAV</button>
+        <button id="mp3Btn">MP3</button>
+        <button id="videoBtn">VIDEO</button>
         <div id="lessonEndActions" class="lesson-end-actions hidden">
           <button id="replayLessonBtn" data-i18n="replay">Repetir</button>
           <button id="nextLessonCta" class="primary" data-i18n="nextLesson">Siguiente lección →</button>
         </div>
       </div>
 
-      <div class="export-row">
-        <span class="export-label" data-i18n="export">EXPORTAR</span>
-        <button id="wavBtn">WAV</button>
-        <button id="mp3Btn">MP3</button>
-        <button id="videoBtn">VIDEO</button>
-      </div>
-
-      <div id="assetStatus" class="asset-status">CW Studio v2.0</div>
+      <div id="assetStatus" class="asset-status">CW Studio v2.1</div>
     </section>
 
     <section id="coursePanel" class="panel active">
@@ -158,6 +156,7 @@
             <label><span data-i18n="effectiveSpeed">Velocidad efectiva</span> <span><span id="effValue">9</span> WPM</span><input id="effRange" type="range" min="3" max="35" value="9"></label>
             <label><span data-i18n="answerDelay">Tiempo de respuesta</span> <span><span id="delayValue">1.5</span>s</span><input id="delayRange" type="range" min="0.5" max="4" step="0.1" value="1.5"></label>
             <label class="inline-check"><input id="variableRecognition" type="checkbox"> <span data-i18n="variableSpeed">Reconocimiento a velocidad variable</span></label>
+            <label class="inline-check"><input id="randomOrder" type="checkbox" checked> <span data-i18n="randomOrder">Orden aleatorio de caracteres y números</span></label>
             <label class="inline-check"><input id="toneVariation" type="checkbox"> <span data-i18n="toneVariation">Variación leve de tono</span></label>
           </div>
         </section>
@@ -204,6 +203,6 @@
     </section>
   </main>
 </div>
-<script type="module" src="js/app.js?v=20"></script>
+<script type="module" src="js/app.js?v=21"></script>
 </body>
 </html>
