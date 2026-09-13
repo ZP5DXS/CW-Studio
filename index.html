@@ -12,7 +12,7 @@
   <header class="topbar">
     <div class="brand">
       <div class="eyebrow">MORSE PRACTICE</div>
-      <h1>CW Studio <span class="version-badge">v3.5</span></h1>
+      <h1>CW Studio <span class="version-badge">v3.5.1.1</span></h1>
     </div>
 
     <div class="voice-console">
@@ -65,10 +65,22 @@
           <div class="loading-percent" id="loadingPercent">0%</div>
           <div class="loading-message" id="loadingMessage">Preparando audio…</div>
           <div id="renderTelemetry" class="render-telemetry hidden" aria-hidden="true">
-            <div class="render-metric"><span id="renderProcessed">00:00 / 00:00</span><small>VIDEO</small></div>
-            <div class="render-metric"><span id="renderSpeed">—</span><small>REALTIME</small></div>
-            <div class="render-metric"><span id="renderEta">CALIBRATING…</span><small>ETA</small></div>
-            <div class="render-metric render-frames"><span id="renderFrames">0 / 0</span><small>FRAMES</small></div>
+            <div class="render-metric">
+              <small>VIDEO</small>
+              <span id="renderProcessed">00:00 / 00:00</span>
+            </div>
+            <div class="render-metric">
+              <small>VELOCIDAD</small>
+              <span id="renderSpeed">—</span>
+            </div>
+            <div class="render-metric">
+              <small>RESTANTE</small>
+              <span id="renderEta">CALIBRANDO…</span>
+            </div>
+            <div class="render-metric render-frames">
+              <small>FRAMES</small>
+              <span id="renderFrames">0 / 0</span>
+            </div>
           </div>
           <div class="loading-track"><div id="loadingBar"></div></div>
         </div>
@@ -226,6 +238,6 @@
     </footer>
   </main>
 </div>
-<script type="module" src="js/app.js?v=35"></script>
+<script type="module" src="js/app.js?v=3511"></script>
 </body>
 </html>
