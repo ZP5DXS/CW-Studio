@@ -1,4 +1,4 @@
-# Morse Practice · CW Studio v2.4
+# Morse Practice · CW Studio v2.5
 
 CW Studio is a free, browser-based environment for learning CW, building custom Morse practice sessions, producing long-form training audio/video, and continuing into Head Copy.
 
@@ -36,7 +36,7 @@ Free and open source. No ads.
 73.
 
 
-## v2.4 visual rules
+## v2.5 visual rules
 
 - The CW ECG/keying trace is intentionally used only during **Familiarization**.
 - Recognition, Marathon, QSO and Head Copy use a flowing Living Line instead, avoiding compressed rows of keying pulses for long words and callsigns.
@@ -46,7 +46,7 @@ Free and open source. No ads.
 - Production UI hides internal voice-pack/debug status after successful loading.
 
 
-## v2.4 Familiarization timing
+## v2.5 Familiarization timing
 
 The visual timing is now explicit:
 
@@ -64,7 +64,7 @@ Recognition begins only after a hard neutral visual boundary, so no Familiarizat
 The CW ECG is drawn over a full-width continuous baseline and is used only during Familiarization. Recognition / Marathon / QSO / Head Copy use the fluid Living Line.
 
 
-## v2.4 — One Line
+## v2.5 — One Line
 
 The visual system now follows one strict rule: **there is always one continuous luminous line**.
 
@@ -79,7 +79,7 @@ No second mouth outline, no stacked visual traces and no overlapping visual syst
 The progress line is seekable like a video. Click/tap the lower timeline area to jump to a different point in the lesson or session. Spoken audio can resume from inside a voice clip; partial CW elements are skipped so Morse is never restarted in a malformed partial state.
 
 
-## v2.4
+## v2.5
 
 - WAV / MP3 / Video exports now share the same control strip as Play / Stop / Fullscreen.
 - Custom letters and numbers are randomized by default using the session seed.
@@ -89,12 +89,12 @@ The progress line is seekable like a video. Click/tap the lower timeline area to
 - Learn CW lesson-specific outro narration is part of the normal lesson timeline, so it plays both on the website and in exported audio/video. It is not export-only.
 
 
-## v2.4 course logic
+## v2.5 course logic
 
 See `COURSE_LOGIC.md`. Narrated review/new-character/group/marathon transitions now have matching exercises immediately after them. Lesson 14 uses real callsigns, and Lessons 15–20 now follow the operational curriculum rather than generic random-character drills.
 
 
-## v2.4 — stable-candidate interaction cleanup
+## v2.5 — stable-candidate interaction cleanup
 
 - Voice selector shows only the voice names: AURA / NEXO in Spanish and NOVA / VECTOR in English.
 - Female voice control uses a subtle purple interior accent; male uses turquoise.
@@ -104,6 +104,18 @@ See `COURSE_LOGIC.md`. Narrated review/new-character/group/marathon transitions 
 - Video export is intentionally still the current MediaRecorder real-time path in this build; replacing it with an offline renderer is an encoder/muxer architecture change and is being kept separate from this stability cleanup.
 
 
-## v2.4 audit
+## v2.5 audit
 
 See `AUDIT_V24.md` for the full course/custom-session/Head-Copy/video audit. The primary video export path now renders offline to MP4 using WebCodecs + Mediabunny, with the old real-time WebM path retained as an automatic compatibility fallback.
+
+
+## v2.5
+
+- Familiarization ECG now follows Morse spacing literally:
+  - dit = 1 unit
+  - dah = 3 units
+  - intra-character element gap = 1 unit
+  - inter-character gap = 3 units
+  - inter-word gap = 7 units
+- Navigation label changed from **Crear sesión / Create Session** to **Crear / Create**.
+- Added an About section with direct links to the CW Studio repository and ZP5DXS Facebook page.

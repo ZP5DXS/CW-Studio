@@ -1,18 +1,18 @@
-import {VoiceEngine} from './voice-engine.js?v=24';
-import {Playback} from './playback.js?v=24';
-import {VisualEngine} from './visual-engine.js?v=24';
-import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=24';
-import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=24';
-import {buildCustom} from './session-builder.js?v=24';
-import {exportWav,exportMp3,download} from './export-engine.js?v=24';
-import {exportVideo} from './video-export.js?v=24';
+import {VoiceEngine} from './voice-engine.js?v=25';
+import {Playback} from './playback.js?v=25';
+import {VisualEngine} from './visual-engine.js?v=25';
+import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=25';
+import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=25';
+import {buildCustom} from './session-builder.js?v=25';
+import {exportWav,exportMp3,download} from './export-engine.js?v=25';
+import {exportVideo} from './video-export.js?v=25';
 
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 
 const UI={
   es:{
-    learnCW:'Aprender CW',createSession:'Crear sesión',chooseLesson:'Elegí cualquier lección y comenzá cuando quieras.',
+    learnCW:'Aprender CW',createSession:'Crear',chooseLesson:'Elegí cualquier lección y comenzá cuando quieras.',
     play:'Reproducir',stop:'Detener',replay:'Repetir',nextLesson:'Siguiente lección →',export:'EXPORTAR',
     goal:'Objetivo',content:'Contenido',sound:'Sonido',length:'Duración',step1:'PASO 1',step2:'PASO 2',step3:'PASO 3',step4:'PASO 4',
     whatTrain:'¿Qué querés entrenar?',combineModes:'Podés combinar familiarización y reconocimiento.',
@@ -25,13 +25,13 @@ const UI={
     effectiveSpeed:'Velocidad efectiva',answerDelay:'Tiempo de respuesta',variableSpeed:'Reconocimiento a velocidad variable',randomOrder:'Orden aleatorio de caracteres y números',courtesyChime:'Tono de cortesía entre caracteres',toneVariation:'Variación leve de tono',
     howLong:'¿Cuánto tiempo?',longHelp:'Creá una práctica breve o una sesión larga de escucha.',seed:'Semilla de sesión',
     back:'Atrás',continue:'Continuar',buildSession:'Crear sesión',editSession:'Editar sesión',
-    headCopyHelp:'Prácticas de escucha para después del curso.',
+    headCopyHelp:'Prácticas de escucha para después del curso.',aboutText:'Curso, práctica personalizada, Head Copy y exportación de audio/video CW desde el navegador.',
     completed:n=>`${n} / 20 completadas`,lesson:'LECCIÓN',loading:'CARGANDO LECCIÓN',exportAudio:'GENERANDO AUDIO',exportVideo:'GENERANDO VIDEO',
     ready:'LISTO',customSession:'SESIÓN PERSONALIZADA',pause:'Pausar',resume:'Continuar',fullscreen:'Pantalla completa',
     contents:{letters:'Letras',numbers:'Números',alnum:'Letras + números',punctuation:'Puntuación',prosigns:'Prosigns',abbreviations:'Abreviaturas CW',callsigns:'Indicativos completos',prefixes:'Prefijos DX',rst:'RST',qso:'QSO',words:'Palabras',custom:'Texto propio'}
   },
   en:{
-    learnCW:'Learn CW',createSession:'Create Session',chooseLesson:'Choose any lesson and start whenever you want.',
+    learnCW:'Learn CW',createSession:'Create',chooseLesson:'Choose any lesson and start whenever you want.',
     play:'Play',stop:'Stop',replay:'Replay',nextLesson:'Next lesson →',export:'EXPORT',
     goal:'Goal',content:'Content',sound:'Sound',length:'Length',step1:'STEP 1',step2:'STEP 2',step3:'STEP 3',step4:'STEP 4',
     whatTrain:'What do you want to train?',combineModes:'You can combine familiarization and recognition.',
@@ -44,7 +44,7 @@ const UI={
     effectiveSpeed:'Effective speed',answerDelay:'Answer delay',variableSpeed:'Variable-speed recognition',randomOrder:'Random character and number order',courtesyChime:'Courtesy tone between characters',toneVariation:'Slight tone variation',
     howLong:'How long?',longHelp:'Create a short drill or a long listening session.',seed:'Session seed',
     back:'Back',continue:'Continue',buildSession:'Build session',editSession:'Edit session',
-    headCopyHelp:'Focused listening challenges for after the course.',
+    headCopyHelp:'Focused listening challenges for after the course.',aboutText:'CW course, custom practice, Head Copy and browser-based audio/video export.',
     completed:n=>`${n} / 20 completed`,lesson:'LESSON',loading:'LOADING LESSON',exportAudio:'EXPORTING AUDIO',exportVideo:'EXPORTING VIDEO',
     ready:'READY',customSession:'CUSTOM SESSION',pause:'Pause',resume:'Resume',fullscreen:'Fullscreen',
     contents:{letters:'Letters',numbers:'Numbers',alnum:'Letters + numbers',punctuation:'Punctuation',prosigns:'Prosigns',abbreviations:'CW abbreviations',callsigns:'Full callsigns',prefixes:'DX prefixes',rst:'RST',qso:'QSO',words:'Words',custom:'Custom text'}
@@ -117,7 +117,7 @@ function loadingStatus(text,prefix='',kicker=tr('loading')){
   const m=s.match(/(\d+)\/(\d+)/);
   const p=m?Number(m[1])/Math.max(1,Number(m[2])):(/ready|complete|rendered/i.test(s)?1:.08);
   setLoading(true,p,`${prefix}${prefix?' · ':''}${s}`,kicker);
-  $('#assetStatus').textContent=`CW Studio v2.4 · ${s}`;$('#assetStatus').classList.add('active');
+  $('#assetStatus').textContent=`CW Studio v2.5 · ${s}`;$('#assetStatus').classList.add('active');
 }
 function stopLoading(){setLoading(false,1,'','')}
 
@@ -194,7 +194,7 @@ async function loadLesson(n){
     success=true;
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v2.4 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v2.5 · ${err.message||err}`;$('#assetStatus').classList.add('active');
     $('#assetStatus').classList.add('warning');
     timeline=null;
     stopLoading();
@@ -218,7 +218,7 @@ async function loadBonus(id){
     if(timeline?.meta?.noVideoExport)$('#videoBtn').disabled=true;
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
-    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v2.4 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
+    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v2.5 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
   }
 }
 
@@ -362,7 +362,7 @@ function resetPlayButton(){
   $('#playBtn').dataset.state='play';
 }
 async function togglePlay(){
-  if(!timeline){$('#assetStatus').textContent='CW Studio v2.4 · no session loaded';return}
+  if(!timeline){$('#assetStatus').textContent='CW Studio v2.5 · no session loaded';return}
   if(playback.isPlaying()){
     if(playback.isPaused()){
       await playback.resume();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
@@ -372,11 +372,11 @@ async function togglePlay(){
     return;
   }
   stopLoading();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
-  $('#assetStatus').textContent='CW Studio v2.4 · preparing audio…';
+  $('#assetStatus').textContent='CW Studio v2.5 · preparing audio…';
   try{
     await playback.play(timeline,{
       lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,startAt:currentPosition,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.4 · ${s}`},
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.5 · ${s}`},
       onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
       onEnd:()=>{
         resetPlayButton();drawLoop(timeline.duration);
@@ -384,7 +384,7 @@ async function togglePlay(){
       }
     });
   }catch(err){
-    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v2.4 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
+    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v2.5 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
   }
 }
 $('#playBtn').onclick=()=>togglePlay();
@@ -418,7 +418,7 @@ async function seekTo(seconds){
         gender:$('#voiceSelect').value,
         tone:+$('#toneRange').value,
         startAt:currentPosition,
-        onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.4 · ${s}`},
+        onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.5 · ${s}`},
         onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
         onEnd:()=>{
           resetPlayButton();
@@ -462,7 +462,7 @@ async function exportAudio(kind){
   try{
     const options={
       lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.4 · ${s}`},
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.5 · ${s}`},
       onProgress:p=>setLoading(true,p,`${Math.round(p*100)}%`,tr('exportAudio'))
     };
     const blob=kind==='wav'?await exportWav(timeline,voice,options,meta()):await exportMp3(timeline,voice,options,meta());
@@ -470,7 +470,7 @@ async function exportAudio(kind){
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v2.4 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v2.5 · ${err.message||err}`;$('#assetStatus').classList.add('active');
     $('#assetStatus').classList.add('warning');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
@@ -502,7 +502,7 @@ $('#videoBtn').onclick=async()=>{
     download(blob,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.${ext}`);
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v2.4 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v2.5 · ${err.message||err}`;$('#assetStatus').classList.add('active');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
   }

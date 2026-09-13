@@ -231,3 +231,55 @@ main{width:100%!important;max-width:none!important}
   box-shadow:inset 0 0 24px rgba(28,199,192,.09)!important;
 }
 .voice-pill strong{letter-spacing:.09em}
+
+/* v2.5 — About / links */
+.about-card{
+  margin:34px 0 4px;
+  padding:22px 24px;
+  border:1px solid rgba(121,229,255,.12);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(121,229,255,.055),transparent 34%),
+    linear-gradient(180deg,rgba(13,21,31,.82),rgba(7,12,18,.9));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:22px;
+}
+.about-copy h2{margin:5px 0 6px;font-size:18px}
+.about-copy p{margin:0;color:#8ea0b5;max-width:760px;font-size:13px}
+.about-actions{display:flex;gap:9px;flex-wrap:wrap}
+.about-btn{
+  min-width:118px;
+  padding:10px 14px;
+  border-radius:12px;
+  border:1px solid rgba(121,229,255,.18);
+  background:rgba(121,229,255,.04);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  color:#dcecf7;
+  text-decoration:none;
+  font-size:11px;
+  font-weight:850;
+  letter-spacing:.09em;
+  transition:.18s ease;
+}
+.about-btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(121,229,255,.5);
+  box-shadow:0 0 24px rgba(121,229,255,.07);
+}
+.about-btn.callsign{
+  border-color:rgba(185,255,222,.18);
+  background:rgba(185,255,222,.035);
+}
+.about-btn.callsign:hover{border-color:rgba(185,255,222,.48)}
+.about-btn-icon{font-size:12px;color:#79e5ff}
+.about-btn.callsign .about-btn-icon{color:#b9ffde}
+@media(max-width:720px){
+  .about-card{align-items:flex-start;flex-direction:column}
+  .about-actions{width:100%}
+  .about-btn{flex:1}
+}

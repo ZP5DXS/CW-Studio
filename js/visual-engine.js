@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS} from './morse-engine.js?v=24';
-import {mnemonicFor} from './mnemonics.js?v=24';
+import {MORSE,PROSIGNS} from './morse-engine.js?v=25';
+import {mnemonicFor} from './mnemonics.js?v=25';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -164,15 +164,50 @@ export class VisualEngine{
   cwLine(event,w,h){
     const text=String(event?.data?.text||'').toUpperCase();
     const seq=[];
-    for(const c of text){
-      if(c===' '){seq.push('wordGap');continue}
+
+    // Morse timing represented literally:
+    // dit = 1 unit high
+    // dah = 3 units high
+    // gap between elements of the SAME character = 1 unit low
+    // gap between characters = 3 units low
+    // gap between words = 7 units low
+    const chars=[...text];
+
+    for(let ci=0;ci<chars.length;ci++){
+      const c=chars[ci];
+
+      if(c===' '){
+        // Replace a preceding character gap with a word gap.
+        if(seq.at(-1)==='charGap')seq.pop();
+        if(seq.at(-1)!=='wordGap')seq.push('wordGap');
+        continue;
+      }
+
       const pat=PROSIGNS[c]||MORSE[c];
-      if(pat)seq.push(...pat.split(''),'charGap');
+      if(!pat)continue;
+
+      const marks=[...pat];
+      for(let mi=0;mi<marks.length;mi++){
+        seq.push(marks[mi]);
+        if(mi<marks.length-1)seq.push('elementGap');
+      }
+
+      // Character spacing is added only when another Morse character follows.
+      const next=chars.slice(ci+1).find(x=>x===' ' || PROSIGNS[x] || MORSE[x]);
+      if(next && next!==' ')seq.push('charGap');
     }
-    while(['charGap','wordGap'].includes(seq.at(-1)))seq.pop();
+
+    while(['elementGap','charGap','wordGap'].includes(seq.at(-1)))seq.pop();
 
     let units=0;
-    for(const s of seq)units+=s==='.'?1:s==='-'?3:s==='wordGap'?7:3;
+    for(const s of seq){
+      units+=s==='.'?1
+        :s==='-'?3
+        :s==='elementGap'?1
+        :s==='charGap'?3
+        :s==='wordGap'?7
+        :0;
+    }
     units=Math.max(units,1);
 
     const left=w*.035,right=w*.965,cy=h*.67,high=h*.565;
@@ -181,17 +216,26 @@ export class VisualEngine{
     const signalWidth=units*unit;
     let x=(w-signalWidth)/2;
 
+    // One uninterrupted baseline from edge to edge.
     const pts=[{x:left,y:cy},{x,y:cy}];
+
     for(const s of seq){
       if(s==='.'||s==='-'){
         const ww=(s==='.'?1:3)*unit;
-        pts.push({x,y:cy},{x,y:high},{x:x+ww,y:high},{x:x+ww,y:cy});
+        pts.push(
+          {x,y:cy},
+          {x,y:high},
+          {x:x+ww,y:high},
+          {x:x+ww,y:cy}
+        );
         x+=ww;
       }else{
-        x+=(s==='wordGap'?7:3)*unit;
+        const gapUnits=s==='elementGap'?1:s==='charGap'?3:7;
+        x+=gapUnits*unit;
         pts.push({x,y:cy});
       }
     }
+
     pts.push({x:right,y:cy});
     return pts;
   }
