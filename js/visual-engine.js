@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS} from './morse-engine.js?v=37';
-import {mnemonicFor,mnemonicEntries} from './mnemonics.js?v=37';
+import {MORSE,PROSIGNS} from './morse-engine.js?v=3711';
+import {mnemonicFor,mnemonicEntries} from './mnemonics.js?v=3711';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -599,6 +599,12 @@ export class VisualEngine{
   drawNumericMnemonic(char,w,h){
     const ctx=this.x;
     const n=String(char||'');
+    const words={
+      es:{'0':'CERO','1':'UNO','2':'DOS','3':'TRES','4':'CUATRO','5':'CINCO','6':'SEIS','7':'SIETE','8':'OCHO','9':'NUEVE'},
+      en:{'0':'ZERO','1':'ONE','2':'TWO','3':'THREE','4':'FOUR','5':'FIVE','6':'SIX','7':'SEVEN','8':'EIGHT','9':'NINE'}
+    };
+    const word=(words[this.language]||words.es)[n]||n;
+
     ctx.save();
     ctx.textAlign='center';
     ctx.textBaseline='middle';
@@ -608,12 +614,15 @@ export class VisualEngine{
     ctx.fillStyle='#f3f8ff';
     ctx.shadowBlur=26;
     ctx.shadowColor='rgba(121,229,255,.45)';
-    ctx.fillText(n,w/2,h*.34);
+    ctx.fillText(n,w/2,h*.31);
 
-    ctx.shadowBlur=0;
-    ctx.fillStyle='rgba(121,229,255,.72)';
-    ctx.font='800 11px system-ui';
-    ctx.fillText(this.language==='es'?'ESCUCHÁ EL RITMO':'HEAR THE RHYTHM',w/2,h*.47);
+    ctx.shadowBlur=14;
+    ctx.shadowColor='rgba(121,229,255,.22)';
+    ctx.fillStyle='#79e5ff';
+    const wordSize=Math.min(48,Math.max(32,w*.04));
+    ctx.font=`850 ${wordSize}px system-ui`;
+    ctx.fillText(word,w/2,h*.47);
+
     ctx.restore();
   }
 
