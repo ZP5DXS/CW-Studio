@@ -1,0 +1,514 @@
+{
+  "A": {
+    "es": {
+      "word": "Arco",
+      "emoji": "🏹",
+      "asset": "es/a_arco.svg",
+      "noto_source": "emoji_u1f3f9.svg"
+    },
+    "en": {
+      "word": "Arrow",
+      "emoji": "🏹",
+      "asset": "en/a_arrow.svg",
+      "noto_source": "emoji_u1f3f9.svg"
+    }
+  },
+  "B": {
+    "es": {
+      "word": "Barco",
+      "emoji": "⛵",
+      "asset": "es/b_barco.svg",
+      "noto_source": "emoji_u26f5.svg"
+    },
+    "en": {
+      "word": "Bridge",
+      "emoji": "🌉",
+      "asset": "en/b_bridge.svg",
+      "noto_source": "emoji_u1f309.svg"
+    }
+  },
+  "C": {
+    "es": {
+      "word": "Campana",
+      "emoji": "🔔",
+      "asset": "es/c_campana.svg",
+      "noto_source": "emoji_u1f514.svg"
+    },
+    "en": {
+      "word": "Crown",
+      "emoji": "👑",
+      "asset": "en/c_crown.svg",
+      "noto_source": "emoji_u1f451.svg"
+    }
+  },
+  "D": {
+    "es": {
+      "word": "Dado",
+      "emoji": "🎲",
+      "asset": "es/d_dado.svg",
+      "noto_source": "emoji_u1f3b2.svg"
+    },
+    "en": {
+      "word": "Drum",
+      "emoji": "🥁",
+      "asset": "en/d_drum.svg",
+      "noto_source": "emoji_u1f941.svg"
+    }
+  },
+  "E": {
+    "es": {
+      "word": "Estrella",
+      "emoji": "⭐",
+      "asset": "es/e_estrella.svg",
+      "noto_source": "emoji_u2b50.svg"
+    },
+    "en": {
+      "word": "Eye",
+      "emoji": "👁️",
+      "asset": "en/e_eye.svg",
+      "noto_source": "emoji_u1f441.svg"
+    }
+  },
+  "F": {
+    "es": {
+      "word": "Fuego",
+      "emoji": "🔥",
+      "asset": "es/f_fuego.svg",
+      "noto_source": "emoji_u1f525.svg",
+      "note": "Faro → Fuego: no dedicated lighthouse emoji in the standard Noto set."
+    },
+    "en": {
+      "word": "Flag",
+      "emoji": "🚩",
+      "asset": "en/f_flag.svg",
+      "noto_source": "emoji_u1f6a9.svg"
+    }
+  },
+  "G": {
+    "es": {
+      "word": "Gato",
+      "emoji": "🐈",
+      "asset": "es/g_gato.svg",
+      "noto_source": "emoji_u1f408.svg"
+    },
+    "en": {
+      "word": "Guitar",
+      "emoji": "🎸",
+      "asset": "en/g_guitar.svg",
+      "noto_source": "emoji_u1f3b8.svg"
+    }
+  },
+  "H": {
+    "es": {
+      "word": "Hacha",
+      "emoji": "🪓",
+      "asset": "es/h_hacha.svg",
+      "noto_source": "emoji_u1fa93.svg"
+    },
+    "en": {
+      "word": "Hammer",
+      "emoji": "🔨",
+      "asset": "en/h_hammer.svg",
+      "noto_source": "emoji_u1f528.svg"
+    }
+  },
+  "I": {
+    "es": {
+      "word": "Imán",
+      "emoji": "🧲",
+      "asset": "es/i_iman.svg",
+      "noto_source": "emoji_u1f9f2.svg"
+    },
+    "en": {
+      "word": "Ice",
+      "emoji": "🧊",
+      "asset": "en/i_ice.svg",
+      "noto_source": "emoji_u1f9ca.svg"
+    }
+  },
+  "J": {
+    "es": {
+      "word": "Jirafa",
+      "emoji": "🦒",
+      "asset": "es/j_jirafa.svg",
+      "noto_source": "emoji_u1f992.svg"
+    },
+    "en": {
+      "word": "Jet",
+      "emoji": "✈️",
+      "asset": "en/j_jet.svg",
+      "noto_source": "emoji_u2708.svg"
+    }
+  },
+  "K": {
+    "es": {
+      "word": "Kayak",
+      "emoji": "🛶",
+      "asset": "es/k_kayak.svg",
+      "noto_source": "emoji_u1f6f6.svg"
+    },
+    "en": {
+      "word": "Kite",
+      "emoji": "🪁",
+      "asset": "en/k_kite.svg",
+      "noto_source": "emoji_u1fa81.svg"
+    }
+  },
+  "L": {
+    "es": {
+      "word": "Luna",
+      "emoji": "🌙",
+      "asset": "es/l_luna.svg",
+      "noto_source": "emoji_u1f319.svg"
+    },
+    "en": {
+      "word": "Leaf",
+      "emoji": "🍃",
+      "asset": "en/l_leaf.svg",
+      "noto_source": "emoji_u1f343.svg",
+      "note": "Lighthouse → Leaf: clean exact Noto asset."
+    }
+  },
+  "M": {
+    "es": {
+      "word": "Montaña",
+      "emoji": "🏔️",
+      "asset": "es/m_montana.svg",
+      "noto_source": "emoji_u1f3d4.svg"
+    },
+    "en": {
+      "word": "Mountain",
+      "emoji": "🏔️",
+      "asset": "en/m_mountain.svg",
+      "noto_source": "emoji_u1f3d4.svg"
+    }
+  },
+  "N": {
+    "es": {
+      "word": "Nube",
+      "emoji": "☁️",
+      "asset": "es/n_nube.svg",
+      "noto_source": "emoji_u2601.svg"
+    },
+    "en": {
+      "word": "Needle",
+      "emoji": "🪡",
+      "asset": "en/n_needle.svg",
+      "noto_source": "emoji_u1faa1.svg"
+    }
+  },
+  "O": {
+    "es": {
+      "word": "Ojo",
+      "emoji": "👁️",
+      "asset": "es/o_ojo.svg",
+      "noto_source": "emoji_u1f441.svg"
+    },
+    "en": {
+      "word": "Orbit",
+      "emoji": "🪐",
+      "asset": "en/o_orbit.svg",
+      "noto_source": "emoji_u1fa90.svg"
+    }
+  },
+  "P": {
+    "es": {
+      "word": "Puente",
+      "emoji": "🌉",
+      "asset": "es/p_puente.svg",
+      "noto_source": "emoji_u1f309.svg"
+    },
+    "en": {
+      "word": "Piano",
+      "emoji": "🎹",
+      "asset": "en/p_piano.svg",
+      "noto_source": "emoji_u1f3b9.svg"
+    }
+  },
+  "Q": {
+    "es": {
+      "word": "Queso",
+      "emoji": "🧀",
+      "asset": "es/q_queso.svg",
+      "noto_source": "emoji_u1f9c0.svg"
+    },
+    "en": {
+      "word": "Queen",
+      "emoji": "👸",
+      "asset": "en/q_queen.svg",
+      "noto_source": "emoji_u1f478.svg",
+      "note": "Quill → Queen: no dedicated quill emoji; princess/queen silhouette is immediately recognizable."
+    }
+  },
+  "R": {
+    "es": {
+      "word": "Reloj",
+      "emoji": "⏰",
+      "asset": "es/r_reloj.svg",
+      "noto_source": "emoji_u23f0.svg"
+    },
+    "en": {
+      "word": "Rocket",
+      "emoji": "🚀",
+      "asset": "en/r_rocket.svg",
+      "noto_source": "emoji_u1f680.svg"
+    }
+  },
+  "S": {
+    "es": {
+      "word": "Serpiente",
+      "emoji": "🐍",
+      "asset": "es/s_serpiente.svg",
+      "noto_source": "emoji_u1f40d.svg"
+    },
+    "en": {
+      "word": "Snake",
+      "emoji": "🐍",
+      "asset": "en/s_snake.svg",
+      "noto_source": "emoji_u1f40d.svg"
+    }
+  },
+  "T": {
+    "es": {
+      "word": "Torre",
+      "emoji": "🗼",
+      "asset": "es/t_torre.svg",
+      "noto_source": "emoji_u1f5fc.svg"
+    },
+    "en": {
+      "word": "Tower",
+      "emoji": "🗼",
+      "asset": "en/t_tower.svg",
+      "noto_source": "emoji_u1f5fc.svg"
+    }
+  },
+  "U": {
+    "es": {
+      "word": "Uva",
+      "emoji": "🍇",
+      "asset": "es/u_uva.svg",
+      "noto_source": "emoji_u1f347.svg"
+    },
+    "en": {
+      "word": "Umbrella",
+      "emoji": "☂️",
+      "asset": "en/u_umbrella.svg",
+      "noto_source": "emoji_u2602.svg"
+    }
+  },
+  "V": {
+    "es": {
+      "word": "Velero",
+      "emoji": "⛵",
+      "asset": "es/v_velero.svg",
+      "noto_source": "emoji_u26f5.svg"
+    },
+    "en": {
+      "word": "Violin",
+      "emoji": "🎻",
+      "asset": "en/v_violin.svg",
+      "noto_source": "emoji_u1f3bb.svg"
+    }
+  },
+  "W": {
+    "es": {
+      "word": "Wok",
+      "emoji": "🍳",
+      "asset": "es/w_wok.svg",
+      "noto_source": "emoji_u1f373.svg"
+    },
+    "en": {
+      "word": "Wave",
+      "emoji": "🌊",
+      "asset": "en/w_wave.svg",
+      "noto_source": "emoji_u1f30a.svg"
+    }
+  },
+  "X": {
+    "es": {
+      "word": "Xilófono",
+      "emoji": "🎹",
+      "asset": "es/x_xilofono.svg",
+      "noto_source": "emoji_u1f3b9.svg",
+      "note": "No dedicated xylophone emoji; keyboard is the closest clean musical-key visual."
+    },
+    "en": {
+      "word": "X-ray",
+      "emoji": "🩻",
+      "asset": "en/x_x_ray.svg",
+      "noto_source": "emoji_u1fa7b.svg",
+      "note": "Xylophone → X-ray: dedicated exact Noto asset."
+    }
+  },
+  "Y": {
+    "es": {
+      "word": "Yate",
+      "emoji": "🛥️",
+      "asset": "es/y_yate.svg",
+      "noto_source": "emoji_u1f6e5.svg"
+    },
+    "en": {
+      "word": "Yacht",
+      "emoji": "🛥️",
+      "asset": "en/y_yacht.svg",
+      "noto_source": "emoji_u1f6e5.svg"
+    }
+  },
+  "Z": {
+    "es": {
+      "word": "Zapato",
+      "emoji": "👞",
+      "asset": "es/z_zapato.svg",
+      "noto_source": "emoji_u1f45e.svg"
+    },
+    "en": {
+      "word": "Zebra",
+      "emoji": "🦓",
+      "asset": "en/z_zebra.svg",
+      "noto_source": "emoji_u1f993.svg",
+      "note": "Zipper → Zebra: dedicated, instantly recognizable Noto asset."
+    }
+  },
+  "0": {
+    "es": {
+      "word": "Anillo",
+      "emoji": "💍",
+      "asset": "es/0_anillo.svg",
+      "noto_source": "emoji_u1f48d.svg"
+    },
+    "en": {
+      "word": "Ring",
+      "emoji": "💍",
+      "asset": "en/0_ring.svg",
+      "noto_source": "emoji_u1f48d.svg"
+    }
+  },
+  "1": {
+    "es": {
+      "word": "Vela",
+      "emoji": "🕯️",
+      "asset": "es/1_vela.svg",
+      "noto_source": "emoji_u1f56f.svg"
+    },
+    "en": {
+      "word": "Candle",
+      "emoji": "🕯️",
+      "asset": "en/1_candle.svg",
+      "noto_source": "emoji_u1f56f.svg"
+    }
+  },
+  "2": {
+    "es": {
+      "word": "Cisne",
+      "emoji": "🦢",
+      "asset": "es/2_cisne.svg",
+      "noto_source": "emoji_u1f9a2.svg"
+    },
+    "en": {
+      "word": "Swan",
+      "emoji": "🦢",
+      "asset": "en/2_swan.svg",
+      "noto_source": "emoji_u1f9a2.svg"
+    }
+  },
+  "3": {
+    "es": {
+      "word": "Trébol",
+      "emoji": "🍀",
+      "asset": "es/3_trebol.svg",
+      "noto_source": "emoji_u1f340.svg"
+    },
+    "en": {
+      "word": "Clover",
+      "emoji": "🍀",
+      "asset": "en/3_clover.svg",
+      "noto_source": "emoji_u1f340.svg"
+    }
+  },
+  "4": {
+    "es": {
+      "word": "Silla",
+      "emoji": "🪑",
+      "asset": "es/4_silla.svg",
+      "noto_source": "emoji_u1fa91.svg"
+    },
+    "en": {
+      "word": "Chair",
+      "emoji": "🪑",
+      "asset": "en/4_chair.svg",
+      "noto_source": "emoji_u1fa91.svg"
+    }
+  },
+  "5": {
+    "es": {
+      "word": "Mano",
+      "emoji": "✋",
+      "asset": "es/5_mano.svg",
+      "noto_source": "emoji_u270b.svg"
+    },
+    "en": {
+      "word": "Hand",
+      "emoji": "✋",
+      "asset": "en/5_hand.svg",
+      "noto_source": "emoji_u270b.svg"
+    }
+  },
+  "6": {
+    "es": {
+      "word": "Caracol",
+      "emoji": "🐌",
+      "asset": "es/6_caracol.svg",
+      "noto_source": "emoji_u1f40c.svg"
+    },
+    "en": {
+      "word": "Snail",
+      "emoji": "🐌",
+      "asset": "en/6_snail.svg",
+      "noto_source": "emoji_u1f40c.svg"
+    }
+  },
+  "7": {
+    "es": {
+      "word": "Palo de hockey",
+      "emoji": "🏒",
+      "asset": "es/7_palo_de_hockey.svg",
+      "noto_source": "emoji_u1f3d2.svg",
+      "note": "Hoz → Palo de hockey: clearer Noto asset and strong 7-like silhouette."
+    },
+    "en": {
+      "word": "Hockey stick",
+      "emoji": "🏒",
+      "asset": "en/7_hockey_stick.svg",
+      "noto_source": "emoji_u1f3d2.svg",
+      "note": "Scythe → Hockey stick: clearer Noto asset and strong 7-like silhouette."
+    }
+  },
+  "8": {
+    "es": {
+      "word": "Reloj de arena",
+      "emoji": "⌛",
+      "asset": "es/8_reloj_de_arena.svg",
+      "noto_source": "emoji_u231b.svg"
+    },
+    "en": {
+      "word": "Hourglass",
+      "emoji": "⌛",
+      "asset": "en/8_hourglass.svg",
+      "noto_source": "emoji_u231b.svg"
+    }
+  },
+  "9": {
+    "es": {
+      "word": "Globo",
+      "emoji": "🎈",
+      "asset": "es/9_globo.svg",
+      "noto_source": "emoji_u1f388.svg"
+    },
+    "en": {
+      "word": "Balloon",
+      "emoji": "🎈",
+      "asset": "en/9_balloon.svg",
+      "noto_source": "emoji_u1f388.svg"
+    }
+  }
+}

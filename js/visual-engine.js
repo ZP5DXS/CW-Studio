@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS} from './morse-engine.js?v=29';
-import {mnemonicFor} from './mnemonics.js?v=29';
+import {MORSE,PROSIGNS} from './morse-engine.js?v=30';
+import {mnemonicFor} from './mnemonics.js?v=30';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));

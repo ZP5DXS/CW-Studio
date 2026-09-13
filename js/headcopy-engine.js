@@ -1,6 +1,6 @@
-import {Timeline} from './timeline.js?v=29';
-import {wordDuration} from './morse-engine.js?v=29';
-import {COMMON_EN,COMMON_ES,RADIO,ABBR,CALLS,NUMBERS100} from './content-data.js?v=29';
+import {Timeline} from './timeline.js?v=30';
+import {wordDuration} from './morse-engine.js?v=30';
+import {COMMON_EN,COMMON_ES,RADIO,ABBR,CALLS,NUMBERS100} from './content-data.js?v=30';
 
 const QSOS=[
 'CQ CQ DE ZP5DXS ZP5DXS K',
@@ -48,7 +48,8 @@ export async function buildHeadCopy(id,{lang='es',gender='female',voice,wpm=15,e
 
   const intro=`${def.id}_intro`,outro=`${def.id}_outro`;
   const coach=['headcopy_no_spelling','headcopy_less_time','headcopy_halfway','headcopy_remember_meaning','headcopy_final_ten','challenge_complete'];
-  const required=def.endless?[intro]:[intro,outro,...coach];
+  const endlessCoach=['stay_flow','trust_ear'];
+  const required=def.endless?[intro,...endlessCoach]:[intro,outro,...coach];
   const check=await voice.preflight(required,lang,gender,onStatus);
   if(!check.ok)throw new Error(`Missing Head Copy audio: ${check.missing.map(x=>x.id).join(', ')}`);
 
@@ -68,6 +69,13 @@ export async function buildHeadCopy(id,{lang='es',gender='female',voice,wpm=15,e
     const d=wordDuration(item,wpm,eff);
     tl.add('cw',t,d,{text:item,wpm,eff,mode:'headcopy'});t+=d+response;
     tl.add('reveal',t,def.endless?.9:1.5,{text:item,lang});t+=def.endless?1.05:1.75;
+
+    if(def.endless){
+      if(i===45)t=await addVoice(tl,t,voice,'stay_flow',lang,gender,
+        lang==='es'?'MANTENÉ EL FLUJO':'STAY WITH THE FLOW','',.40);
+      if(i===105)t=await addVoice(tl,t,voice,'trust_ear',lang,gender,
+        lang==='es'?'CONFIÁ EN TU OÍDO':'TRUST YOUR EAR','',.40);
+    }
 
     if(!def.endless && def.id!=='qso_head_copy'){
       if(i===19)t=await addVoice(tl,t,voice,'headcopy_no_spelling',lang,gender,lang==='es'?'ESCUCHÁ LA UNIDAD':'HEAR THE UNIT','',.45);
