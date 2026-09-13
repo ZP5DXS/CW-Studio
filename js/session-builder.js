@@ -1,4 +1,4 @@
-import {Timeline} from './timeline.js?v=21';import {tokenDuration,wordDuration} from './morse-engine.js?v=21';
+import {Timeline} from './timeline.js?v=22';import {tokenDuration,wordDuration} from './morse-engine.js?v=22';
 const LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ',NUMBERS='0123456789';
 const ABBR=['TNX','FER','PSE','AGN','FB','GM','GA','GE','WX','ANT','RIG'],CALLS=['ZP5DXS','W1AW','K1ABC','LU1ABC','PY2XYZ','JA1ABC','DL4ABC','EA7XYZ'];
 const PROSIGNS=['BT','AR','SK','KN'],PUNCT=['?','/'];

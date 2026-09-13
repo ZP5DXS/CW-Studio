@@ -1,11 +1,11 @@
-import {VoiceEngine} from './voice-engine.js?v=21';
-import {Playback} from './playback.js?v=21';
-import {VisualEngine} from './visual-engine.js?v=21';
-import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=21';
-import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=21';
-import {buildCustom} from './session-builder.js?v=21';
-import {exportWav,exportMp3,download} from './export-engine.js?v=21';
-import {exportVideo} from './video-export.js?v=21';
+import {VoiceEngine} from './voice-engine.js?v=22';
+import {Playback} from './playback.js?v=22';
+import {VisualEngine} from './visual-engine.js?v=22';
+import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=22';
+import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=22';
+import {buildCustom} from './session-builder.js?v=22';
+import {exportWav,exportMp3,download} from './export-engine.js?v=22';
+import {exportVideo} from './video-export.js?v=22';
 
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
@@ -121,7 +121,7 @@ function loadingStatus(text,prefix='',kicker=tr('loading')){
   const m=s.match(/(\d+)\/(\d+)/);
   const p=m?Number(m[1])/Math.max(1,Number(m[2])):(/ready|complete|rendered/i.test(s)?1:.08);
   setLoading(true,p,`${prefix}${prefix?' · ':''}${s}`,kicker);
-  $('#assetStatus').textContent=`CW Studio v2.1 · ${s}`;$('#assetStatus').classList.add('active');
+  $('#assetStatus').textContent=`CW Studio v2.2 · ${s}`;$('#assetStatus').classList.add('active');
 }
 function stopLoading(){setLoading(false,1,'','')}
 
@@ -198,7 +198,7 @@ async function loadLesson(n){
     success=true;
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v2.1 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v2.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');
     $('#assetStatus').classList.add('warning');
     timeline=null;
     stopLoading();
@@ -221,7 +221,7 @@ async function loadBonus(id){
     controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=false});
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
-    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v2.1 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
+    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v2.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
   }
 }
 
@@ -357,7 +357,7 @@ function resetPlayButton(){
   $('#playBtn').dataset.state='play';
 }
 async function togglePlay(){
-  if(!timeline){$('#assetStatus').textContent='CW Studio v2.1 · no session loaded';return}
+  if(!timeline){$('#assetStatus').textContent='CW Studio v2.2 · no session loaded';return}
   if(playback.isPlaying()){
     if(playback.isPaused()){
       await playback.resume();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
@@ -367,11 +367,11 @@ async function togglePlay(){
     return;
   }
   stopLoading();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
-  $('#assetStatus').textContent='CW Studio v2.1 · preparing audio…';
+  $('#assetStatus').textContent='CW Studio v2.2 · preparing audio…';
   try{
     await playback.play(timeline,{
       lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,startAt:currentPosition,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.1 · ${s}`},
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.2 · ${s}`},
       onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
       onEnd:()=>{
         resetPlayButton();drawLoop(timeline.duration);
@@ -379,7 +379,7 @@ async function togglePlay(){
       }
     });
   }catch(err){
-    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v2.1 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
+    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v2.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
   }
 }
 $('#playBtn').onclick=()=>togglePlay();
@@ -413,7 +413,7 @@ async function seekTo(seconds){
         gender:$('#voiceSelect').value,
         tone:+$('#toneRange').value,
         startAt:currentPosition,
-        onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.1 · ${s}`},
+        onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.2 · ${s}`},
         onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
         onEnd:()=>{
           resetPlayButton();
@@ -457,7 +457,7 @@ async function exportAudio(kind){
   try{
     const options={
       lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.1 · ${s}`},
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v2.2 · ${s}`},
       onProgress:p=>setLoading(true,p,`${Math.round(p*100)}%`,tr('exportAudio'))
     };
     const blob=kind==='wav'?await exportWav(timeline,voice,options,meta()):await exportMp3(timeline,voice,options,meta());
@@ -465,7 +465,7 @@ async function exportAudio(kind){
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v2.1 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v2.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');
     $('#assetStatus').classList.add('warning');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
@@ -485,7 +485,7 @@ $('#videoBtn').onclick=async()=>{
     download(blob,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`);
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v2.1 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v2.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
   }
