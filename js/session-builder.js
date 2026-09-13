@@ -1,6 +1,6 @@
-import {Timeline} from './timeline.js?v=30';
-import {tokenDuration,wordDuration} from './morse-engine.js?v=30';
-import {RADIO,ABBR,CALLS,PREFIXES,PUNCT,PROSIGNS,RST,QSO_FRAGMENTS} from './content-data.js?v=30';
+import {Timeline} from './timeline.js?v=32';
+import {tokenDuration,wordDuration} from './morse-engine.js?v=32';
+import {RADIO,ABBR,CALLS,PREFIXES,PUNCT,PROSIGNS,RST,QSO_FRAGMENTS} from './content-data.js?v=32';
 
 const LETTERS=[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'],DIGITS=[...'0123456789'];
 

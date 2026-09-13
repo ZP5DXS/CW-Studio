@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS} from './morse-engine.js?v=30';
-import {mnemonicFor} from './mnemonics.js?v=30';
+import {MORSE,PROSIGNS} from './morse-engine.js?v=32';
+import {mnemonicFor,mnemonicEntries} from './mnemonics.js?v=32';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -51,10 +51,152 @@ export class VisualEngine{
     this.lastRendered=null;
     this.lastSize='';
     this.offlineAudio=null;
+    this.mnemonicImages=new Map();
+    this.mnemonicPromises=new Map();
+    this.mnemonicFailures=new Set();
   }
 
   setLanguage(l){this.language=l||'es'}
   setOfflineAudio(buffer){this.offlineAudio=buffer||null}
+
+  mnemonicKey(char,lang=this.language){
+    return `${lang}|${String(char||'').toUpperCase()}`;
+  }
+
+  restyleNotoSvg(svgText){
+    // Preserve Noto's professional geometry/details but remap its palette into
+    // the CW Studio cyan/ice/dark visual language.
+    const mapHex=(hex)=>{
+      let h=hex.slice(1);
+      if(h.length===3)h=h.split('').map(c=>c+c).join('');
+      if(h.length!==6)return hex;
+      const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+      if([r,g,b].some(Number.isNaN))return hex;
+      const lum=(.2126*r+.7152*g+.0722*b)/255;
+      if(lum<.17)return '#07151f';
+      if(lum<.36)return '#1a6072';
+      if(lum<.57)return '#42b8cf';
+      if(lum<.78)return '#79e5ff';
+      return '#d9fbff';
+    };
+    let out=String(svgText||'');
+    out=out.replace(/#[0-9a-fA-F]{6}\b/g,m=>mapHex(m));
+    out=out.replace(/#[0-9a-fA-F]{3}\b/g,m=>mapHex(m));
+    return out;
+  }
+
+  async loadMnemonic(char,lang=this.language){
+    const key=this.mnemonicKey(char,lang);
+    if(this.mnemonicImages.has(key))return this.mnemonicImages.get(key);
+    if(this.mnemonicFailures.has(key))return null;
+    if(this.mnemonicPromises.has(key))return this.mnemonicPromises.get(key);
+
+    const rec=mnemonicFor(char,lang);
+    if(!rec?.asset)return null;
+
+    const promise=(async()=>{
+      try{
+        const r=await fetch(rec.asset,{cache:'force-cache'});
+        if(!r.ok)throw new Error(`${rec.asset} → HTTP ${r.status}`);
+        const styled=this.restyleNotoSvg(await r.text());
+        const blob=new Blob([styled],{type:'image/svg+xml'});
+        const url=URL.createObjectURL(blob);
+        const img=new Image();
+        await new Promise((resolve,reject)=>{
+          img.onload=resolve;
+          img.onerror=()=>reject(new Error(`Could not decode ${rec.asset}`));
+          img.src=url;
+        });
+        URL.revokeObjectURL(url);
+        this.mnemonicImages.set(key,img);
+        return img;
+      }catch(err){
+        console.warn('[CW Studio] mnemonic asset fallback:',key,err);
+        this.mnemonicFailures.add(key);
+        return null;
+      }finally{
+        this.mnemonicPromises.delete(key);
+      }
+    })();
+
+    this.mnemonicPromises.set(key,promise);
+    return promise;
+  }
+
+  async preloadMnemonics(lang=this.language,onStatus=()=>{}){
+    const entries=mnemonicEntries(lang);
+    let done=0;
+    for(const rec of entries){
+      await this.loadMnemonic(rec.char,lang);
+      done++;
+      onStatus(`mnemonics ${done}/${entries.length}`);
+    }
+    return {loaded:entries.length-this.mnemonicFailures.size,total:entries.length};
+  }
+
+  mnemonicImage(char,lang=this.language){
+    const key=this.mnemonicKey(char,lang);
+    const img=this.mnemonicImages.get(key)||null;
+    if(!img&&!this.mnemonicFailures.has(key)&&!this.mnemonicPromises.has(key)){
+      // Lazy safety net; normal lesson/custom loading preloads the pack.
+      this.loadMnemonic(char,lang);
+    }
+    return img;
+  }
+
+  drawMnemonicAsset(char,lang,w,h,time,event){
+    const img=this.mnemonicImage(char,lang);
+    if(!img)return false;
+
+    const local=event?.duration?clamp((time-event.start)/event.duration,0,1):1;
+    const enter=ease(clamp(local/.18,0,1));
+    const leave=ease(clamp((1-local)/.14,0,1));
+    const alpha=Math.min(enter,leave);
+    const scale=.90+.10*enter;
+
+    const maxW=w*.30,maxH=h*.39;
+    const ratio=(img.naturalWidth||1)/(img.naturalHeight||1);
+    let dw=maxW,dh=dw/ratio;
+    if(dh>maxH){dh=maxH;dw=dh*ratio}
+    dw*=scale;dh*=scale;
+
+    const cx=w/2,cy=h*.61;
+    const x=cx-dw/2,y=cy-dh/2;
+
+    const ctx=this.x;
+    ctx.save();
+
+    // Mask the baseline behind the icon so it reads as one line arriving at,
+    // becoming, and leaving the mnemonic rather than a pasted sticker.
+    const halo=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(dw,dh)*.72);
+    halo.addColorStop(0,'rgba(3,8,12,.96)');
+    halo.addColorStop(.66,'rgba(3,8,12,.80)');
+    halo.addColorStop(1,'rgba(3,8,12,0)');
+    ctx.fillStyle=halo;
+    ctx.fillRect(cx-dw*.82,cy-dh*.82,dw*1.64,dh*1.64);
+
+    ctx.globalAlpha=.22*alpha;
+    ctx.shadowBlur=36;
+    ctx.shadowColor='#79e5ff';
+    ctx.drawImage(img,x,y,dw,dh);
+
+    ctx.globalAlpha=.96*alpha;
+    ctx.shadowBlur=15;
+    ctx.shadowColor='rgba(121,229,255,.75)';
+    ctx.drawImage(img,x,y,dw,dh);
+
+    // Small luminous anchor where the Living Line meets the visual.
+    ctx.globalAlpha=.40*alpha;
+    ctx.beginPath();
+    ctx.arc(cx,cy+dh*.50,3.6,0,TAU);
+    ctx.fillStyle='#b9ffde';
+    ctx.shadowBlur=12;
+    ctx.shadowColor='#79e5ff';
+    ctx.fill();
+
+    ctx.restore();
+    return true;
+  }
   setAnalyser(a){
     this.audioAnalyser=a;
     if(a)this.wave=new Uint8Array(a.fftSize);
@@ -488,10 +630,15 @@ export class VisualEngine{
     let target=this.baseline(w,h);
     let main='',sub='';
 
+    let mnemonicAsset=null;
     if(mnemonicEv){
       shapeName='mnemonic';
-      target=this.mnemonicShape(mnemonicEv.data.text,mnemonicEv.data.lang||this.language,w,h);
-      this.drawMnemonicText(mnemonicEv.data.text,mnemonicEv.data.lang||this.language,w,h);
+      const mLang=mnemonicEv.data.lang||this.language;
+      // Noto asset is now the visual mnemonic. The Living Line itself stays
+      // continuous underneath and visually feeds into the icon.
+      target=this.baseline(w,h);
+      mnemonicAsset={char:mnemonicEv.data.text,lang:mLang,event:mnemonicEv};
+      this.drawMnemonicText(mnemonicEv.data.text,mLang,w,h);
     }else if(voiceEv||charVoiceEv){
       shapeName='voice';
       target=this.voiceLine(time,w,h);
@@ -547,6 +694,20 @@ export class VisualEngine{
     }));
     this.lastRendered=points;
     this.drawLine(points,time,1);
+
+    if(mnemonicAsset){
+      const ok=this.drawMnemonicAsset(
+        mnemonicAsset.char,
+        mnemonicAsset.lang,
+        w,h,time,mnemonicAsset.event
+      );
+      if(!ok && this.mnemonicFailures.has(this.mnemonicKey(mnemonicAsset.char,mnemonicAsset.lang))){
+        // Safe fallback only when an SVG truly failed. This keeps CW Studio
+        // usable even if a single production asset is accidentally missing.
+        const fallback=resample(this.mnemonicShape(mnemonicAsset.char,mnemonicAsset.lang,w,h),240);
+        this.drawLine(fallback,time,.82);
+      }
+    }
 
     if(main){
       ctx.textAlign='center';

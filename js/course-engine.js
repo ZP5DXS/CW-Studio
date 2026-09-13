@@ -1,5 +1,5 @@
-import {Timeline} from './timeline.js?v=30';
-import {tokenDuration,wordDuration} from './morse-engine.js?v=30';
+import {Timeline} from './timeline.js?v=32';
+import {tokenDuration,wordDuration} from './morse-engine.js?v=32';
 
 export const COURSE=[
 [1,'HEAR',['T','E','A'],6,'Discover complete CW sounds'],

@@ -1,6 +1,6 @@
-import {Timeline} from './timeline.js?v=30';
-import {wordDuration} from './morse-engine.js?v=30';
-import {COMMON_EN,COMMON_ES,RADIO,ABBR,CALLS,NUMBERS100} from './content-data.js?v=30';
+import {Timeline} from './timeline.js?v=32';
+import {wordDuration} from './morse-engine.js?v=32';
+import {COMMON_EN,COMMON_ES,RADIO,ABBR,CALLS,NUMBERS100} from './content-data.js?v=32';
 
 const QSOS=[
 'CQ CQ DE ZP5DXS ZP5DXS K',
@@ -59,7 +59,7 @@ export async function buildHeadCopy(id,{lang='es',gender='female',voice,wpm=15,e
 
   const r=rng(`${def.id}-${lang}`);
   let items=def.id==='qso_head_copy'?[...itemsBase]:shuffled(itemsBase,r);
-  const endlessChunkSeconds=20*60; // repeated automatically by the player
+  const endlessChunkSeconds=20*60; // logical content loop; audio is scheduled in short windows
   let count=def.id==='qso_head_copy'?items.length:100;
   let response=def.id==='qso_head_copy'?3.0:1.9;
 

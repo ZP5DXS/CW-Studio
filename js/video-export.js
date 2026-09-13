@@ -1,6 +1,6 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=30';
-import {renderOffline} from './export-engine.js?v=30';
-import {VisualEngine} from './visual-engine.js?v=30';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=32';
+import {renderOffline} from './export-engine.js?v=32';
+import {VisualEngine} from './visual-engine.js?v=32';
 
 const MEDIABUNNY_URL='https://cdn.jsdelivr.net/npm/mediabunny@1.56.1/+esm';
 
@@ -25,6 +25,9 @@ async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,on
   const renderer=new VisualEngine(canvas);
   renderer.setLanguage(lang);
   renderer.setOfflineAudio(audio);
+  // Video rendering is frame-driven and much faster than playback, so all
+  // mnemonic SVGs must be ready before frame 0.
+  await renderer.preloadMnemonics(lang);
 
   const target=new BufferTarget();
   const output=new Output({format:new Mp4OutputFormat(),target});
@@ -65,6 +68,7 @@ async function exportFast(tl,voice,{lang='es',gender='female',tone=700,fps=24,on
 
 async function exportRealtime(tl,voice,visual,{lang='es',gender='female',tone=700,fps=30,onProgress=()=>{},onStage=()=>{}}={}){
   onStage('compatibility');
+  await visual.preloadMnemonics(lang);
   if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream)throw new Error('Video export is not supported by this browser.');
 
   const ctx=new AudioContext(),dest=ctx.createMediaStreamDestination(),master=ctx.createGain();

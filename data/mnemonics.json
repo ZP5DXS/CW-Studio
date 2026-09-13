@@ -2,361 +2,361 @@
   "A": {
     "es": {
       "word": "Arco",
-      "shape": "bow"
+      "asset": "assets/mnemonics/es/a_arco.svg"
     },
     "en": {
       "word": "Arrow",
-      "shape": "arrow"
+      "asset": "assets/mnemonics/en/a_arrow.svg"
     }
   },
   "B": {
     "es": {
       "word": "Barco",
-      "shape": "boat"
+      "asset": "assets/mnemonics/es/b_barco.svg"
     },
     "en": {
       "word": "Bridge",
-      "shape": "bridge"
+      "asset": "assets/mnemonics/en/b_bridge.svg"
     }
   },
   "C": {
     "es": {
       "word": "Campana",
-      "shape": "bell"
+      "asset": "assets/mnemonics/es/c_campana.svg"
     },
     "en": {
       "word": "Crown",
-      "shape": "crown"
+      "asset": "assets/mnemonics/en/c_crown.svg"
     }
   },
   "D": {
     "es": {
       "word": "Dado",
-      "shape": "cube"
+      "asset": "assets/mnemonics/es/d_dado.svg"
     },
     "en": {
       "word": "Drum",
-      "shape": "drum"
+      "asset": "assets/mnemonics/en/d_drum.svg"
     }
   },
   "E": {
     "es": {
       "word": "Estrella",
-      "shape": "star"
+      "asset": "assets/mnemonics/es/e_estrella.svg"
     },
     "en": {
       "word": "Eye",
-      "shape": "eye"
+      "asset": "assets/mnemonics/en/e_eye.svg"
     }
   },
   "F": {
     "es": {
-      "word": "Faro",
-      "shape": "lighthouse"
+      "word": "Fuego",
+      "asset": "assets/mnemonics/es/f_fuego.svg"
     },
     "en": {
       "word": "Flag",
-      "shape": "flag"
+      "asset": "assets/mnemonics/en/f_flag.svg"
     }
   },
   "G": {
     "es": {
       "word": "Gato",
-      "shape": "cat"
+      "asset": "assets/mnemonics/es/g_gato.svg"
     },
     "en": {
       "word": "Guitar",
-      "shape": "guitar"
+      "asset": "assets/mnemonics/en/g_guitar.svg"
     }
   },
   "H": {
     "es": {
       "word": "Hacha",
-      "shape": "axe"
+      "asset": "assets/mnemonics/es/h_hacha.svg"
     },
     "en": {
       "word": "Hammer",
-      "shape": "hammer"
+      "asset": "assets/mnemonics/en/h_hammer.svg"
     }
   },
   "I": {
     "es": {
       "word": "Imán",
-      "shape": "magnet"
+      "asset": "assets/mnemonics/es/i_iman.svg"
     },
     "en": {
       "word": "Ice",
-      "shape": "ice"
+      "asset": "assets/mnemonics/en/i_ice.svg"
     }
   },
   "J": {
     "es": {
       "word": "Jirafa",
-      "shape": "giraffe"
+      "asset": "assets/mnemonics/es/j_jirafa.svg"
     },
     "en": {
       "word": "Jet",
-      "shape": "jet"
+      "asset": "assets/mnemonics/en/j_jet.svg"
     }
   },
   "K": {
     "es": {
       "word": "Kayak",
-      "shape": "kayak"
+      "asset": "assets/mnemonics/es/k_kayak.svg"
     },
     "en": {
       "word": "Kite",
-      "shape": "kite"
+      "asset": "assets/mnemonics/en/k_kite.svg"
     }
   },
   "L": {
     "es": {
       "word": "Luna",
-      "shape": "moon"
+      "asset": "assets/mnemonics/es/l_luna.svg"
     },
     "en": {
-      "word": "Lighthouse",
-      "shape": "lighthouse"
+      "word": "Leaf",
+      "asset": "assets/mnemonics/en/l_leaf.svg"
     }
   },
   "M": {
     "es": {
       "word": "Montaña",
-      "shape": "mountain"
+      "asset": "assets/mnemonics/es/m_montana.svg"
     },
     "en": {
       "word": "Mountain",
-      "shape": "mountain"
+      "asset": "assets/mnemonics/en/m_mountain.svg"
     }
   },
   "N": {
     "es": {
       "word": "Nube",
-      "shape": "cloud"
+      "asset": "assets/mnemonics/es/n_nube.svg"
     },
     "en": {
       "word": "Needle",
-      "shape": "needle"
+      "asset": "assets/mnemonics/en/n_needle.svg"
     }
   },
   "O": {
     "es": {
       "word": "Ojo",
-      "shape": "eye"
+      "asset": "assets/mnemonics/es/o_ojo.svg"
     },
     "en": {
       "word": "Orbit",
-      "shape": "orbit"
+      "asset": "assets/mnemonics/en/o_orbit.svg"
     }
   },
   "P": {
     "es": {
       "word": "Puente",
-      "shape": "bridge"
+      "asset": "assets/mnemonics/es/p_puente.svg"
     },
     "en": {
       "word": "Piano",
-      "shape": "piano"
+      "asset": "assets/mnemonics/en/p_piano.svg"
     }
   },
   "Q": {
     "es": {
       "word": "Queso",
-      "shape": "cheese"
+      "asset": "assets/mnemonics/es/q_queso.svg"
     },
     "en": {
-      "word": "Quill",
-      "shape": "quill"
+      "word": "Queen",
+      "asset": "assets/mnemonics/en/q_queen.svg"
     }
   },
   "R": {
     "es": {
       "word": "Reloj",
-      "shape": "clock"
+      "asset": "assets/mnemonics/es/r_reloj.svg"
     },
     "en": {
       "word": "Rocket",
-      "shape": "rocket"
+      "asset": "assets/mnemonics/en/r_rocket.svg"
     }
   },
   "S": {
     "es": {
       "word": "Serpiente",
-      "shape": "snake"
+      "asset": "assets/mnemonics/es/s_serpiente.svg"
     },
     "en": {
       "word": "Snake",
-      "shape": "snake"
+      "asset": "assets/mnemonics/en/s_snake.svg"
     }
   },
   "T": {
     "es": {
       "word": "Torre",
-      "shape": "tower"
+      "asset": "assets/mnemonics/es/t_torre.svg"
     },
     "en": {
       "word": "Tower",
-      "shape": "tower"
+      "asset": "assets/mnemonics/en/t_tower.svg"
     }
   },
   "U": {
     "es": {
       "word": "Uva",
-      "shape": "grapes"
+      "asset": "assets/mnemonics/es/u_uva.svg"
     },
     "en": {
       "word": "Umbrella",
-      "shape": "umbrella"
+      "asset": "assets/mnemonics/en/u_umbrella.svg"
     }
   },
   "V": {
     "es": {
       "word": "Velero",
-      "shape": "sailboat"
+      "asset": "assets/mnemonics/es/v_velero.svg"
     },
     "en": {
       "word": "Violin",
-      "shape": "violin"
+      "asset": "assets/mnemonics/en/v_violin.svg"
     }
   },
   "W": {
     "es": {
       "word": "Wok",
-      "shape": "wok"
+      "asset": "assets/mnemonics/es/w_wok.svg"
     },
     "en": {
       "word": "Wave",
-      "shape": "wave"
+      "asset": "assets/mnemonics/en/w_wave.svg"
     }
   },
   "X": {
     "es": {
       "word": "Xilófono",
-      "shape": "xylophone"
+      "asset": "assets/mnemonics/es/x_xilofono.svg"
     },
     "en": {
-      "word": "Xylophone",
-      "shape": "xylophone"
+      "word": "X-ray",
+      "asset": "assets/mnemonics/en/x_x_ray.svg"
     }
   },
   "Y": {
     "es": {
       "word": "Yate",
-      "shape": "yacht"
+      "asset": "assets/mnemonics/es/y_yate.svg"
     },
     "en": {
       "word": "Yacht",
-      "shape": "yacht"
+      "asset": "assets/mnemonics/en/y_yacht.svg"
     }
   },
   "Z": {
     "es": {
       "word": "Zapato",
-      "shape": "shoe"
+      "asset": "assets/mnemonics/es/z_zapato.svg"
     },
     "en": {
-      "word": "Zipper",
-      "shape": "zipper"
+      "word": "Zebra",
+      "asset": "assets/mnemonics/en/z_zebra.svg"
     }
   },
   "0": {
     "es": {
       "word": "Anillo",
-      "shape": "ring"
+      "asset": "assets/mnemonics/es/0_anillo.svg"
     },
     "en": {
       "word": "Ring",
-      "shape": "ring"
+      "asset": "assets/mnemonics/en/0_ring.svg"
     }
   },
   "1": {
     "es": {
       "word": "Vela",
-      "shape": "candle"
+      "asset": "assets/mnemonics/es/1_vela.svg"
     },
     "en": {
       "word": "Candle",
-      "shape": "candle"
+      "asset": "assets/mnemonics/en/1_candle.svg"
     }
   },
   "2": {
     "es": {
       "word": "Cisne",
-      "shape": "swan"
+      "asset": "assets/mnemonics/es/2_cisne.svg"
     },
     "en": {
       "word": "Swan",
-      "shape": "swan"
+      "asset": "assets/mnemonics/en/2_swan.svg"
     }
   },
   "3": {
     "es": {
       "word": "Trébol",
-      "shape": "clover"
+      "asset": "assets/mnemonics/es/3_trebol.svg"
     },
     "en": {
       "word": "Clover",
-      "shape": "clover"
+      "asset": "assets/mnemonics/en/3_clover.svg"
     }
   },
   "4": {
     "es": {
       "word": "Silla",
-      "shape": "chair"
+      "asset": "assets/mnemonics/es/4_silla.svg"
     },
     "en": {
       "word": "Chair",
-      "shape": "chair"
+      "asset": "assets/mnemonics/en/4_chair.svg"
     }
   },
   "5": {
     "es": {
       "word": "Mano",
-      "shape": "hand"
+      "asset": "assets/mnemonics/es/5_mano.svg"
     },
     "en": {
       "word": "Hand",
-      "shape": "hand"
+      "asset": "assets/mnemonics/en/5_hand.svg"
     }
   },
   "6": {
     "es": {
       "word": "Caracol",
-      "shape": "snail"
+      "asset": "assets/mnemonics/es/6_caracol.svg"
     },
     "en": {
       "word": "Snail",
-      "shape": "snail"
+      "asset": "assets/mnemonics/en/6_snail.svg"
     }
   },
   "7": {
     "es": {
-      "word": "Hoz",
-      "shape": "scythe"
+      "word": "Palo de hockey",
+      "asset": "assets/mnemonics/es/7_palo_de_hockey.svg"
     },
     "en": {
-      "word": "Scythe",
-      "shape": "scythe"
+      "word": "Hockey stick",
+      "asset": "assets/mnemonics/en/7_hockey_stick.svg"
     }
   },
   "8": {
     "es": {
       "word": "Reloj de arena",
-      "shape": "hourglass"
+      "asset": "assets/mnemonics/es/8_reloj_de_arena.svg"
     },
     "en": {
       "word": "Hourglass",
-      "shape": "hourglass"
+      "asset": "assets/mnemonics/en/8_hourglass.svg"
     }
   },
   "9": {
     "es": {
       "word": "Globo",
-      "shape": "balloon"
+      "asset": "assets/mnemonics/es/9_globo.svg"
     },
     "en": {
       "word": "Balloon",
-      "shape": "balloon"
+      "asset": "assets/mnemonics/en/9_balloon.svg"
     }
   }
 }

@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=30';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=32';
 
 export class Playback{
   constructor(voice){
@@ -87,7 +87,7 @@ export class Playback{
 
     const needed=new Map();
     for(const e of tl.events){
-      if(e.start>endAt)continue;
+      if(e.start>=endAt)continue;
       const ends=e.start+(e.duration||0);
       if(ends<from)continue;
       if(e.type==='voice'||e.type==='charVoice'){
@@ -113,7 +113,7 @@ export class Playback{
     onStatus(`audio ready · ${needed.size} voice clips`);
 
     for(const e of tl.events){
-      if(e.start>endAt)continue;
+      if(e.start>=endAt)continue;
       const eventEnd=e.start+(e.duration||0);
       if(eventEnd<from)continue;
 

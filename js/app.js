@@ -1,11 +1,11 @@
-import {VoiceEngine} from './voice-engine.js?v=30';
-import {Playback} from './playback.js?v=30';
-import {VisualEngine} from './visual-engine.js?v=30';
-import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=30';
-import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=30';
-import {buildCustom} from './session-builder.js?v=30';
-import {exportWav,exportMp3,download} from './export-engine.js?v=30';
-import {exportVideo} from './video-export.js?v=30';
+import {VoiceEngine} from './voice-engine.js?v=32';
+import {Playback} from './playback.js?v=32';
+import {VisualEngine} from './visual-engine.js?v=32';
+import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=32';
+import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=32';
+import {buildCustom} from './session-builder.js?v=32';
+import {exportWav,exportMp3,download} from './export-engine.js?v=32';
+import {exportVideo} from './video-export.js?v=32';
 
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
@@ -185,6 +185,7 @@ async function loadLesson(n){
   let success=false;
   try{
     await voice.discover(s=>loadingStatus(s,'',tr('loading')));
+    await visual.preloadMnemonics(lang(),s=>loadingStatus(s,'',tr('loading')));
     timeline=await buildLesson(currentLesson,{
       lang:lang(),
       gender:$('#voiceSelect').value,
@@ -200,7 +201,7 @@ async function loadLesson(n){
     success=true;
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v3.0 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v3.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');
     $('#assetStatus').classList.add('warning');
     timeline=null;
     stopLoading();
@@ -231,7 +232,7 @@ async function loadBonus(id){
     }
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
-    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v3.0 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
+    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v3.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
   }
 }
 
@@ -333,6 +334,9 @@ $$('.duration-choice').forEach(b=>b.onclick=()=>{
 $('#buildSessionBtn').onclick=async()=>{
   visual.setLanguage(lang());currentPosition=0;
   setLoading(true,.03,'','');
+  if(selectedModes.has('familiarization')){
+    await visual.preloadMnemonics(lang(),s=>loadingStatus(s,'',tr('loading')));
+  }
   timeline=await buildCustom({
     lang:lang(),
     familiarization:selectedModes.has('familiarization'),
@@ -374,17 +378,26 @@ function resetPlayButton(){
   $('#playBtn').textContent=tr('play');
   $('#playBtn').dataset.state='play';
 }
-function handlePlaybackEnd(){
+function handlePlaybackEnd(segmentEnd=null){
   const generation=playbackGeneration;
+
   if(timeline?.meta?.loopPlayback){
-    currentPosition=0;
-    drawLoop(0);
-    // Loop a bounded Head Copy chunk indefinitely without building a 9-hour timeline.
+    // Continuous Head Copy is intentionally played in short scheduling windows.
+    // Scheduling a 20-minute CW timeline at once can create thousands of WebAudio
+    // oscillator/gain nodes and may result in a visually-running but silent graph.
+    // Move to the end of this small audio segment, then schedule the next one.
+    const end=Number.isFinite(segmentEnd)?segmentEnd:currentPosition;
+    currentPosition=end>=timeline.duration-.05?0:end;
+    drawLoop(currentPosition);
+
     setTimeout(()=>{
-      if(generation===playbackGeneration && timeline?.meta?.loopPlayback)togglePlay();
-    },120);
+      if(generation===playbackGeneration && timeline?.meta?.loopPlayback){
+        togglePlay();
+      }
+    },45);
     return;
   }
+
   resetPlayButton();
   drawLoop(timeline?.duration||0);
   if(timeline?.meta?.kind==='course'){
@@ -394,7 +407,7 @@ function handlePlaybackEnd(){
 }
 
 async function togglePlay(){
-  if(!timeline){$('#assetStatus').textContent='CW Studio v3.0 · no session loaded';return}
+  if(!timeline){$('#assetStatus').textContent='CW Studio v3.2 · no session loaded';return}
   if(playback.isPlaying()){
     if(playback.isPaused()){
       await playback.resume();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
@@ -404,16 +417,29 @@ async function togglePlay(){
     return;
   }
   stopLoading();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
-  $('#assetStatus').textContent='CW Studio v3.0 · preparing audio…';
+  $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   try{
+    const continuousWindow=timeline?.meta?.loopPlayback
+      ? Math.min(timeline.duration,currentPosition+35)
+      : null;
+
     await playback.play(timeline,{
-      lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,startAt:currentPosition,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v3.0 · ${s}`},
+      lang:lang(),
+      gender:$('#voiceSelect').value,
+      tone:+$('#toneRange').value,
+      startAt:currentPosition,
+      limit:continuousWindow,
+      onStatus:s=>{
+        // Keep technical playback detail out of the production UI.
+        console.debug('[CW Studio audio]',s);
+        $('#assetStatus').textContent='';
+        $('#assetStatus').classList.remove('active','warning');
+      },
       onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
-      onEnd:()=>handlePlaybackEnd()
+      onEnd:()=>handlePlaybackEnd(continuousWindow)
     });
   }catch(err){
-    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v3.0 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
+    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v3.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');$('#assetStatus').classList.add('warning');
   }
 }
 $('#playBtn').onclick=()=>togglePlay();
@@ -447,7 +473,7 @@ async function seekTo(seconds){
         gender:$('#voiceSelect').value,
         tone:+$('#toneRange').value,
         startAt:currentPosition,
-        onStatus:s=>{$('#assetStatus').textContent=`CW Studio v3.0 · ${s}`},
+        onStatus:s=>{$('#assetStatus').textContent=`CW Studio v3.2 · ${s}`},
         onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
         onEnd:()=>handlePlaybackEnd()
       });
@@ -495,7 +521,7 @@ async function exportAudio(kind){
   try{
     const options={
       lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v3.0 · ${s}`},
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v3.2 · ${s}`},
       onProgress:p=>setLoading(true,p,'','')
     };
     const blob=kind==='wav'?await exportWav(timeline,voice,options,meta()):await exportMp3(timeline,voice,options,meta());
@@ -503,7 +529,7 @@ async function exportAudio(kind){
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v3.0 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v3.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');
     $('#assetStatus').classList.add('warning');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
@@ -534,7 +560,7 @@ $('#videoBtn').onclick=async()=>{
     download(blob,`${exportBaseName()}.${ext}`);
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v3.0 · ${err.message||err}`;$('#assetStatus').classList.add('active');
+    $('#assetStatus').textContent=`CW Studio v3.2 · ${err.message||err}`;$('#assetStatus').classList.add('active');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
   }
