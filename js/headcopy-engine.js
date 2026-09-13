@@ -1,6 +1,6 @@
-import {Timeline} from './timeline.js?v=28';
-import {wordDuration} from './morse-engine.js?v=28';
-import {COMMON_EN,COMMON_ES,RADIO,ABBR,CALLS,NUMBERS100} from './content-data.js?v=28';
+import {Timeline} from './timeline.js?v=29';
+import {wordDuration} from './morse-engine.js?v=29';
+import {COMMON_EN,COMMON_ES,RADIO,ABBR,CALLS,NUMBERS100} from './content-data.js?v=29';
 
 const QSOS=[
 'CQ CQ DE ZP5DXS ZP5DXS K',

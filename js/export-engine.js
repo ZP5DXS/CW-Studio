@@ -1,4 +1,4 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=28';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=29';
 
 function ascii(s){return new TextEncoder().encode(s)}
 function concat(...parts){const n=parts.reduce((a,p)=>a+p.length,0),o=new Uint8Array(n);let x=0;for(const p of parts){o.set(p,x);x+=p.length}return o}
@@ -16,7 +16,11 @@ export async function renderOffline(tl,voice,{lang='es',gender='female',tone=700
 
   const sr=44100;
   const renderDuration=tl.duration+.5;
-  const ctx=new OfflineAudioContext(1,Math.ceil(renderDuration*sr),sr);
+  const frames=Math.ceil(renderDuration*sr);
+
+  // One mono 44.1 kHz offline graph. This is deliberately the same path for
+  // Course, Custom and finite Head Copy timelines.
+  const ctx=new OfflineAudioContext(1,frames,sr);
   const master=ctx.createGain();
   master.gain.value=.82;
   const comp=ctx.createDynamicsCompressor();
@@ -24,72 +28,69 @@ export async function renderOffline(tl,voice,{lang='es',gender='female',tone=700
   master.connect(comp).connect(ctx.destination);
 
   const voiceEvents=tl.events.filter(e=>e.type==='voice'||e.type==='charVoice');
-  let vi=0;
+  const voiceBuffers=new Map();
+
+  // Decode each unique voice clip once before scheduling. Custom sessions can
+  // repeat the same character hundreds of times; fetching/decoding it once is
+  // materially faster and avoids work inside the scheduling loop.
+  const uniqueVoiceIds=[...new Set(voiceEvents.map(e=>
+    e.type==='voice'?e.data.id:`char_${String(e.data.char).toLowerCase()}`
+  ))];
+
+  for(let i=0;i<uniqueVoiceIds.length;i++){
+    const id=uniqueVoiceIds[i];
+    onStatus(`loading voice ${i+1}/${uniqueVoiceIds.length} · ${id}`);
+    onProgress(uniqueVoiceIds.length?(.03+.27*(i+1)/uniqueVoiceIds.length):.30);
+    const b=await voice.buffer(ctx,id,lang,gender);
+    if(!b)throw new Error(`Required voice clip unavailable during export: ${id}`);
+    voiceBuffers.set(id,b);
+  }
+
+  onStatus('preparing audio…');
+  onProgress(.32);
+
   for(const e of tl.events){
     if(e.type==='cw'){
-      scheduleText(ctx,master,e.data.text,e.start,{wpm:e.data.wpm||15,effectiveWpm:e.data.eff||15,tone:e.data.tone||tone,amp:.30});
+      scheduleText(ctx,master,e.data.text,e.start,{
+        wpm:e.data.wpm||15,
+        effectiveWpm:e.data.eff||15,
+        tone:e.data.tone||tone,
+        amp:.30
+      });
     }else if(e.type==='check'){
       scheduleCheckTone(ctx,master,e.start,{amp:.14});
     }else if(e.type==='voice'||e.type==='charVoice'){
-      vi++;
       const id=e.type==='voice'?e.data.id:`char_${String(e.data.char).toLowerCase()}`;
-      onStatus(`loading voice ${vi}/${voiceEvents.length} · ${id}`);
-      onProgress(voiceEvents.length?(.04+.34*vi/voiceEvents.length):.38);
-      const b=await voice.buffer(ctx,id,lang,gender);
-      if(b){
-        const source=ctx.createBufferSource();
-        source.buffer=b;source.connect(master);source.start(e.start);
-      }
+      const b=voiceBuffers.get(id);
+      const source=ctx.createBufferSource();
+      source.buffer=b;
+      source.connect(master);
+      source.start(e.start);
     }
   }
 
   onStatus('rendering audio…');
-  onProgress(.40);
+  onProgress(.36);
 
-  // OfflineAudioContext normally gives no progress while startRendering() runs.
-  // Suspend/resume checkpoints give real timeline-based progress in browsers
-  // that support OfflineAudioContext.suspend(). A heartbeat fallback is kept
-  // for implementations that do not.
-  let checkpointSupported=typeof ctx.suspend==='function'&&typeof ctx.resume==='function';
-  const checkpointPromises=[];
+  // startRendering() itself has no standard granular progress callback.
+  // Do not suspend/resume the OfflineAudioContext merely to fake progress:
+  // suspend() has uneven browser support and can stall long/custom renders.
+  // A lightweight heartbeat only keeps the UI alive while the browser renders
+  // the graph as fast as it can.
+  let virtual=.36;
+  const heartbeat=setInterval(()=>{
+    virtual=Math.min(.59,virtual+.006);
+    onProgress(virtual);
+  },160);
 
-  if(checkpointSupported && renderDuration>8){
-    for(let f=.10;f<1;f+=.10){
-      const at=Math.min(renderDuration-.02,renderDuration*f);
-      if(at<=0)continue;
-      try{
-        const cp=ctx.suspend(at).then(async()=>{
-          onProgress(.40+.22*f);
-          await ctx.resume();
-        }).catch(()=>{});
-        checkpointPromises.push(cp);
-      }catch{
-        checkpointSupported=false;
-        break;
-      }
-    }
-  }
-
-  let heartbeat=null;
-  let virtual=.40;
-  if(!checkpointSupported){
-    heartbeat=setInterval(()=>{
-      virtual=Math.min(.60,virtual+.008);
-      onProgress(virtual);
-    },180);
-  }
-
-  let rendered;
   try{
-    rendered=await ctx.startRendering();
-    await Promise.allSettled(checkpointPromises);
+    const rendered=await ctx.startRendering();
+    onStatus('audio ready');
+    onProgress(.62);
+    return rendered;
   }finally{
-    if(heartbeat)clearInterval(heartbeat);
+    clearInterval(heartbeat);
   }
-
-  onStatus('audio ready');
-  onProgress(.63);
-  return rendered;
 }
 export async function exportWav(tl,voice,o,meta={}){
   const b=await renderOffline(tl,voice,o);

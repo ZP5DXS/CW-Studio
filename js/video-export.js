@@ -1,6 +1,6 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=28';
-import {renderOffline} from './export-engine.js?v=28';
-import {VisualEngine} from './visual-engine.js?v=28';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=29';
+import {renderOffline} from './export-engine.js?v=29';
+import {VisualEngine} from './visual-engine.js?v=29';
 
 const MEDIABUNNY_URL='https://cdn.jsdelivr.net/npm/mediabunny@1.56.1/+esm';
 
@@ -113,6 +113,7 @@ export async function exportVideo(tl,voice,visual,opts={}){
     return await exportFast(tl,voice,opts);
   }catch(err){
     console.warn('Fast video export unavailable; falling back to real time:',err);
+    opts.onFallback?.(err);
     opts.onStage?.('fallback');
     return await exportRealtime(tl,voice,visual,opts);
   }
