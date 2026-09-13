@@ -1,254 +1,416 @@
-import {VoiceEngine} from './voice-engine.js?v=14';
-import {Playback} from './playback.js?v=14';
-import {VisualEngine} from './visual-engine.js?v=14';
-import {COURSE,buildLesson} from './course-engine.js?v=14';
-import {buildCustom} from './session-builder.js?v=14';
-import {exportWav,exportMp3,download} from './export-engine.js?v=14';
-import {exportVideo} from './video-export.js?v=14';
+import {VoiceEngine} from './voice-engine.js?v=15';
+import {Playback} from './playback.js?v=15';
+import {VisualEngine} from './visual-engine.js?v=15';
+import {COURSE,buildLesson} from './course-engine.js?v=15';
+import {buildCustom} from './session-builder.js?v=15';
+import {exportWav,exportMp3,download} from './export-engine.js?v=15';
+import {exportVideo} from './video-export.js?v=15';
 
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-window.addEventListener('error',e=>{const el=document.querySelector('#assetStatus');if(el){el.textContent=`Startup error: ${e.message}`;el.classList.add('warning')}console.error(e.error||e.message)});
-window.addEventListener('unhandledrejection',e=>{const el=document.querySelector('#assetStatus');if(el){el.textContent=`Startup error: ${e.reason?.message||e.reason||'unknown error'}`;el.classList.add('warning')}console.error(e.reason)});
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
 
 const UI={
   es:{
-    learnCW:'Aprender CW',createSession:'Crear sesión',headCopy:'Head Copy',
-    chooseLesson:'Elegí cualquier lección y comenzá cuando quieras.',
-    play:'Reproducir',stop:'Detener',replay:'Repetir',nextLesson:'Siguiente lección →',
-    export:'EXPORTAR',video:'VIDEO',
-    completed:n=>`${n} / 20 completadas`,
-    loading:'CARGANDO LECCIÓN',exportAudio:'GENERANDO AUDIO',exportVideo:'GENERANDO VIDEO',
-    lesson:'Lección',ready:'lista',female:'VOZ FEMENINA',male:'VOZ MASCULINA',
-    lessonComplete:'LECCIÓN COMPLETADA'
+    learnCW:'Aprender CW',createSession:'Crear sesión',chooseLesson:'Elegí cualquier lección y comenzá cuando quieras.',
+    play:'Reproducir',stop:'Detener',replay:'Repetir',nextLesson:'Siguiente lección →',export:'EXPORTAR',
+    goal:'Objetivo',content:'Contenido',sound:'Sonido',length:'Duración',step1:'PASO 1',step2:'PASO 2',step3:'PASO 3',step4:'PASO 4',
+    whatTrain:'¿Qué querés entrenar?',combineModes:'Podés combinar familiarización y reconocimiento.',
+    familiarize:'Familiarizar',famHelp:'Aprendé letras y números con apoyo visual.',
+    recognize:'Reconocer',recHelp:'Escuchá primero y respondé antes de la voz.',
+    marathon:'Maratón',marHelp:'Escucha continua con mínima interrupción.',
+    chooseMaterial:'Elegí el material',materialHelp:'Familiarización usa letras y números. Reconocimiento permite contenido de radio.',
+    howSound:'¿Cómo debe sonar?',soundHelp:'Empezá simple. Las opciones avanzadas quedan fuera del camino.',
+    speed:'Velocidad',tone:'Tono',advanced:'Avanzado ▾',advancedOpen:'Avanzado ▴',
+    effectiveSpeed:'Velocidad efectiva',answerDelay:'Tiempo de respuesta',variableSpeed:'Reconocimiento a velocidad variable',toneVariation:'Variación leve de tono',
+    howLong:'¿Cuánto tiempo?',longHelp:'Creá una práctica breve o una sesión larga de escucha.',seed:'Semilla de sesión',
+    back:'Atrás',continue:'Continuar',buildSession:'Crear sesión',editSession:'Editar sesión',
+    headCopyHelp:'Prácticas de escucha para después del curso.',
+    completed:n=>`${n} / 20 completadas`,lesson:'LECCIÓN',loading:'CARGANDO LECCIÓN',exportAudio:'GENERANDO AUDIO',exportVideo:'GENERANDO VIDEO',
+    ready:'LISTO',customSession:'SESIÓN PERSONALIZADA',
+    contents:{letters:'Letras',numbers:'Números',alnum:'Letras + números',punctuation:'Puntuación',prosigns:'Prosigns',abbreviations:'Abreviaturas CW',callsigns:'Indicativos',prefixes:'Prefijos',rst:'RST',qso:'QSO',words:'Palabras',custom:'Texto propio'}
   },
   en:{
-    learnCW:'Learn CW',createSession:'Create Session',headCopy:'Head Copy',
-    chooseLesson:'Choose any lesson and start whenever you want.',
-    play:'Play',stop:'Stop',replay:'Replay',nextLesson:'Next lesson →',
-    export:'EXPORT',video:'VIDEO',
-    completed:n=>`${n} / 20 completed`,
-    loading:tr('loading'),exportAudio:tr('exportAudio'),exportVideo:tr('exportVideo'),
-    lesson:'Lesson',ready:'ready',female:'FEMALE VOICE',male:'MALE VOICE',
-    lessonComplete:'LESSON COMPLETE'
+    learnCW:'Learn CW',createSession:'Create Session',chooseLesson:'Choose any lesson and start whenever you want.',
+    play:'Play',stop:'Stop',replay:'Replay',nextLesson:'Next lesson →',export:'EXPORT',
+    goal:'Goal',content:'Content',sound:'Sound',length:'Length',step1:'STEP 1',step2:'STEP 2',step3:'STEP 3',step4:'STEP 4',
+    whatTrain:'What do you want to train?',combineModes:'You can combine familiarization and recognition.',
+    familiarize:'Familiarize',famHelp:'Learn letters and numbers with visual support.',
+    recognize:'Recognize',recHelp:'Hear first and answer before the voice.',
+    marathon:'Marathon',marHelp:'Continuous listening with minimal interruption.',
+    chooseMaterial:'Choose the material',materialHelp:'Familiarization uses letters and numbers. Recognition can use radio content.',
+    howSound:'How should it sound?',soundHelp:'Start simple. Advanced options stay out of the way.',
+    speed:'Speed',tone:'Tone',advanced:'Advanced ▾',advancedOpen:'Advanced ▴',
+    effectiveSpeed:'Effective speed',answerDelay:'Answer delay',variableSpeed:'Variable-speed recognition',toneVariation:'Slight tone variation',
+    howLong:'How long?',longHelp:'Create a short drill or a long listening session.',seed:'Session seed',
+    back:'Back',continue:'Continue',buildSession:'Build session',editSession:'Edit session',
+    headCopyHelp:'Focused listening challenges for after the course.',
+    completed:n=>`${n} / 20 completed`,lesson:'LESSON',loading:'LOADING LESSON',exportAudio:'EXPORTING AUDIO',exportVideo:'EXPORTING VIDEO',
+    ready:'READY',customSession:'CUSTOM SESSION',
+    contents:{letters:'Letters',numbers:'Numbers',alnum:'Letters + numbers',punctuation:'Punctuation',prosigns:'Prosigns',abbreviations:'CW abbreviations',callsigns:'Callsigns',prefixes:'Prefixes',rst:'RST',qso:'QSO',words:'Words',custom:'Custom text'}
   }
 };
-function uiLang(){return $('#languageSelect').value||'es'}
-function tr(k,...args){const v=UI[uiLang()][k];return typeof v==='function'?v(...args):v}
-function applyLanguageUI(){
-  const lang=uiLang();
-  $$('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(UI[lang][k])el.textContent=tr(k)});
-  $('#voiceFemaleName').textContent=lang==='es'?'DALIA':'EMMA';
-  $('#voiceMaleName').textContent=lang==='es'?'JORGE':'ANDREW';
-  $('#voiceFemaleMeta').textContent=`${lang.toUpperCase()} · ${tr('female')}`;
-  $('#voiceMaleMeta').textContent=`${lang.toUpperCase()} · ${tr('male')}`;
-  const done=new Set(JSON.parse(localStorage.getItem('cwStudio.completed')||'[]'));
-  $('#courseProgressText').textContent=tr('completed',done.size);
-}
-function syncVoicePills(){
-  $$('.lang-pill').forEach(b=>b.classList.toggle('active',b.dataset.lang===$('#languageSelect').value));
-  $$('.voice-pill').forEach(b=>b.classList.toggle('active',b.dataset.gender===$('#voiceSelect').value));
-  applyLanguageUI();
-}
 
-const voice=new VoiceEngine();const playback=new Playback(voice),visual=new VisualEngine($('#visualCanvas'));
+function lang(){return $('#languageSelect').value||'es'}
+function tr(k,...args){const v=UI[lang()][k];return typeof v==='function'?v(...args):v}
 
-function setLoadingUI(active,percent=0,message='Preparing…',kicker=tr('loading')){
-  const overlay=$('#loadingOverlay');
-  if(!overlay)return;
-  const p=Math.max(0,Math.min(1,Number(percent)||0));
-  overlay.classList.toggle('hidden',!active);
-  $('#loadingKicker').textContent=kicker;
-  $('#loadingPercent').textContent=`${Math.round(p*100)}%`;
-  $('#loadingMessage').textContent=String(message||'');
-  $('#loadingBar').style.width=`${Math.round(p*100)}%`;
-}
-function loadingStatus(text,prefix='Loading lesson',kicker=tr('loading')){
-  const s=String(text||'');
-  const m=s.match(/(\d+)\/(\d+)/);
-  let pct=.08;
-  if(m)pct=Math.max(0,Math.min(1,Number(m[1])/Math.max(1,Number(m[2]))));
-  else if(/ready|complete|rendered/i.test(s))pct=1;
-  setLoadingUI(true,pct,`${prefix} · ${s}`,kicker);
-  $('#assetStatus').textContent=`CW Studio v1.4 · ${s}`;
-}
-function stopLoadingUI(){setLoadingUI(false,1,'','')}
+const voice=new VoiceEngine();
+const playback=new Playback(voice);
+const visual=new VisualEngine($('#visualCanvas'));
 
-voice.init().catch(err=>console.warn('Voice init:',err));
-let currentLesson=Number(localStorage.getItem('cwStudio.currentLesson')||1),timeline=null,wizardStep=1,selectedModes=new Set(['familiarization','recognition']),selectedContents=new Set(['letters']),selectedDuration=900;
+let currentLesson=Number(localStorage.getItem('cwStudio.currentLesson')||1);
+let timeline=null;
+let wizardStep=1;
+let selectedModes=new Set(['familiarization','recognition']);
+let selectedContents=new Set(['letters']);
+let selectedDuration=900;
 const completed=new Set(JSON.parse(localStorage.getItem('cwStudio.completedLessons')||'[]'));
 
-function fmt(s){s=Math.max(0,Math.floor(s));return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
-function drawLoop(t=0){if(!timeline){$('#timeLabel').textContent='00:00 / 00:00';return}visual.draw(t,timeline);$('#timeLabel').textContent=`${fmt(t)} / ${fmt(timeline.duration||0)}`}
-function meta(){return {title:timeline?.meta?.title||'CW Studio Session',comment:`${timeline?.meta?.kind==='course'?'Learn CW lesson':'Custom practice session'} · Generated by ZP5DXS with Morse Practice CW Studio`}}
+const controls=['#playBtn','#wavBtn','#mp3Btn','#videoBtn'];
+
+window.addEventListener('error',e=>{
+  const el=$('#assetStatus');
+  if(el){el.textContent=`Startup error: ${e.message}`;el.classList.add('warning')}
+  console.error(e.error||e.message);
+});
+window.addEventListener('unhandledrejection',e=>{
+  const el=$('#assetStatus');
+  if(el){el.textContent=`Startup error: ${e.reason?.message||e.reason||'unknown error'}`;el.classList.add('warning')}
+  console.error(e.reason);
+});
+
+function applyLanguage(){
+  document.documentElement.lang=lang();
+  $$('[data-i18n]').forEach(el=>{
+    const key=el.dataset.i18n;
+    if(UI[lang()][key]!==undefined)el.textContent=tr(key);
+  });
+
+  // Provisional public aliases; underlying TTS voices stay untouched.
+  if(lang()==='es'){
+    $('#voiceFemaleName').textContent='AURA';
+    $('#voiceFemaleMeta').textContent='ES · VOZ CÁLIDA';
+    $('#voiceMaleName').textContent='NEXO';
+    $('#voiceMaleMeta').textContent='ES · VOZ SERENA';
+  }else{
+    $('#voiceFemaleName').textContent='NOVA';
+    $('#voiceFemaleMeta').textContent='EN · WARM VOICE';
+    $('#voiceMaleName').textContent='VECTOR';
+    $('#voiceMaleMeta').textContent='EN · CALM VOICE';
+  }
+
+  $$('.lang-pill').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang()));
+  $$('.voice-pill').forEach(b=>b.classList.toggle('active',b.dataset.gender===$('#voiceSelect').value));
+  $('#courseProgressText').textContent=tr('completed',completed.size);
+  renderContentChoices();
+  renderBonuses();
+}
+
+function setLoading(active,percent=0,message='',kicker=tr('loading')){
+  const overlay=$('#loadingOverlay');
+  overlay.classList.toggle('hidden',!active);
+  const p=Math.max(0,Math.min(1,Number(percent)||0));
+  $('#loadingKicker').textContent=kicker;
+  $('#loadingPercent').textContent=`${Math.round(p*100)}%`;
+  $('#loadingMessage').textContent=message;
+  $('#loadingBar').style.width=`${Math.round(p*100)}%`;
+}
+function loadingStatus(text,prefix='',kicker=tr('loading')){
+  const s=String(text||'');
+  const m=s.match(/(\d+)\/(\d+)/);
+  const p=m?Number(m[1])/Math.max(1,Number(m[2])):(/ready|complete|rendered/i.test(s)?1:.08);
+  setLoading(true,p,`${prefix}${prefix?' · ':''}${s}`,kicker);
+  $('#assetStatus').textContent=`CW Studio v1.5 · ${s}`;
+}
+function stopLoading(){setLoading(false,1,'','')}
+
+function fmt(s){
+  s=Math.max(0,Math.floor(s||0));
+  return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+}
+function drawLoop(t=0){
+  if(!timeline){$('#timeLabel').textContent='00:00 / 00:00';return}
+  visual.draw(t,timeline);
+  $('#timeLabel').textContent=`${fmt(t)} / ${fmt(timeline.duration)}`;
+}
+function meta(){
+  return {
+    title:timeline?.meta?.title||'CW Studio Session',
+    comment:`${timeline?.meta?.kind==='course'?'Learn CW lesson':'Custom practice session'} · Generated by ZP5DXS with Morse Practice CW Studio`
+  };
+}
+
+function renderLessons(){
+  $('#lessonGrid').innerHTML=COURSE.map(l=>`
+    <article class="lesson ${l.lesson===currentLesson?'current':''} ${completed.has(l.lesson)?'completed':''}" data-lesson="${l.lesson}">
+      <div class="lesson-top">
+        <div class="n">${tr('lesson')} ${String(l.lesson).padStart(2,'0')}</div>
+        <span class="lesson-check">${completed.has(l.lesson)?'✓':''}</span>
+      </div>
+      <h3>${l.newItems.length?l.newItems.join(' · '):l.focus}</h3>
+      <p>${l.focus}<br>${l.charWpm} WPM · ${l.effectiveWpm} eff.</p>
+    </article>`).join('');
+
+  $$('.lesson').forEach(el=>el.onclick=()=>loadLesson(Number(el.dataset.lesson)));
+  $('#courseProgressText').textContent=tr('completed',completed.size);
+  $('#courseProgressBar').style.width=`${completed.size/20*100}%`;
+  requestAnimationFrame(()=>$('#lessonGrid .lesson.current')?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}));
+}
+
+const BONUS_ITEMS=[
+  ['100 Common Words','100 palabras frecuentes'],
+  ['100 Real Callsigns','100 indicativos reales'],
+  ['100 Radio Words','100 palabras de radio'],
+  ['100 Numbers','100 números'],
+  ['100 CW Abbreviations','100 abreviaturas CW'],
+  ['QSO Head Copy','QSO progresivo'],
+  ['Endless Head Copy','Escucha continua']
+];
+function renderBonuses(){
+  $('#bonusGrid').innerHTML=BONUS_ITEMS.map(([en,es],i)=>`
+    <article class="bonus-card" data-bonus="${i}">
+      <div class="n">HEAD COPY ${String(i+1).padStart(2,'0')}</div>
+      <h3>${lang()==='es'?es:en}</h3>
+    </article>`).join('');
+}
 
 async function loadLesson(n){
   currentLesson=Math.max(1,Math.min(20,n));
   localStorage.setItem('cwStudio.currentLesson',currentLesson);
-
   playback.stop();
-  $('#lessonEndActions')?.classList.add('hidden');
+  $('#lessonEndActions').classList.add('hidden');
   timeline=null;
 
-  const label=`LESSON ${String(currentLesson).padStart(2,'0')}`;
-  $('#statusLabel').textContent=label;
-  $('#currentLessonLabel').textContent=`${tr('lesson')} ${String(currentLesson).padStart(2,'0')}`;
-  $('#assetStatus').textContent=`CW Studio v1.4 · loading lesson ${String(currentLesson).padStart(2,'0')}…`;
-  setLoadingUI(true,.03,`Loading lesson ${String(currentLesson).padStart(2,'0')}…`,tr('loading'));
-
+  $('#statusLabel').textContent=`${tr('lesson')} ${String(currentLesson).padStart(2,'0')}`;
+  setLoading(true,.03,`${tr('loading')} ${String(currentLesson).padStart(2,'0')}…`,tr('loading'));
   controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=true});
 
   let success=false;
   try{
-    await voice.discover(s=>loadingStatus(s,'Loading lesson'));
-    const roots=voice.roots();
-
-    if(!roots.core || !roots.course){
-      throw new Error(`Voice indexes not found. Core: ${roots.core||'not found'} · Course: ${roots.course||'not found'}`);
-    }
-
-    $('#assetStatus').textContent=`CW Studio v1.4 · Core found: ${roots.core} · Course found: ${roots.course} · preparing lesson…`;
-
+    await voice.discover(s=>loadingStatus(s,'',tr('loading')));
     timeline=await buildLesson(currentLesson,{
-      lang:$('#languageSelect').value,
+      lang:lang(),
       gender:$('#voiceSelect').value,
       voice,
-      onStatus:s=>loadingStatus(s,'Loading lesson',tr('loading'))
+      onStatus:s=>loadingStatus(s,'',tr('loading'))
     });
-
     renderLessons();
     drawLoop(0);
     const r=voice.roots();
-    $('#assetStatus').textContent=`CW Studio v1.4 · lesson ${String(currentLesson).padStart(2,'0')} ready · Core: ${r.core} (${r.coreClips}) · Course: ${r.course} (${r.courseClips})`;
+    $('#assetStatus').textContent=`CW Studio v1.5 · ${tr('lesson')} ${String(currentLesson).padStart(2,'0')} · ${r.coreClips}+${r.courseClips} voice clips ready`;
     $('#assetStatus').classList.remove('warning');
-    stopLoadingUI();drawLoop(0);
+    stopLoading();
     success=true;
   }catch(err){
     console.error(err);
-    timeline=null;
-    drawLoop(0);
-    $('#assetStatus').textContent=`CW Studio v1.4 · could not load lesson: ${err.message||err}`;
+    $('#assetStatus').textContent=`CW Studio v1.5 · ${err.message||err}`;
     $('#assetStatus').classList.add('warning');
-    stopLoadingUI();
+    timeline=null;
+    stopLoading();
   }finally{
     controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=!success});
   }
 }
 
-function renderLessons(){
-  $('#lessonGrid').innerHTML=COURSE.map(l=>`<article class="lesson ${l.lesson===currentLesson?'current':''} ${completed.has(l.lesson)?'completed':''}" data-lesson="${l.lesson}"><div class="lesson-top"><div class="n">LESSON ${String(l.lesson).padStart(2,'0')}</div><span class="lesson-check">${completed.has(l.lesson)?'✓':''}</span></div><h3>${l.newItems.length?l.newItems.join(' · '):l.focus}</h3><p>${l.focus}<br>${l.charWpm} WPM · ${l.effectiveWpm} effective</p></article>`).join('');
-  $$('.lesson').forEach(el=>{el.classList.remove('locked');el.disabled=false;el.onclick=()=>loadLesson(Number(el.dataset.lesson))});
-  $('#prevLessonBtn').disabled=currentLesson===1;$('#nextLessonBtn').disabled=currentLesson===20;
-  $('#courseProgressText').textContent=tr('completed',completed.size);$('#courseProgressBar').style.width=`${completed.size/20*100}%`;
-  requestAnimationFrame(()=>$('#lessonGrid .lesson.current')?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}))
+function completeCurrent(){
+  if(timeline?.meta?.kind!=='course')return;
+  completed.add(currentLesson);
+  localStorage.setItem('cwStudio.completedLessons',JSON.stringify([...completed].sort((a,b)=>a-b)));
+  renderLessons();
 }
-function completeCurrent(){if(timeline?.meta?.kind!=='course')return;completed.add(currentLesson);localStorage.setItem('cwStudio.completedLessons',JSON.stringify([...completed].sort((a,b)=>a-b)));renderLessons()}
 
-$$('.tab').forEach(btn=>btn.onclick=()=>{
-  $$('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+function showTab(tab){
+  $$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   $$('.panel').forEach(p=>p.classList.remove('active'));
-  const tab=btn.dataset.tab;
   $(`#${tab}Panel`)?.classList.add('active');
-  if(tab==='studio')setWorkspaceMode('studio-config'); else setWorkspaceMode(tab);
-});b.classList.add('active');$$('.panel').forEach(x=>x.classList.remove('active'));$('#'+b.dataset.tab+'Panel').classList.add('active')});
-$('#prevLessonBtn').onclick=()=>loadLesson(currentLesson-1);$('#nextLessonBtn').onclick=()=>loadLesson(currentLesson+1);
-$('#carouselPrev').onclick=()=>$('#lessonGrid').scrollBy({left:-Math.max(280,$('#lessonGrid').clientWidth*.72),behavior:'smooth'});
-$('#carouselNext').onclick=()=>$('#lessonGrid').scrollBy({left: Math.max(280,$('#lessonGrid').clientWidth*.72),behavior:'smooth'});
 
-$('#languageSelect').onchange=()=>timeline?.meta?.kind==='course'&&loadLesson(currentLesson);$('#voiceSelect').onchange=()=>timeline?.meta?.kind==='course'&&loadLesson(currentLesson);
-
-const bonuses=[['100 Common Words','Build word-level recognition'],['100 Real Callsigns','Real-world callsign retention'],['100 Radio Words','Operational vocabulary'],['100 Numbers','Numbers in radio contexts'],['100 CW Abbreviations','Common operating shorthand'],['QSO Head Copy','Progressive complete exchanges'],['Endless Head Copy','Continuous listening']];
-$('#bonusGrid').innerHTML=bonuses.map(x=>`<article class="bonus"><h3>${x[0]}</h3><p>${x[1]}</p></article>`).join('');
-
-const CONTENTS=[['letters','Letters'],['numbers','Numbers'],['alnum','Letters + Numbers'],['punctuation','Punctuation'],['prosigns','Prosigns'],['abbreviations','CW Abbreviations'],['callsigns','Callsigns'],['prefixes','Prefixes'],['rst','RST'],['qso','QSO'],['words','Words'],['custom','Custom Text']];
-function renderContentChoices(){
-  const fam=selectedModes.has('familiarization'),onlyFam=fam&&selectedModes.size===1;const allowed=onlyFam?new Set(['letters','numbers']):new Set(CONTENTS.map(x=>x[0]));
-  if(onlyFam)for(const x of [...selectedContents])if(!allowed.has(x))selectedContents.delete(x);
-  if(!selectedContents.size)selectedContents.add('letters');
-  $('#contentChoices').innerHTML=CONTENTS.filter(([id])=>allowed.has(id)).map(([id,label])=>`<button class="choice compact ${selectedContents.has(id)?'selected':''}" data-content="${id}"><strong>${label}</strong></button>`).join('');
-  $$('[data-content]').forEach(b=>b.onclick=()=>{const id=b.dataset.content;if(selectedContents.has(id))selectedContents.delete(id);else selectedContents.add(id);if(!selectedContents.size)selectedContents.add(id);renderContentChoices();$('#customTextWrap').classList.toggle('hidden',!selectedContents.has('custom'))});
-  $('#customTextWrap').classList.toggle('hidden',!selectedContents.has('custom'))
-}
-$$('[data-mode]').forEach(b=>b.onclick=()=>{const id=b.dataset.mode;if(selectedModes.has(id))selectedModes.delete(id);else selectedModes.add(id);if(!selectedModes.size)selectedModes.add(id);$$('[data-mode]').forEach(x=>x.classList.toggle('selected',selectedModes.has(x.dataset.mode)));renderContentChoices()});
-renderContentChoices();
-
-function setWizard(n){wizardStep=Math.max(1,Math.min(4,n));$$('.wizard-step').forEach(x=>x.classList.toggle('active',+x.dataset.step===wizardStep));$$('.wizard-panel').forEach(x=>x.classList.toggle('active',+x.dataset.wizardPanel===wizardStep));$('#wizardBack').style.visibility=wizardStep===1?'hidden':'visible';$('#wizardNext').classList.toggle('hidden',wizardStep===4);$('#buildSessionBtn').classList.toggle('hidden',wizardStep!==4)}
-$$('.wizard-step').forEach(b=>b.onclick=()=>setWizard(+b.dataset.step));$('#wizardBack').onclick=()=>setWizard(wizardStep-1);$('#wizardNext').onclick=()=>setWizard(wizardStep+1);setWizard(1);
-['wpm','eff','tone','delay'].forEach(k=>{$(`#${k}Range`).oninput=e=>$(`#${k}Value`).textContent=e.target.value});
-$('#advancedToggle').onclick=()=>{$('#advancedOptions').classList.toggle('hidden');$('#advancedToggle').textContent=$('#advancedOptions').classList.contains('hidden')?'Advanced ▾':'Advanced ▴'};
-$$('.duration-choice').forEach(b=>b.onclick=()=>{selectedDuration=+b.dataset.duration;$$('.duration-choice').forEach(x=>x.classList.toggle('selected',x===b))});
-
-$('#buildSessionBtn').onclick=()=>{setWorkspaceMode('studio-player');timeline=buildCustom({familiarization:selectedModes.has('familiarization'),recognition:selectedModes.has('recognition'),marathon:selectedModes.has('marathon'),contents:[...selectedContents],customText:$('#customText').value,wpm:+$('#wpmRange').value,eff:+$('#effRange').value,tone:+$('#toneRange').value,delay:+$('#delayRange').value,variableRecognition:$('#variableRecognition').checked,toneVariation:$('#toneVariation').checked,duration:selectedDuration,seed:$('#seedInput').value});$('#statusLabel').textContent='CUSTOM SESSION';drawLoop(0)};
-
-async function play(limit=null){stopLoadingUI();if(!timeline){$('#assetStatus').textContent='CW Studio v1.4 · select a loaded lesson first';return}
-  $('#assetStatus').textContent='CW Studio v1.4 · preparing audio…';
-  await playback.play(timeline,{
-    lang:$('#languageSelect').value,
-    gender:$('#voiceSelect').value,
-    tone:+$('#toneRange').value,
-    limit,
-    onStatus:(s)=>{ $('#assetStatus').textContent='CW Studio v1.4 · '+s; },
-    onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
-    onEnd:()=>{drawLoop(limit||timeline.duration);if(!limit){completeCurrent();if(timeline?.meta?.kind==='course')$('#lessonEndActions').classList.remove('hidden')}}
-  })
-}
-$('#wavBtn').onclick=async()=>{if(!timeline)return;
-  const btn=$('#wavBtn'),old=btn.textContent;
-  btn.disabled=true;btn.textContent='Preparing WAV…';
-  $('#assetStatus').textContent='CW Studio v1.4 · preparing WAV…';setLoadingUI(true,.04,'Preparing WAV…',tr('exportAudio'));
-  try{
-    const b=await exportWav(timeline,voice,{
-      lang:$('#languageSelect').value,
-      gender:$('#voiceSelect').value,
-      tone:+$('#toneRange').value,
-      onStatus:s=>loadingStatus(s,'Exporting audio',tr('exportAudio'))
-    },meta());
-    btn.textContent='Downloading…';
-    download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.wav`);
-    $('#assetStatus').textContent='CW Studio v1.4 · WAV ready';stopLoadingUI();drawLoop(0);
-  }catch(e){
-    console.error(e);$('#assetStatus').textContent=`CW Studio v1.4 · WAV error: ${e.message||e}`;$('#assetStatus').classList.add('warning');stopLoadingUI();
-  }finally{btn.disabled=false;btn.textContent=old}
-};
-$('#mp3Btn').onclick=async()=>{if(!timeline)return;
-  const btn=$('#mp3Btn'),old=btn.textContent;
-  btn.disabled=true;btn.textContent='Preparing MP3…';
-  $('#assetStatus').textContent='CW Studio v1.4 · preparing MP3…';setLoadingUI(true,.04,'Preparing MP3…',tr('exportAudio'));
-  try{
-    const b=await exportMp3(timeline,voice,{
-      lang:$('#languageSelect').value,
-      gender:$('#voiceSelect').value,
-      tone:+$('#toneRange').value,
-      onStatus:s=>loadingStatus(s,'Exporting audio',tr('exportAudio'))
-    },meta());
-    btn.textContent='Downloading…';
-    download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.mp3`);
-    $('#assetStatus').textContent='CW Studio v1.4 · MP3 ready';stopLoadingUI();drawLoop(0);
-  }catch(e){
-    console.error(e);$('#assetStatus').textContent=`CW Studio v1.4 · MP3 error: ${e.message||e}`;$('#assetStatus').classList.add('warning');stopLoadingUI();
-  }finally{btn.disabled=false;btn.textContent=old}
-};
-$('#videoBtn').onclick=async()=>{if(!timeline)return;const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;try{const b=await exportVideo(timeline,voice,visual,{lang:$('#languageSelect').value,gender:$('#voiceSelect').value,tone:+$('#toneRange').value,onProgress:p=>{btn.textContent=`Video ${Math.round(p*100)}%`;setLoadingUI(true,p,`Rendering video · ${Math.round(p*100)}%`,tr('exportVideo'))}});download(b,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`)}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;stopLoadingUI();drawLoop(0)}};
-
-renderLessons();
-$('#assetStatus').textContent='CW Studio v1.4 · interface ready';
-setTimeout(()=>loadLesson(currentLesson),0);
-
-$('#replayLessonBtn').onclick=()=>{ $('#lessonEndActions').classList.add('hidden'); play(); };
-$('#nextLessonCta').onclick=()=>{ $('#lessonEndActions').classList.add('hidden'); loadLesson(currentLesson>=20?1:currentLesson+1); };
-
-function setWorkspaceMode(mode){
-  document.body.dataset.workspace=mode;
-  const player=document.querySelector('.player-section');
-  const course=document.querySelector('#coursePanel');
-  const studio=document.querySelector('#studioPanel');
-  const bonus=document.querySelector('#bonusPanel');
-  if(mode==='studio-config'){
-    player?.classList.add('workspace-hidden');
-    studio?.classList.remove('workspace-hidden');
-  }else if(mode==='studio-player'){
-    player?.classList.remove('workspace-hidden');
-    studio?.classList.add('workspace-hidden');
+  if(tab==='studio'){
+    $('#playerSection').classList.add('workspace-hidden');
+    $('#sessionWizard').classList.remove('workspace-hidden');
+    $('#sessionBuiltActions').classList.add('hidden');
   }else{
-    player?.classList.remove('workspace-hidden');
+    $('#playerSection').classList.remove('workspace-hidden');
   }
 }
+
+$$('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+$('#carouselPrev').onclick=()=>$('#lessonGrid').scrollBy({left:-Math.max(280,$('#lessonGrid').clientWidth*.78),behavior:'smooth'});
+$('#carouselNext').onclick=()=>$('#lessonGrid').scrollBy({left: Math.max(280,$('#lessonGrid').clientWidth*.78),behavior:'smooth'});
+$('#bonusPrev').onclick=()=>$('#bonusGrid').scrollBy({left:-Math.max(280,$('#bonusGrid').clientWidth*.78),behavior:'smooth'});
+$('#bonusNext').onclick=()=>$('#bonusGrid').scrollBy({left: Math.max(280,$('#bonusGrid').clientWidth*.78),behavior:'smooth'});
+
+$$('.lang-pill').forEach(b=>b.onclick=async()=>{
+  $('#languageSelect').value=b.dataset.lang;
+  applyLanguage();
+  if(timeline?.meta?.kind==='course')await loadLesson(currentLesson);
+});
+$$('.voice-pill').forEach(b=>b.onclick=async()=>{
+  $('#voiceSelect').value=b.dataset.gender;
+  applyLanguage();
+  if(timeline?.meta?.kind==='course')await loadLesson(currentLesson);
+});
+
+const CONTENT_KEYS=['letters','numbers','alnum','punctuation','prosigns','abbreviations','callsigns','prefixes','rst','qso','words','custom'];
+function renderContentChoices(){
+  const box=$('#contentChoices'); if(!box)return;
+  const onlyFam=selectedModes.has('familiarization')&&selectedModes.size===1;
+  const allowed=onlyFam?new Set(['letters','numbers']):new Set(CONTENT_KEYS);
+  for(const x of [...selectedContents])if(!allowed.has(x))selectedContents.delete(x);
+  if(!selectedContents.size)selectedContents.add('letters');
+
+  box.innerHTML=CONTENT_KEYS.filter(k=>allowed.has(k)).map(k=>`
+    <button class="choice compact ${selectedContents.has(k)?'selected':''}" data-content="${k}">
+      <strong>${UI[lang()].contents[k]}</strong>
+    </button>`).join('');
+
+  $$('[data-content]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.content;
+    if(selectedContents.has(id))selectedContents.delete(id); else selectedContents.add(id);
+    if(!selectedContents.size)selectedContents.add(id);
+    renderContentChoices();
+  });
+  $('#customTextWrap').classList.toggle('hidden',!selectedContents.has('custom'));
+}
+
+$$('[data-mode]').forEach(b=>b.onclick=()=>{
+  const id=b.dataset.mode;
+  if(selectedModes.has(id))selectedModes.delete(id); else selectedModes.add(id);
+  if(!selectedModes.size)selectedModes.add(id);
+  $$('[data-mode]').forEach(x=>x.classList.toggle('selected',selectedModes.has(x.dataset.mode)));
+  renderContentChoices();
+});
+
+function setWizard(n){
+  wizardStep=Math.max(1,Math.min(4,n));
+  $$('.wizard-step').forEach(x=>x.classList.toggle('active',+x.dataset.step===wizardStep));
+  $$('.wizard-panel').forEach(x=>x.classList.toggle('active',+x.dataset.wizardPanel===wizardStep));
+  $('#wizardBack').style.visibility=wizardStep===1?'hidden':'visible';
+  $('#wizardNext').classList.toggle('hidden',wizardStep===4);
+  $('#buildSessionBtn').classList.toggle('hidden',wizardStep!==4);
+}
+$$('.wizard-step').forEach(b=>b.onclick=()=>setWizard(+b.dataset.step));
+$('#wizardBack').onclick=()=>setWizard(wizardStep-1);
+$('#wizardNext').onclick=()=>setWizard(wizardStep+1);
+
+['wpm','eff','tone','delay'].forEach(k=>{
+  $(`#${k}Range`).oninput=e=>$(`#${k}Value`).textContent=e.target.value;
+});
+$('#advancedToggle').onclick=()=>{
+  const open=$('#advancedOptions').classList.toggle('hidden')===false;
+  $('#advancedToggle').textContent=open?tr('advancedOpen'):tr('advanced');
+};
+$$('.duration-choice').forEach(b=>b.onclick=()=>{
+  selectedDuration=+b.dataset.duration;
+  $$('.duration-choice').forEach(x=>x.classList.toggle('selected',x===b));
+});
+
+$('#buildSessionBtn').onclick=()=>{
+  timeline=buildCustom({
+    familiarization:selectedModes.has('familiarization'),
+    recognition:selectedModes.has('recognition'),
+    marathon:selectedModes.has('marathon'),
+    contents:[...selectedContents],
+    customText:$('#customText').value,
+    wpm:+$('#wpmRange').value,
+    eff:+$('#effRange').value,
+    tone:+$('#toneRange').value,
+    delay:+$('#delayRange').value,
+    variableRecognition:$('#variableRecognition').checked,
+    toneVariation:$('#toneVariation').checked,
+    duration:selectedDuration,
+    seed:$('#seedInput').value
+  });
+  $('#statusLabel').textContent=tr('customSession');
+  $('#sessionWizard').classList.add('workspace-hidden');
+  $('#sessionBuiltActions').classList.remove('hidden');
+  $('#playerSection').classList.remove('workspace-hidden');
+  drawLoop(0);
+};
+$('#editSessionBtn').onclick=()=>{
+  playback.stop();
+  $('#playerSection').classList.add('workspace-hidden');
+  $('#sessionWizard').classList.remove('workspace-hidden');
+  $('#sessionBuiltActions').classList.add('hidden');
+};
+
+async function play(){
+  if(!timeline){$('#assetStatus').textContent='CW Studio v1.5 · no session loaded';return}
+  stopLoading();
+  $('#assetStatus').textContent='CW Studio v1.5 · preparing audio…';
+  try{
+    await playback.play(timeline,{
+      lang:lang(),
+      gender:$('#voiceSelect').value,
+      tone:+$('#toneRange').value,
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.5 · ${s}`},
+      onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
+      onEnd:()=>{
+        drawLoop(timeline.duration);
+        if(timeline?.meta?.kind==='course'){
+          completeCurrent();
+          $('#lessonEndActions').classList.remove('hidden');
+        }
+      }
+    });
+  }catch(err){
+    console.error(err);
+    $('#assetStatus').textContent=`CW Studio v1.5 · ${err.message||err}`;
+    $('#assetStatus').classList.add('warning');
+  }
+}
+$('#playBtn').onclick=()=>play();
+$('#stopBtn').onclick=()=>{playback.stop();drawLoop(0)};
+$('#replayLessonBtn').onclick=()=>{$('#lessonEndActions').classList.add('hidden');play()};
+$('#nextLessonCta').onclick=()=>{$('#lessonEndActions').classList.add('hidden');loadLesson(currentLesson>=20?1:currentLesson+1)};
+
+async function exportAudio(kind){
+  if(!timeline)return;
+  const btn=kind==='wav'?$('#wavBtn'):$('#mp3Btn');
+  const old=btn.textContent;
+  btn.disabled=true;
+  setLoading(true,.04,kind.toUpperCase(),tr('exportAudio'));
+  try{
+    const options={
+      lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
+      onStatus:s=>loadingStatus(s,'',tr('exportAudio'))
+    };
+    const blob=kind==='wav'?await exportWav(timeline,voice,options,meta()):await exportMp3(timeline,voice,options,meta());
+    download(blob,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.${kind}`);
+    $('#assetStatus').textContent=`CW Studio v1.5 · ${kind.toUpperCase()} ready`;
+  }catch(err){
+    console.error(err);
+    $('#assetStatus').textContent=`CW Studio v1.5 · ${err.message||err}`;
+    $('#assetStatus').classList.add('warning');
+  }finally{
+    btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
+  }
+}
+$('#wavBtn').onclick=()=>exportAudio('wav');
+$('#mp3Btn').onclick=()=>exportAudio('mp3');
+
+$('#videoBtn').onclick=async()=>{
+  if(!timeline)return;
+  const btn=$('#videoBtn'),old=btn.textContent;btn.disabled=true;
+  try{
+    const blob=await exportVideo(timeline,voice,visual,{
+      lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
+      onProgress:p=>setLoading(true,p,`${Math.round(p*100)}%`,tr('exportVideo'))
+    });
+    download(blob,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`);
+  }catch(err){
+    console.error(err);
+    $('#assetStatus').textContent=`CW Studio v1.5 · ${err.message||err}`;
+  }finally{
+    btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
+  }
+};
+
+voice.init().catch(err=>console.warn('Voice init:',err));
+renderLessons();
+renderBonuses();
+renderContentChoices();
+setWizard(1);
+applyLanguage();
+$('#statusLabel').textContent=tr('ready');
+$('#assetStatus').textContent='CW Studio v1.5 · interface ready';
+setTimeout(()=>loadLesson(currentLesson),0);

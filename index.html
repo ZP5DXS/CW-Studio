@@ -1,172 +1,209 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Morse Practice · CW Studio</title>
-  <meta name="description" content="Learn CW and create custom Morse code practice audio and video — by ZP5DXS." />
-  <link rel="stylesheet" href="css/app.css" />
+  <meta name="description" content="Learn CW and create Morse code practice audio and video — by ZP5DXS.">
+  <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div>
-        <div class="eyebrow">MORSE PRACTICE</div>
-        <h1>CW Studio <span class="version-badge">v1.4</span></h1>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="eyebrow">MORSE PRACTICE</div>
+      <h1>CW Studio <span class="version-badge">v1.5</span></h1>
+    </div>
+
+    <div class="voice-console">
+      <div class="language-pills" aria-label="Language">
+        <button class="lang-pill active" data-lang="es">ES</button>
+        <button class="lang-pill" data-lang="en">EN</button>
       </div>
-      <div class="top-controls voice-console">
-        <div class="language-pills" id="languagePills">
-          <button class="lang-pill active" data-lang="es">ES</button>
-          <button class="lang-pill" data-lang="en">EN</button>
-        </div>
-        <div class="voice-pills" id="voicePills">
-          <button class="voice-pill active" data-gender="female">
-            <span class="voice-orb"><i></i><i></i><i></i></span>
-            <span><strong id="voiceFemaleName">DALIA</strong><small id="voiceFemaleMeta">ES · VOZ FEMENINA</small></span>
-          </button>
-          <button class="voice-pill" data-gender="male">
-            <span class="voice-orb"><i></i><i></i><i></i></span>
-            <span><strong id="voiceMaleName">JORGE</strong><small id="voiceMaleMeta">ES · VOZ MASCULINA</small></span>
-          </button>
-        </div>
-        <select id="languageSelect" class="sr-only"><option value="es">Español</option><option value="en">English</option></select>
-        <select id="voiceSelect" class="sr-only"><option value="female">Female</option><option value="male">Male</option></select>
+
+      <div class="voice-pills" aria-label="Voice">
+        <button class="voice-pill active" data-gender="female">
+          <span class="voice-orb"><i></i><i></i><i></i></span>
+          <span>
+            <strong id="voiceFemaleName">AURA</strong>
+            <small id="voiceFemaleMeta">ES · VOZ CÁLIDA</small>
+          </span>
+        </button>
+        <button class="voice-pill" data-gender="male">
+          <span class="voice-orb"><i></i><i></i><i></i></span>
+          <span>
+            <strong id="voiceMaleName">NEXO</strong>
+            <small id="voiceMaleMeta">ES · VOZ SERENA</small>
+          </span>
+        </button>
       </div>
-    </header>
 
-    <nav class="tabs" aria-label="Main sections">
-      <button class="tab active" data-tab="course" data-i18n="learnCW">Aprender CW</button>
-      <button class="tab" data-tab="studio" data-i18n="createSession">Crear sesión</button>
-      <button class="tab" data-tab="bonus" data-i18n="headCopy">Head Copy</button>
-    </nav>
+      <select id="languageSelect" class="sr-only">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+      <select id="voiceSelect" class="sr-only">
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+      </select>
+    </div>
+  </header>
 
-    <main>
+  <nav class="tabs" aria-label="Main sections">
+    <button class="tab active" data-tab="course" data-i18n="learnCW">Aprender CW</button>
+    <button class="tab" data-tab="studio" data-i18n="createSession">Crear sesión</button>
+    <button class="tab" data-tab="bonus">Head Copy</button>
+  </nav>
 
+  <main>
+    <section class="player-section" id="playerSection">
+      <div class="visual-wrap">
+        <canvas id="visualCanvas" width="1280" height="720"></canvas>
 
-      <section class="player-section">
-        <div class="visual-wrap">
-          <canvas id="visualCanvas" width="1280" height="720"></canvas>
-          <div id="loadingOverlay" class="loading-overlay hidden" aria-live="polite">
-            <div class="loading-kicker" id="loadingKicker">LOADING LESSON</div>
-            <div class="loading-percent" id="loadingPercent">0%</div>
-            <div class="loading-message" id="loadingMessage">Preparing audio…</div>
-            <div class="loading-track"><div id="loadingBar"></div></div>
+        <div id="loadingOverlay" class="loading-overlay hidden" aria-live="polite">
+          <div class="loading-kicker" id="loadingKicker">CARGANDO LECCIÓN</div>
+          <div class="loading-percent" id="loadingPercent">0%</div>
+          <div class="loading-message" id="loadingMessage">Preparando audio…</div>
+          <div class="loading-track"><div id="loadingBar"></div></div>
+        </div>
+
+        <div class="visual-overlay">
+          <span id="statusLabel">LISTO</span>
+          <span id="timeLabel">00:00 / 00:00</span>
+        </div>
+      </div>
+
+      <div class="transport transport-main">
+        <button id="playBtn" class="primary" data-i18n="play">Reproducir</button>
+        <button id="stopBtn" data-i18n="stop">Detener</button>
+        <div class="grow"></div>
+        <div id="lessonEndActions" class="lesson-end-actions hidden">
+          <button id="replayLessonBtn" data-i18n="replay">Repetir</button>
+          <button id="nextLessonCta" class="primary" data-i18n="nextLesson">Siguiente lección →</button>
+        </div>
+      </div>
+
+      <div class="export-row">
+        <span class="export-label" data-i18n="export">EXPORTAR</span>
+        <button id="wavBtn">WAV</button>
+        <button id="mp3Btn">MP3</button>
+        <button id="videoBtn">VIDEO</button>
+      </div>
+
+      <div id="assetStatus" class="asset-status">CW Studio v1.5</div>
+    </section>
+
+    <section id="coursePanel" class="panel active">
+      <div class="section-head compact-head">
+        <div>
+          <h2 data-i18n="learnCW">Aprender CW</h2>
+          <p data-i18n="chooseLesson">Elegí cualquier lección y comenzá cuando quieras.</p>
+        </div>
+        <div class="course-meta"><span id="courseProgressText">0 / 20 completadas</span></div>
+      </div>
+
+      <div class="course-progress"><div id="courseProgressBar"></div></div>
+
+      <div class="lesson-carousel-shell">
+        <button id="carouselPrev" class="carousel-arrow" aria-label="Anterior">‹</button>
+        <div id="lessonGrid" class="lesson-carousel" aria-label="Lecciones"></div>
+        <button id="carouselNext" class="carousel-arrow" aria-label="Siguiente">›</button>
+      </div>
+    </section>
+
+    <section id="studioPanel" class="panel">
+      <div id="sessionWizard" class="wizard">
+        <div class="wizard-steps">
+          <button class="wizard-step active" data-step="1"><span>1</span><b data-i18n="goal">Objetivo</b></button>
+          <button class="wizard-step" data-step="2"><span>2</span><b data-i18n="content">Contenido</b></button>
+          <button class="wizard-step" data-step="3"><span>3</span><b data-i18n="sound">Sonido</b></button>
+          <button class="wizard-step" data-step="4"><span>4</span><b data-i18n="length">Duración</b></button>
+        </div>
+
+        <section class="wizard-panel active" data-wizard-panel="1">
+          <div class="wizard-copy">
+            <div class="eyebrow" data-i18n="step1">PASO 1</div>
+            <h3 data-i18n="whatTrain">¿Qué querés entrenar?</h3>
+            <p data-i18n="combineModes">Podés combinar familiarización y reconocimiento.</p>
           </div>
-          <div class="visual-overlay"><span id="statusLabel">READY</span><span id="timeLabel">00:00 / 00:00</span></div>
-        </div>
-        <div class="transport transport-main">
-          <button id="playBtn" class="primary" data-i18n="play">Reproducir</button>
-          <button id="stopBtn" data-i18n="stop">Detener</button>
+          <div class="choice-grid mode-grid">
+            <button class="choice selected" data-mode="familiarization"><strong data-i18n="familiarize">Familiarizar</strong><span data-i18n="famHelp">Aprendé letras y números con apoyo visual.</span></button>
+            <button class="choice selected" data-mode="recognition"><strong data-i18n="recognize">Reconocer</strong><span data-i18n="recHelp">Escuchá primero y respondé antes de la voz.</span></button>
+            <button class="choice" data-mode="marathon"><strong data-i18n="marathon">Maratón</strong><span data-i18n="marHelp">Escucha continua con mínima interrupción.</span></button>
+          </div>
+        </section>
+
+        <section class="wizard-panel" data-wizard-panel="2">
+          <div class="wizard-copy">
+            <div class="eyebrow" data-i18n="step2">PASO 2</div>
+            <h3 data-i18n="chooseMaterial">Elegí el material</h3>
+            <p id="contentHelp" data-i18n="materialHelp">Familiarización usa letras y números. Reconocimiento permite contenido de radio.</p>
+          </div>
+          <div id="contentChoices" class="choice-grid content-grid"></div>
+          <div id="customTextWrap" class="custom-wrap hidden"><textarea id="customText" placeholder="Pegá tu texto aquí…"></textarea></div>
+        </section>
+
+        <section class="wizard-panel" data-wizard-panel="3">
+          <div class="wizard-copy">
+            <div class="eyebrow" data-i18n="step3">PASO 3</div>
+            <h3 data-i18n="howSound">¿Cómo debe sonar?</h3>
+            <p data-i18n="soundHelp">Empezá simple. Las opciones avanzadas quedan fuera del camino.</p>
+          </div>
+          <div class="sound-grid">
+            <div class="slider-card"><label><span data-i18n="speed">Velocidad</span> <strong><span id="wpmValue">15</span> WPM</strong><input id="wpmRange" type="range" min="8" max="35" value="15"></label></div>
+            <div class="slider-card"><label><span data-i18n="tone">Tono</span> <strong><span id="toneValue">700</span> Hz</strong><input id="toneRange" type="range" min="350" max="1000" step="10" value="700"></label></div>
+          </div>
+          <button id="advancedToggle" class="ghost" data-i18n="advanced">Avanzado ▾</button>
+          <div id="advancedOptions" class="advanced-options hidden">
+            <label><span data-i18n="effectiveSpeed">Velocidad efectiva</span> <span><span id="effValue">9</span> WPM</span><input id="effRange" type="range" min="3" max="35" value="9"></label>
+            <label><span data-i18n="answerDelay">Tiempo de respuesta</span> <span><span id="delayValue">1.5</span>s</span><input id="delayRange" type="range" min="0.5" max="4" step="0.1" value="1.5"></label>
+            <label class="inline-check"><input id="variableRecognition" type="checkbox"> <span data-i18n="variableSpeed">Reconocimiento a velocidad variable</span></label>
+            <label class="inline-check"><input id="toneVariation" type="checkbox"> <span data-i18n="toneVariation">Variación leve de tono</span></label>
+          </div>
+        </section>
+
+        <section class="wizard-panel" data-wizard-panel="4">
+          <div class="wizard-copy">
+            <div class="eyebrow" data-i18n="step4">PASO 4</div>
+            <h3 data-i18n="howLong">¿Cuánto tiempo?</h3>
+            <p data-i18n="longHelp">Creá una práctica breve o una sesión larga de escucha.</p>
+          </div>
+          <div class="duration-grid">
+            <button class="duration-choice" data-duration="300">5 min</button>
+            <button class="duration-choice" data-duration="600">10 min</button>
+            <button class="duration-choice selected" data-duration="900">15 min</button>
+            <button class="duration-choice" data-duration="1800">30 min</button>
+            <button class="duration-choice" data-duration="3600">1 h</button>
+            <button class="duration-choice" data-duration="7200">2 h</button>
+          </div>
+          <div class="seed-row"><label><span data-i18n="seed">Semilla de sesión</span><input id="seedInput" value="MP-DEMO-001"></label></div>
+        </section>
+
+        <div class="wizard-nav">
+          <button id="wizardBack" class="ghost" data-i18n="back">Atrás</button>
           <div class="grow"></div>
-          <div id="lessonEndActions" class="lesson-end-actions hidden">
-            <button id="replayLessonBtn" data-i18n="replay">Repetir</button>
-            <button id="nextLessonCta" class="primary" data-i18n="nextLesson">Siguiente lección →</button>
-          </div>
+          <button id="wizardNext" class="primary" data-i18n="continue">Continuar</button>
+          <button id="buildSessionBtn" class="primary hidden" data-i18n="buildSession">Crear sesión</button>
         </div>
-        <div class="export-row">
-          <span class="export-label" data-i18n="export">EXPORTAR</span>
-          <button id="wavBtn">WAV</button>
-          <button id="mp3Btn">MP3</button>
-          <button id="videoBtn" data-i18n="video">VIDEO</button>
-        </div>
-          <button id="wavBtn">Export WAV</button>
-          <button id="mp3Btn">Export MP3</button>
-          <button id="videoBtn">Export Video</button>
-        </div>
-        <div id="assetStatus" class="asset-status">Checking voice packs…</div>
-      </section>
+      </div>
 
-      <section id="coursePanel" class="panel active">
-        <div class="section-head compact-head">
-          <div><h2 data-i18n="learnCW">Aprender CW</h2><p data-i18n="chooseLesson">Elegí cualquier lección y comenzá cuando quieras.</p></div>
-          <div class="course-meta"><span id="courseProgressText">0 / 20 completed</span></div>
-        </div>
-        <div class="course-progress"><div id="courseProgressBar"></div></div>
-        <div class="lesson-carousel-shell">
-          <button id="carouselPrev" class="carousel-arrow" aria-label="Scroll lessons left">‹</button>
-          <div id="lessonGrid" class="lesson-grid lesson-carousel" aria-label="Course lessons"></div>
-          <button id="carouselNext" class="carousel-arrow" aria-label="Scroll lessons right">›</button>
-        </div>
-        <div class="course-selected-row">
-          <button id="prevLessonBtn" class="ghost">← Previous lesson</button>
-          <div id="currentLessonLabel">Lesson 01</div>
-          <button id="nextLessonBtn" class="ghost">Next lesson →</button>
-        </div>
-          <button id="nextLessonBtn" class="primary">Next →</button>
-        </div>
-      </section>
+      <div id="sessionBuiltActions" class="session-built-actions hidden">
+        <button id="editSessionBtn" data-i18n="editSession">Editar sesión</button>
+      </div>
+    </section>
 
-      <section id="studioPanel" class="panel">
-        <div class="section-head compact-head">
-          <div><h2>Create Session</h2><p>A guided builder. Pick a goal, choose content, then fine-tune only what matters.</p></div>
-        </div>
-
-        <div class="wizard" id="sessionWizard">
-          <div class="wizard-steps">
-            <button class="wizard-step active" data-step="1"><span>1</span>Goal</button>
-            <button class="wizard-step" data-step="2"><span>2</span>Content</button>
-            <button class="wizard-step" data-step="3"><span>3</span>Sound</button>
-            <button class="wizard-step" data-step="4"><span>4</span>Length</button>
-          </div>
-
-          <section class="wizard-panel active" data-wizard-panel="1">
-            <div class="wizard-copy"><div class="eyebrow">STEP 1</div><h3>What do you want to train?</h3><p>You can combine familiarization and recognition in the same session.</p></div>
-            <div class="choice-grid mode-grid">
-              <button class="choice selected" data-mode="familiarization"><strong>Familiarize</strong><span>Learn letters and numbers with strong visual support.</span></button>
-              <button class="choice selected" data-mode="recognition"><strong>Recognize</strong><span>Hear first, answer in your head, then reveal.</span></button>
-              <button class="choice" data-mode="marathon"><strong>Marathon</strong><span>Continuous listening with minimal interruption.</span></button>
-            </div>
-          </section>
-
-          <section class="wizard-panel" data-wizard-panel="2">
-            <div class="wizard-copy"><div class="eyebrow">STEP 2</div><h3>Choose the material</h3><p id="contentHelp">Familiarization uses only letters and numbers. Recognition can use richer radio content.</p></div>
-            <div id="contentChoices" class="choice-grid content-grid"></div>
-            <div id="customTextWrap" class="custom-wrap hidden"><textarea id="customText" placeholder="Paste your own text here…"></textarea></div>
-          </section>
-
-          <section class="wizard-panel" data-wizard-panel="3">
-            <div class="wizard-copy"><div class="eyebrow">STEP 3</div><h3>How should it sound?</h3><p>Start simple. Advanced options stay out of the way unless you need them.</p></div>
-            <div class="sound-grid">
-              <div class="slider-card"><label>Speed <strong><span id="wpmValue">15</span> WPM</strong><input id="wpmRange" type="range" min="8" max="35" value="15"></label></div>
-              <div class="slider-card"><label>Tone <strong><span id="toneValue">700</span> Hz</strong><input id="toneRange" type="range" min="350" max="1000" step="10" value="700"></label></div>
-            </div>
-            <button id="advancedToggle" class="ghost">Advanced ▾</button>
-            <div id="advancedOptions" class="advanced-options hidden">
-              <label>Effective speed <span id="effValue">9</span> WPM<input id="effRange" type="range" min="3" max="35" value="9"></label>
-              <label>Answer delay <span id="delayValue">1.5</span>s<input id="delayRange" type="range" min="0.5" max="4" step="0.1" value="1.5"></label>
-              <label class="inline-check"><input id="variableRecognition" type="checkbox"> Variable-speed recognition</label>
-              <label class="inline-check"><input id="toneVariation" type="checkbox"> Slight tone variation between items</label>
-            </div>
-          </section>
-
-          <section class="wizard-panel" data-wizard-panel="4">
-            <div class="wizard-copy"><div class="eyebrow">STEP 4</div><h3>How long?</h3><p>Generate a short drill or a long listening session.</p></div>
-            <div class="duration-grid">
-              <button class="duration-choice" data-duration="300">5 min</button>
-              <button class="duration-choice" data-duration="600">10 min</button>
-              <button class="duration-choice selected" data-duration="900">15 min</button>
-              <button class="duration-choice" data-duration="1800">30 min</button>
-              <button class="duration-choice" data-duration="3600">1 hour</button>
-              <button class="duration-choice" data-duration="7200">2 hours</button>
-            </div>
-            <div class="seed-row"><label>Session seed <input id="seedInput" value="MP-DEMO-001"></label></div>
-          </section>
-
-          <div class="wizard-nav">
-            <button id="wizardBack" class="ghost">Back</button>
-            <div class="grow"></div>
-            <button id="wizardNext" class="primary">Continue</button>
-            <button id="buildSessionBtn" class="primary hidden">Build Session</button>
-          </div>
-        </div>
-      </section>
-
-      <section id="bonusPanel" class="panel">
-        <div class="section-head compact-head"><div><h2>Head Copy Training</h2><p>Continue after the course with focused listening challenges.</p></div></div>
-        <div id="bonusGrid" class="bonus-grid"></div>
-      </section>
-    </main>
-  </div>
-  <script type="module" src="js/app.js?v=14"></script>
+    <section id="bonusPanel" class="panel">
+      <div class="section-head compact-head">
+        <div><h2>Head Copy</h2><p data-i18n="headCopyHelp">Prácticas de escucha para después del curso.</p></div>
+      </div>
+      <div class="lesson-carousel-shell bonus-carousel-shell">
+        <button id="bonusPrev" class="carousel-arrow" aria-label="Anterior">‹</button>
+        <div id="bonusGrid" class="lesson-carousel bonus-carousel"></div>
+        <button id="bonusNext" class="carousel-arrow" aria-label="Siguiente">›</button>
+      </div>
+    </section>
+  </main>
+</div>
+<script type="module" src="js/app.js?v=15"></script>
 </body>
 </html>

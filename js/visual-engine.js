@@ -1,4 +1,4 @@
-import {MORSE,PROSIGNS,unitSeconds} from './morse-engine.js?v=14';
+import {MORSE,PROSIGNS,unitSeconds} from './morse-engine.js?v=15';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -52,7 +52,7 @@ export class VisualEngine{
   constructor(canvas){
     this.c=canvas;this.x=canvas.getContext('2d');
     this.audioAnalyser=null;this.wave=new Uint8Array(1024);
-    this.prevShape=null;this.shapeStart=0;this.shapeName='';
+    this.prevShape=null;this.shapeStart=0;this.shapeName='';this.lastRendered=null;
   }
   setAnalyser(a){this.audioAnalyser=a;if(a)this.wave=new Uint8Array(a.fftSize)}
   background(ctx,w,h){
@@ -211,7 +211,18 @@ export class VisualEngine{
       if(e.type==='reveal'){main=e.data.text||'';sub='';shape=e.data.mnemonic?'mnemonic':'recognition';shapeEvent=e}
       if(e.type==='check'){main='✓';sub='';shape='target';shapeEvent=e}
     }
-    const points=this.shapeFor(shape,shapeEvent,time,w,h);
+    const target=resample(this.shapeFor(shape,shapeEvent,time,w,h),190);
+    if(shape!==this.shapeName){
+      this.prevShape=this.lastRendered?this.lastRendered.map(p=>({...p})):resample(this.shapeLine(time,w,h),190);
+      this.shapeStart=performance.now();
+      this.shapeName=shape;
+    }
+    const morph=ease(clamp((performance.now()-this.shapeStart)/460,0,1));
+    const points=target.map((p,i)=>({
+      x:lerp(this.prevShape?.[i]?.x??p.x,p.x,morph),
+      y:lerp(this.prevShape?.[i]?.y??p.y,p.y,morph)
+    }));
+    this.lastRendered=points;
     this.drawLivingLine(points,time);
 
     if(mode){ctx.textAlign='center';ctx.fillStyle='#75e6ff';ctx.font='800 14px system-ui';ctx.fillText(mode,w/2,74)}

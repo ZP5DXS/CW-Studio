@@ -1,21 +1,18 @@
-# Morse Practice · CW Studio v1.4 — Living Line
+# CW Studio v1.5
 
-Pure 2D visual pass.
+Stability + layout rebuild.
 
-The player now uses one continuous luminous line as its visual language:
-- narration → electric mouth / lips driven by actual voice energy
-- CW → binary ECG/keying trace with dit width 1 and dah width 3
-- phases → the same line morphs into clock, target, waves, QSO and milestone forms
-- familiarization → line can morph into mnemonic silhouettes
-- no persistent visualizer; each form appears only when its phase is active
-
-UX:
-- voice selector is now iconic, not a plain select
-- complete ES/EN UI strings are normalized
-- no 30-second preview
-- export controls are in a dedicated row below playback
-- lesson carousel has no visible scrollbar and no redundant Previous/Next controls
-- after a lesson finishes, Replay and Next Lesson appear
-- Create Session hides the player while configuring, then hides the wizard and shows the generated player
-
-Existing audio paths and voice-pack logic from v1.2/v1.3 are unchanged.
+- Rebuilt from the last stable v1.3 app logic.
+- Fixed broken event handlers introduced in v1.4.
+- Removed duplicate/stray Next buttons.
+- Player is full-width and remains the dominant element.
+- Export controls live in a separate row below playback.
+- Lesson and Head Copy lists are horizontal carousels with arrows only; scrollbars are hidden.
+- Create Session hides the player during configuration, then hides the wizard when a session is built.
+- Voice selector is visual/iconic. Public aliases are provisional:
+  ES: AURA / NEXO
+  EN: NOVA / VECTOR
+  Underlying Edge-TTS voice IDs are unchanged.
+- ES/EN UI strings are normalized.
+- The visualizer remains pure 2D and uses one luminous line that morphs between narration, CW, phase symbols and mnemonic silhouettes.
+- Audio paths/voice-pack structure are unchanged from the working v1.2/v1.3 resolver.
