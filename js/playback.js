@@ -1,13 +1,17 @@
-import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=15';
+import {scheduleText,scheduleCheckTone} from './morse-engine.js?v=16';
 
 export class Playback{
-  constructor(voice){this.voice=voice;this.ctx=null;this.sources=[];this.timer=null;this.ended=false}
+  constructor(voice){this.voice=voice;this.ctx=null;this.sources=[];this.timer=null;this.ended=false;this.playing=false;this.paused=false}
   stop(){
     this.sources.forEach(s=>{try{s.stop()}catch{}});
     this.sources=[];
     if(this.ctx){this.ctx.close().catch(()=>{});this.ctx=null}
-    clearInterval(this.timer);this.timer=null;
+    clearInterval(this.timer);this.timer=null;this.playing=false;this.paused=false;
   }
+  async pause(){if(this.ctx&&this.playing&&!this.paused){await this.ctx.suspend();this.paused=true;return true}return false}
+  async resume(){if(this.ctx&&this.playing&&this.paused){await this.ctx.resume();this.paused=false;return true}return false}
+  isPaused(){return !!this.paused}
+  isPlaying(){return !!this.playing}
 
   async play(tl,{lang='es',gender='female',tone=700,onTick=()=>{},onEnd=()=>{},onStatus=()=>{},limit=null,destination=null}={}){
     this.stop();
@@ -58,12 +62,12 @@ export class Playback{
       }
     }
 
-    this.ended=false;
+    this.ended=false;this.playing=true;this.paused=false;
     this.timer=setInterval(()=>{
       const t=Math.max(0,ctx.currentTime-base);
       onTick(Math.min(t,endAt),analyser);
       if(t>=endAt+.05&&!this.ended){
-        this.ended=true;clearInterval(this.timer);this.timer=null;onEnd();
+        this.ended=true;this.playing=false;this.paused=false;clearInterval(this.timer);this.timer=null;onEnd();
       }
     },33);
     return {ctx,analyser,base,endAt,master};

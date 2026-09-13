@@ -12,7 +12,7 @@
   <header class="topbar">
     <div class="brand">
       <div class="eyebrow">MORSE PRACTICE</div>
-      <h1>CW Studio <span class="version-badge">v1.5</span></h1>
+      <h1>CW Studio <span class="version-badge">v1.6</span></h1>
     </div>
 
     <div class="voice-console">
@@ -25,15 +25,15 @@
         <button class="voice-pill active" data-gender="female">
           <span class="voice-orb"><i></i><i></i><i></i></span>
           <span>
-            <strong id="voiceFemaleName">AURA</strong>
-            <small id="voiceFemaleMeta">ES · VOZ CÁLIDA</small>
+            <strong id="voiceFemaleName">VOZ 01</strong>
+            <small id="voiceFemaleMeta">ES · FEMENINA</small>
           </span>
         </button>
         <button class="voice-pill" data-gender="male">
           <span class="voice-orb"><i></i><i></i><i></i></span>
           <span>
-            <strong id="voiceMaleName">NEXO</strong>
-            <small id="voiceMaleMeta">ES · VOZ SERENA</small>
+            <strong id="voiceMaleName">VOZ 02</strong>
+            <small id="voiceMaleMeta">ES · MASCULINA</small>
           </span>
         </button>
       </div>
@@ -57,7 +57,7 @@
 
   <main>
     <section class="player-section" id="playerSection">
-      <div class="visual-wrap">
+      <div class="visual-wrap" id="visualWrap">
         <canvas id="visualCanvas" width="1280" height="720"></canvas>
 
         <div id="loadingOverlay" class="loading-overlay hidden" aria-live="polite">
@@ -75,7 +75,7 @@
 
       <div class="transport transport-main">
         <button id="playBtn" class="primary" data-i18n="play">Reproducir</button>
-        <button id="stopBtn" data-i18n="stop">Detener</button>
+        <button id="stopBtn" data-i18n="stop">Detener</button><button id="fullscreenBtn" class="icon-btn" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>
         <div class="grow"></div>
         <div id="lessonEndActions" class="lesson-end-actions hidden">
           <button id="replayLessonBtn" data-i18n="replay">Repetir</button>
@@ -90,7 +90,7 @@
         <button id="videoBtn">VIDEO</button>
       </div>
 
-      <div id="assetStatus" class="asset-status">CW Studio v1.5</div>
+      <div id="assetStatus" class="asset-status">CW Studio v1.6</div>
     </section>
 
     <section id="coursePanel" class="panel active">
@@ -204,6 +204,6 @@
     </section>
   </main>
 </div>
-<script type="module" src="js/app.js?v=15"></script>
+<script type="module" src="js/app.js?v=16"></script>
 </body>
 </html>

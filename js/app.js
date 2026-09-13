@@ -1,10 +1,11 @@
-import {VoiceEngine} from './voice-engine.js?v=15';
-import {Playback} from './playback.js?v=15';
-import {VisualEngine} from './visual-engine.js?v=15';
-import {COURSE,buildLesson} from './course-engine.js?v=15';
-import {buildCustom} from './session-builder.js?v=15';
-import {exportWav,exportMp3,download} from './export-engine.js?v=15';
-import {exportVideo} from './video-export.js?v=15';
+import {VoiceEngine} from './voice-engine.js?v=16';
+import {Playback} from './playback.js?v=16';
+import {VisualEngine} from './visual-engine.js?v=16';
+import {COURSE,buildLesson,courseFocus} from './course-engine.js?v=16';
+import {HEAD_COPY,buildHeadCopy} from './headcopy-engine.js?v=16';
+import {buildCustom} from './session-builder.js?v=16';
+import {exportWav,exportMp3,download} from './export-engine.js?v=16';
+import {exportVideo} from './video-export.js?v=16';
 
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
@@ -26,7 +27,7 @@ const UI={
     back:'Atrás',continue:'Continuar',buildSession:'Crear sesión',editSession:'Editar sesión',
     headCopyHelp:'Prácticas de escucha para después del curso.',
     completed:n=>`${n} / 20 completadas`,lesson:'LECCIÓN',loading:'CARGANDO LECCIÓN',exportAudio:'GENERANDO AUDIO',exportVideo:'GENERANDO VIDEO',
-    ready:'LISTO',customSession:'SESIÓN PERSONALIZADA',
+    ready:'LISTO',customSession:'SESIÓN PERSONALIZADA',pause:'Pausar',resume:'Continuar',fullscreen:'Pantalla completa',
     contents:{letters:'Letras',numbers:'Números',alnum:'Letras + números',punctuation:'Puntuación',prosigns:'Prosigns',abbreviations:'Abreviaturas CW',callsigns:'Indicativos',prefixes:'Prefijos',rst:'RST',qso:'QSO',words:'Palabras',custom:'Texto propio'}
   },
   en:{
@@ -45,7 +46,7 @@ const UI={
     back:'Back',continue:'Continue',buildSession:'Build session',editSession:'Edit session',
     headCopyHelp:'Focused listening challenges for after the course.',
     completed:n=>`${n} / 20 completed`,lesson:'LESSON',loading:'LOADING LESSON',exportAudio:'EXPORTING AUDIO',exportVideo:'EXPORTING VIDEO',
-    ready:'READY',customSession:'CUSTOM SESSION',
+    ready:'READY',customSession:'CUSTOM SESSION',pause:'Pause',resume:'Resume',fullscreen:'Fullscreen',
     contents:{letters:'Letters',numbers:'Numbers',alnum:'Letters + numbers',punctuation:'Punctuation',prosigns:'Prosigns',abbreviations:'CW abbreviations',callsigns:'Callsigns',prefixes:'Prefixes',rst:'RST',qso:'QSO',words:'Words',custom:'Custom text'}
   }
 };
@@ -79,7 +80,7 @@ window.addEventListener('unhandledrejection',e=>{
 });
 
 function applyLanguage(){
-  document.documentElement.lang=lang();
+  document.documentElement.lang=lang();visual.setLanguage(lang());
   $$('[data-i18n]').forEach(el=>{
     const key=el.dataset.i18n;
     if(UI[lang()][key]!==undefined)el.textContent=tr(key);
@@ -87,15 +88,15 @@ function applyLanguage(){
 
   // Provisional public aliases; underlying TTS voices stay untouched.
   if(lang()==='es'){
-    $('#voiceFemaleName').textContent='AURA';
-    $('#voiceFemaleMeta').textContent='ES · VOZ CÁLIDA';
-    $('#voiceMaleName').textContent='NEXO';
-    $('#voiceMaleMeta').textContent='ES · VOZ SERENA';
+    $('#voiceFemaleName').textContent='VOZ 01';
+    $('#voiceFemaleMeta').textContent='ES · FEMENINA';
+    $('#voiceMaleName').textContent='VOZ 02';
+    $('#voiceMaleMeta').textContent='ES · MASCULINA';
   }else{
-    $('#voiceFemaleName').textContent='NOVA';
-    $('#voiceFemaleMeta').textContent='EN · WARM VOICE';
-    $('#voiceMaleName').textContent='VECTOR';
-    $('#voiceMaleMeta').textContent='EN · CALM VOICE';
+    $('#voiceFemaleName').textContent='VOICE 01';
+    $('#voiceFemaleMeta').textContent='EN · FEMALE';
+    $('#voiceMaleName').textContent='VOICE 02';
+    $('#voiceMaleMeta').textContent='EN · MALE';
   }
 
   $$('.lang-pill').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang()));
@@ -119,7 +120,7 @@ function loadingStatus(text,prefix='',kicker=tr('loading')){
   const m=s.match(/(\d+)\/(\d+)/);
   const p=m?Number(m[1])/Math.max(1,Number(m[2])):(/ready|complete|rendered/i.test(s)?1:.08);
   setLoading(true,p,`${prefix}${prefix?' · ':''}${s}`,kicker);
-  $('#assetStatus').textContent=`CW Studio v1.5 · ${s}`;
+  $('#assetStatus').textContent=`CW Studio v1.6 · ${s}`;
 }
 function stopLoading(){setLoading(false,1,'','')}
 
@@ -146,8 +147,8 @@ function renderLessons(){
         <div class="n">${tr('lesson')} ${String(l.lesson).padStart(2,'0')}</div>
         <span class="lesson-check">${completed.has(l.lesson)?'✓':''}</span>
       </div>
-      <h3>${l.newItems.length?l.newItems.join(' · '):l.focus}</h3>
-      <p>${l.focus}<br>${l.charWpm} WPM · ${l.effectiveWpm} eff.</p>
+      <h3>${l.newItems.length?l.newItems.join(' · '):courseFocus(l.lesson,lang())}</h3>
+      <p>${courseFocus(l.lesson,lang())}<br>${l.charWpm} WPM · ${l.effectiveWpm} eff.</p>
     </article>`).join('');
 
   $$('.lesson').forEach(el=>el.onclick=()=>loadLesson(Number(el.dataset.lesson)));
@@ -156,27 +157,19 @@ function renderLessons(){
   requestAnimationFrame(()=>$('#lessonGrid .lesson.current')?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}));
 }
 
-const BONUS_ITEMS=[
-  ['100 Common Words','100 palabras frecuentes'],
-  ['100 Real Callsigns','100 indicativos reales'],
-  ['100 Radio Words','100 palabras de radio'],
-  ['100 Numbers','100 números'],
-  ['100 CW Abbreviations','100 abreviaturas CW'],
-  ['QSO Head Copy','QSO progresivo'],
-  ['Endless Head Copy','Escucha continua']
-];
 function renderBonuses(){
-  $('#bonusGrid').innerHTML=BONUS_ITEMS.map(([en,es],i)=>`
-    <article class="bonus-card" data-bonus="${i}">
+  $('#bonusGrid').innerHTML=HEAD_COPY.map((b,i)=>`
+    <article class="bonus-card ${timeline?.meta?.kind==='headcopy'&&timeline.meta.id===b.id?'current':''}" data-bonus="${b.id}">
       <div class="n">HEAD COPY ${String(i+1).padStart(2,'0')}</div>
-      <h3>${lang()==='es'?es:en}</h3>
+      <h3>${b.title[lang()]}</h3>
     </article>`).join('');
+  $$('.bonus-card').forEach(el=>el.onclick=()=>loadBonus(el.dataset.bonus));
 }
 
 async function loadLesson(n){
   currentLesson=Math.max(1,Math.min(20,n));
   localStorage.setItem('cwStudio.currentLesson',currentLesson);
-  playback.stop();
+  playback.stop();resetPlayButton();
   $('#lessonEndActions').classList.add('hidden');
   timeline=null;
 
@@ -196,18 +189,34 @@ async function loadLesson(n){
     renderLessons();
     drawLoop(0);
     const r=voice.roots();
-    $('#assetStatus').textContent=`CW Studio v1.5 · ${tr('lesson')} ${String(currentLesson).padStart(2,'0')} · ${r.coreClips}+${r.courseClips} voice clips ready`;
+    $('#assetStatus').textContent=`CW Studio v1.6 · ${tr('lesson')} ${String(currentLesson).padStart(2,'0')} · ${r.coreClips}+${r.courseClips} voice clips ready`;
     $('#assetStatus').classList.remove('warning');
     stopLoading();
     success=true;
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v1.5 · ${err.message||err}`;
+    $('#assetStatus').textContent=`CW Studio v1.6 · ${err.message||err}`;
     $('#assetStatus').classList.add('warning');
     timeline=null;
     stopLoading();
   }finally{
     controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=!success});
+  }
+}
+
+async function loadBonus(id){
+  playback.stop();resetPlayButton();timeline=null;
+  $('#lessonEndActions').classList.add('hidden');
+  setLoading(true,.03,'Head Copy…',lang()==='es'?'CARGANDO HEAD COPY':'LOADING HEAD COPY');
+  controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=true});
+  try{
+    await voice.discover(s=>loadingStatus(s,'',lang()==='es'?'CARGANDO HEAD COPY':'LOADING HEAD COPY'));
+    timeline=await buildHeadCopy(id,{lang:lang(),gender:$('#voiceSelect').value,voice,wpm:15,eff:12,onStatus:s=>loadingStatus(s,'',lang()==='es'?'CARGANDO HEAD COPY':'LOADING HEAD COPY')});
+    visual.setLanguage(lang());drawLoop(0);renderBonuses();stopLoading();
+    controls.forEach(sel=>{const el=$(sel);if(el)el.disabled=false});
+    $('#assetStatus').textContent=`CW Studio v1.6 · ${timeline.meta.title}`;
+  }catch(err){
+    console.error(err);stopLoading();$('#assetStatus').textContent=`CW Studio v1.6 · ${err.message||err}`;$('#assetStatus').classList.add('warning');
   }
 }
 
@@ -229,6 +238,8 @@ function showTab(tab){
     $('#sessionBuiltActions').classList.add('hidden');
   }else{
     $('#playerSection').classList.remove('workspace-hidden');
+    if(tab==='bonus' && timeline?.meta?.kind!=='headcopy') loadBonus(HEAD_COPY[0].id);
+    if(tab==='course' && timeline?.meta?.kind!=='course') loadLesson(currentLesson);
   }
 }
 
@@ -306,6 +317,7 @@ $$('.duration-choice').forEach(b=>b.onclick=()=>{
 
 $('#buildSessionBtn').onclick=()=>{
   timeline=buildCustom({
+    lang:lang(),
     familiarization:selectedModes.has('familiarization'),
     recognition:selectedModes.has('recognition'),
     marathon:selectedModes.has('marathon'),
@@ -320,7 +332,7 @@ $('#buildSessionBtn').onclick=()=>{
     duration:selectedDuration,
     seed:$('#seedInput').value
   });
-  $('#statusLabel').textContent=tr('customSession');
+  $('#statusLabel').textContent=tr('customSession');visual.setLanguage(lang());resetPlayButton();
   $('#sessionWizard').classList.add('workspace-hidden');
   $('#sessionBuiltActions').classList.remove('hidden');
   $('#playerSection').classList.remove('workspace-hidden');
@@ -333,35 +345,45 @@ $('#editSessionBtn').onclick=()=>{
   $('#sessionBuiltActions').classList.add('hidden');
 };
 
-async function play(){
-  if(!timeline){$('#assetStatus').textContent='CW Studio v1.5 · no session loaded';return}
-  stopLoading();
-  $('#assetStatus').textContent='CW Studio v1.5 · preparing audio…';
+function resetPlayButton(){
+  $('#playBtn').textContent=tr('play');
+  $('#playBtn').dataset.state='play';
+}
+async function togglePlay(){
+  if(!timeline){$('#assetStatus').textContent='CW Studio v1.6 · no session loaded';return}
+  if(playback.isPlaying()){
+    if(playback.isPaused()){
+      await playback.resume();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
+    }else{
+      await playback.pause();$('#playBtn').textContent=tr('resume');$('#playBtn').dataset.state='resume';
+    }
+    return;
+  }
+  stopLoading();$('#playBtn').textContent=tr('pause');$('#playBtn').dataset.state='pause';
+  $('#assetStatus').textContent='CW Studio v1.6 · preparing audio…';
   try{
     await playback.play(timeline,{
-      lang:lang(),
-      gender:$('#voiceSelect').value,
-      tone:+$('#toneRange').value,
-      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.5 · ${s}`},
+      lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.6 · ${s}`},
       onTick:(t,a)=>{visual.setAnalyser(a);drawLoop(t)},
       onEnd:()=>{
-        drawLoop(timeline.duration);
-        if(timeline?.meta?.kind==='course'){
-          completeCurrent();
-          $('#lessonEndActions').classList.remove('hidden');
-        }
+        resetPlayButton();drawLoop(timeline.duration);
+        if(timeline?.meta?.kind==='course'){completeCurrent();$('#lessonEndActions').classList.remove('hidden')}
       }
     });
   }catch(err){
-    console.error(err);
-    $('#assetStatus').textContent=`CW Studio v1.5 · ${err.message||err}`;
-    $('#assetStatus').classList.add('warning');
+    resetPlayButton();console.error(err);$('#assetStatus').textContent=`CW Studio v1.6 · ${err.message||err}`;$('#assetStatus').classList.add('warning');
   }
 }
-$('#playBtn').onclick=()=>play();
-$('#stopBtn').onclick=()=>{playback.stop();drawLoop(0)};
-$('#replayLessonBtn').onclick=()=>{$('#lessonEndActions').classList.add('hidden');play()};
+$('#playBtn').onclick=()=>togglePlay();
+$('#stopBtn').onclick=()=>{playback.stop();resetPlayButton();drawLoop(0)};
+$('#replayLessonBtn').onclick=()=>{$('#lessonEndActions').classList.add('hidden');playback.stop();resetPlayButton();togglePlay()};
 $('#nextLessonCta').onclick=()=>{$('#lessonEndActions').classList.add('hidden');loadLesson(currentLesson>=20?1:currentLesson+1)};
+$('#fullscreenBtn').onclick=async()=>{
+  const el=$('#visualWrap')||document.querySelector('.visual-wrap');
+  try{if(!document.fullscreenElement)await el.requestFullscreen();else await document.exitFullscreen()}catch(e){console.warn(e)}
+};
+
 
 async function exportAudio(kind){
   if(!timeline)return;
@@ -372,14 +394,15 @@ async function exportAudio(kind){
   try{
     const options={
       lang:lang(),gender:$('#voiceSelect').value,tone:+$('#toneRange').value,
-      onStatus:s=>loadingStatus(s,'',tr('exportAudio'))
+      onStatus:s=>{$('#assetStatus').textContent=`CW Studio v1.6 · ${s}`},
+      onProgress:p=>setLoading(true,p,`${Math.round(p*100)}%`,tr('exportAudio'))
     };
     const blob=kind==='wav'?await exportWav(timeline,voice,options,meta()):await exportMp3(timeline,voice,options,meta());
     download(blob,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.${kind}`);
-    $('#assetStatus').textContent=`CW Studio v1.5 · ${kind.toUpperCase()} ready`;
+    $('#assetStatus').textContent=`CW Studio v1.6 · ${kind.toUpperCase()} ready`;
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v1.5 · ${err.message||err}`;
+    $('#assetStatus').textContent=`CW Studio v1.6 · ${err.message||err}`;
     $('#assetStatus').classList.add('warning');
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
@@ -399,7 +422,7 @@ $('#videoBtn').onclick=async()=>{
     download(blob,`${timeline?.meta?.kind==='course'?`learn-cw-${String(currentLesson).padStart(2,'0')}`:'cw-studio-session'}.webm`);
   }catch(err){
     console.error(err);
-    $('#assetStatus').textContent=`CW Studio v1.5 · ${err.message||err}`;
+    $('#assetStatus').textContent=`CW Studio v1.6 · ${err.message||err}`;
   }finally{
     btn.disabled=false;btn.textContent=old;stopLoading();drawLoop(0);
   }
@@ -412,5 +435,5 @@ renderContentChoices();
 setWizard(1);
 applyLanguage();
 $('#statusLabel').textContent=tr('ready');
-$('#assetStatus').textContent='CW Studio v1.5 · interface ready';
+$('#assetStatus').textContent='CW Studio v1.6 · interface ready';
 setTimeout(()=>loadLesson(currentLesson),0);

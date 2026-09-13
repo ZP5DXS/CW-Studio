@@ -94,3 +94,20 @@ main{width:100%;display:block}
   .voice-pill{min-width:145px}
   .export-row{flex-wrap:wrap}
 }
+
+/* v1.6 layout/timing polish */
+.app-shell{max-width:none!important;width:100%!important;margin:0!important;padding:20px clamp(14px,2vw,34px) 42px!important}
+.player-section{width:100%!important;max-width:none!important;margin:8px 0 28px!important}
+.visual-wrap{width:100%!important;max-width:none!important;aspect-ratio:16/9!important;min-height:0!important}
+.visual-overlay{top:14px!important;bottom:auto!important;left:18px!important;right:18px!important;z-index:3!important}
+.transport-main{padding-top:2px!important}
+.export-row{justify-content:flex-start!important;gap:10px!important;padding:12px 0 4px!important}
+.export-row .export-label{min-width:72px}
+.icon-btn{min-width:42px;padding:9px 11px;font-size:17px}
+.bonus-card.current{border-color:rgba(121,229,255,.58);box-shadow:0 10px 30px rgba(0,0,0,.3),0 0 24px rgba(121,229,255,.05)}
+.visual-wrap:fullscreen{background:#020406;border-radius:0}
+.visual-wrap:fullscreen canvas{width:100vw!important;height:100vh!important;object-fit:contain}
+@media(min-width:1200px){
+  .visual-wrap{height:min(78vh,900px)!important;aspect-ratio:auto!important}
+  .visual-wrap canvas{object-fit:contain;background:#020406}
+}

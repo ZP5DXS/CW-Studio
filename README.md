@@ -1,18 +1,36 @@
-# CW Studio v1.5
+# Morse Practice · CW Studio v1.6
 
-Stability + layout rebuild.
+CW Studio is a free, browser-based environment for learning CW, building custom Morse practice sessions, producing long-form training audio/video, and continuing into Head Copy.
 
-- Rebuilt from the last stable v1.3 app logic.
-- Fixed broken event handlers introduced in v1.4.
-- Removed duplicate/stray Next buttons.
-- Player is full-width and remains the dominant element.
-- Export controls live in a separate row below playback.
-- Lesson and Head Copy lists are horizontal carousels with arrows only; scrollbars are hidden.
-- Create Session hides the player during configuration, then hides the wizard when a session is built.
-- Voice selector is visual/iconic. Public aliases are provisional:
-  ES: AURA / NEXO
-  EN: NOVA / VECTOR
-  Underlying Edge-TTS voice IDs are unchanged.
-- ES/EN UI strings are normalized.
-- The visualizer remains pure 2D and uses one luminous line that morphs between narration, CW, phase symbols and mnemonic silhouettes.
-- Audio paths/voice-pack structure are unchanged from the working v1.2/v1.3 resolver.
+It combines a structured Learn CW course, reusable human narration, smooth sine-wave CW synthesis, bilingual mnemonic familiarization, generative 2D visuals, local progress, and export tools. No account and no backend are required for the core experience.
+
+## Main areas
+
+- **Learn CW** — 20 guided lessons, freely selectable.
+- **Create Session** — a guided builder for familiarization, recognition, marathon listening and custom material.
+- **Head Copy** — dedicated post-course challenges using the bonus narration already included in the Course Voice Pack.
+- **Audio export** — WAV and MP3 generated in the browser.
+- **Video export** — synchronized WebM using the same timeline and visuals as playback.
+- **Living Line** — one 2D luminous line morphs between narration, CW keying, instructional symbols and mnemonic silhouettes.
+
+## Audio packs
+
+CW Studio uses the two static voice packs generated for Morse Practice. The repository layout currently in use is intentionally preserved; the application reads the JSON indexes generated with the packs rather than renaming MP3 files.
+
+## Mnemonics
+
+`MNEMONICS.md` and `data/mnemonics.json` contain the complete original ES/EN A–Z + 0–9 association table. Mnemonics are used only in Familiarization; Recognition intentionally removes that assistance.
+
+## Privacy and architecture
+
+The project is designed for static hosting on GitHub Pages. Course progress is stored locally in the browser. Core operation does not require a server-side account.
+
+## About
+
+Created as part of the Morse Practice ecosystem by **ZP5DXS** to make CW practice easier to share, more engaging to watch, and useful both as an interactive lesson and as long-form audio/video training.
+
+Free and open source. No ads.
+
+**Courtesy of ZP5DXS · Facebook: ZP5DXS**
+
+73.

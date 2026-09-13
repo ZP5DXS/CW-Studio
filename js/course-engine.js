@@ -1,5 +1,5 @@
-import {Timeline} from './timeline.js?v=15';
-import {tokenDuration,wordDuration} from './morse-engine.js?v=15';
+import {Timeline} from './timeline.js?v=16';
+import {tokenDuration,wordDuration} from './morse-engine.js?v=16';
 
 export const COURSE=[
 [1,'HEAR',['T','E','A'],6,'Discover complete CW sounds'],
@@ -23,6 +23,9 @@ export const COURSE=[
 [19,'COMMUNICATE',[],12,'Build a complete QSO'],
 [20,'COPY',[],12,'Your First QSO']
 ].map(([lesson,phase,newItems,eff,focus])=>({lesson,phase,newItems,charWpm:15,effectiveWpm:Math.min(eff,15),focus}));
+
+const FOCUS_ES={"1": "Primeros sonidos CW", "2": "Primer reconocimiento deliberado", "3": "Grupos cortos y palabras simples", "4": "Reconocimiento acumulativo", "5": "Grupos de dos y tres", "6": "Reconocer sin reconstruir", "7": "Menos ayuda visual", "8": "Reconocimiento difícil y recuperación", "9": "Alfabeto A–Z completo", "10": "Consolidación del alfabeto", "11": "Introducción a los números", "12": "Mezclar letras y números", "13": "Conjunto A–Z y 0–9 completo", "14": "Reconocimiento de indicativos", "15": "Realizar una llamada", "16": "Reportes de señal", "17": "Información del operador", "18": "Control y cierre de un QSO", "19": "Construir un QSO completo", "20": "Tu primer QSO"};
+export function courseFocus(lesson,lang='en'){const cfg=COURSE.find(x=>x.lesson===lesson);return lang==='es'?(FOCUS_ES[lesson]||cfg?.focus||''):(cfg?.focus||'')}
 
 const T={
   afterFirstCw:.62,
@@ -54,6 +57,7 @@ function voiceCard(id,tl,lang){
   const lesson=tl.meta?.lesson||1;
   const lessonNo=String(lesson).padStart(2,'0');
   const fresh=(cfg.newItems||[]).join(' · ');
+  const focus=courseFocus(lesson,lang);
 
   const cards={
     course_welcome:[es?'LEARN CW':'LEARN CW',es?'Aprende por el sonido, no por puntos y rayas.':'Learn by sound, not dots and dashes.','course'],
@@ -64,7 +68,7 @@ function voiceCard(id,tl,lang){
     recognition_say_before_answer:[es?'RESPONDE PRIMERO':'ANSWER FIRST',es?'Di el carácter antes de escuchar la respuesta.':'Say the character before hearing the answer.','recognition'],
     less_visual_help:[es?'MENOS AYUDA VISUAL':'LESS VISUAL HELP',es?'Confía cada vez más en tu oído.':'Trust your ear more and more.','focus'],
     begin_review:[es?'REPASO':'REVIEW',es?'Activamos lo que ya conoces.':'Wake up what you already know.','review'],
-    new_characters:[es?'NUEVOS SONIDOS':'NEW SOUNDS',fresh||cfg.focus,'new'],
+    new_characters:[es?'NUEVOS SONIDOS':'NEW SOUNDS',fresh||focus,'new'],
     groups_intro:[es?'GRUPOS':'GROUPS',es?'Escucha la secuencia completa.':'Hear the complete sequence.','groups'],
     marathon_intro:[es?'ESCUCHA CONTINUA':'CONTINUOUS LISTENING',es?'Mantén el flujo y deja pasar los errores.':'Stay with the flow and let mistakes go.','flow'],
     numbers:[es?'NÚMEROS':'NUMBERS',es?'El mismo principio: sonido completo.':'Same principle: one complete sound.','numbers'],
@@ -84,10 +88,10 @@ function voiceCard(id,tl,lang){
   };
 
   if(/^lesson_\d\d_intro$/.test(id)){
-    return {title:`${es?'LECCIÓN':'LESSON'} ${lessonNo}`,subtitle:fresh?`${fresh} · ${cfg.focus}`:cfg.focus,graphic:'lesson'};
+    return {title:`${es?'LECCIÓN':'LESSON'} ${lessonNo}`,subtitle:fresh?`${fresh} · ${focus}`:focus,graphic:'lesson'};
   }
   if(/^lesson_\d\d_outro$/.test(id)){
-    return {title:es?'LECCIÓN COMPLETADA':'LESSON COMPLETE',subtitle:cfg.focus,graphic:'finish'};
+    return {title:es?'LECCIÓN COMPLETADA':'LESSON COMPLETE',subtitle:focus,graphic:'finish'};
   }
   if(/_full$/.test(id)||/_explain$/.test(id)){
     const concept=id.replace(/_(full|explain)$/,'').toUpperCase();
@@ -194,7 +198,7 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
   const plan=lessonVoicePlan(lesson);
   let t=0;
 
-  tl.add('title',t,4,{title:`LESSON ${String(lesson).padStart(2,'0')}`,subtitle:cfg.newItems.length?cfg.newItems.join(' · '):cfg.focus});
+  tl.add('title',t,4,{title:`${lang==='es'?'LECCIÓN':'LESSON'} ${String(lesson).padStart(2,'0')}`,subtitle:cfg.newItems.length?cfg.newItems.join(' · '):courseFocus(lesson,lang),blankVisual:true});
   t+=4.4;
 
   for(const id of plan.before)t=await addVoice(tl,t,voice,id,lang,gender,1.0);
@@ -212,7 +216,7 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
       t+=d+T.afterFirstCw;
 
       const vd=await voice.requireDuration(id,lang,gender);
-      tl.add('reveal',t,vd+T.revealTail,{text:c,mnemonic:true});
+      tl.add('reveal',t,vd+T.revealTail,{text:c,mnemonic:true,lang});
       tl.add('charVoice',t,vd,{char:c});
       t+=vd+T.afterVoice;
 
@@ -237,12 +241,12 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
     if(lesson<=13&&text.length===1){
       const id=`char_${String(text).toLowerCase()}`;
       const vd=await voice.requireDuration(id,lang,gender);
-      tl.add('reveal',t,vd+T.revealTail,{text});
+      tl.add('reveal',t,vd+T.revealTail,{text,lang});
       tl.add('charVoice',t,vd,{char:text});
       t+=vd+T.afterVoice;
       t=addConfirmationCw(tl,t,text,wpm,cfg.effectiveWpm);
     }else{
-      tl.add('reveal',t,.92,{text});
+      tl.add('reveal',t,.92,{text,lang});
       t+=1.02;
     }
 
@@ -267,7 +271,7 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
       const d=wordDuration(q,wpm,cfg.effectiveWpm);
       tl.add('cw',t,d,{text:q,wpm,eff:cfg.effectiveWpm,mode:lesson===20?'headcopy':'sequence'});
       t+=d+(lesson===20?3:2);
-      tl.add('reveal',t,2,{text:q});
+      tl.add('reveal',t,2,{text:q,lang});
       t+=2.15+T.beforeChime;
       t=addChime(tl,t);
     }
