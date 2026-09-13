@@ -12,22 +12,32 @@
     <header class="topbar">
       <div>
         <div class="eyebrow">MORSE PRACTICE</div>
-        <h1>CW Studio <span class="version-badge">v1.3</span></h1>
+        <h1>CW Studio <span class="version-badge">v1.4</span></h1>
       </div>
-      <div class="top-controls">
-        <label>Language
-          <select id="languageSelect"><option value="es">Español</option><option value="en">English</option></select>
-        </label>
-        <label>Voice
-          <select id="voiceSelect"><option value="female">Female</option><option value="male">Male</option></select>
-        </label>
+      <div class="top-controls voice-console">
+        <div class="language-pills" id="languagePills">
+          <button class="lang-pill active" data-lang="es">ES</button>
+          <button class="lang-pill" data-lang="en">EN</button>
+        </div>
+        <div class="voice-pills" id="voicePills">
+          <button class="voice-pill active" data-gender="female">
+            <span class="voice-orb"><i></i><i></i><i></i></span>
+            <span><strong id="voiceFemaleName">DALIA</strong><small id="voiceFemaleMeta">ES · VOZ FEMENINA</small></span>
+          </button>
+          <button class="voice-pill" data-gender="male">
+            <span class="voice-orb"><i></i><i></i><i></i></span>
+            <span><strong id="voiceMaleName">JORGE</strong><small id="voiceMaleMeta">ES · VOZ MASCULINA</small></span>
+          </button>
+        </div>
+        <select id="languageSelect" class="sr-only"><option value="es">Español</option><option value="en">English</option></select>
+        <select id="voiceSelect" class="sr-only"><option value="female">Female</option><option value="male">Male</option></select>
       </div>
     </header>
 
     <nav class="tabs" aria-label="Main sections">
-      <button class="tab active" data-tab="course">Learn CW</button>
-      <button class="tab" data-tab="studio">Create Session</button>
-      <button class="tab" data-tab="bonus">Head Copy</button>
+      <button class="tab active" data-tab="course" data-i18n="learnCW">Aprender CW</button>
+      <button class="tab" data-tab="studio" data-i18n="createSession">Crear sesión</button>
+      <button class="tab" data-tab="bonus" data-i18n="headCopy">Head Copy</button>
     </nav>
 
     <main>
@@ -44,11 +54,21 @@
           </div>
           <div class="visual-overlay"><span id="statusLabel">READY</span><span id="timeLabel">00:00 / 00:00</span></div>
         </div>
-        <div class="transport">
-          <button id="playBtn" class="primary">Play</button>
-          <button id="stopBtn">Stop</button>
-          <button id="previewBtn">30s Preview</button>
+        <div class="transport transport-main">
+          <button id="playBtn" class="primary" data-i18n="play">Reproducir</button>
+          <button id="stopBtn" data-i18n="stop">Detener</button>
           <div class="grow"></div>
+          <div id="lessonEndActions" class="lesson-end-actions hidden">
+            <button id="replayLessonBtn" data-i18n="replay">Repetir</button>
+            <button id="nextLessonCta" class="primary" data-i18n="nextLesson">Siguiente lección →</button>
+          </div>
+        </div>
+        <div class="export-row">
+          <span class="export-label" data-i18n="export">EXPORTAR</span>
+          <button id="wavBtn">WAV</button>
+          <button id="mp3Btn">MP3</button>
+          <button id="videoBtn" data-i18n="video">VIDEO</button>
+        </div>
           <button id="wavBtn">Export WAV</button>
           <button id="mp3Btn">Export MP3</button>
           <button id="videoBtn">Export Video</button>
@@ -58,7 +78,7 @@
 
       <section id="coursePanel" class="panel active">
         <div class="section-head compact-head">
-          <div><h2>Learn CW</h2><p>Choose a lesson and continue from where you left off.</p></div>
+          <div><h2 data-i18n="learnCW">Aprender CW</h2><p data-i18n="chooseLesson">Elegí cualquier lección y comenzá cuando quieras.</p></div>
           <div class="course-meta"><span id="courseProgressText">0 / 20 completed</span></div>
         </div>
         <div class="course-progress"><div id="courseProgressBar"></div></div>
@@ -147,6 +167,6 @@
       </section>
     </main>
   </div>
-  <script type="module" src="js/app.js?v=13"></script>
+  <script type="module" src="js/app.js?v=14"></script>
 </body>
 </html>

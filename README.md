@@ -1,13 +1,21 @@
-# Morse Practice · CW Studio v1.3
+# Morse Practice · CW Studio v1.4 — Living Line
 
-Visual-course build.
+Pure 2D visual pass.
 
-Changes:
-- Player is the main element at the top of the page.
-- Course lessons are a single horizontal carousel below it.
-- Lesson loading progress and export progress are displayed inside the 16:9 player.
-- Guided narration now has synchronized visual cards instead of a generic "GUIDED INSTRUCTION" screen.
-- Spoken audio uses a mirrored waveform that opens/closes like a mouth.
-- CW uses a scrolling binary/ECG-style trace: keyed pulses have width 1 for a dit and width 3 for a dah; no textual dots/dashes are shown.
-- Familiarization / Recognition / Review / Callsigns / QSO phases each have their own visual language.
-- Existing audio paths from v1.2 are unchanged.
+The player now uses one continuous luminous line as its visual language:
+- narration → electric mouth / lips driven by actual voice energy
+- CW → binary ECG/keying trace with dit width 1 and dah width 3
+- phases → the same line morphs into clock, target, waves, QSO and milestone forms
+- familiarization → line can morph into mnemonic silhouettes
+- no persistent visualizer; each form appears only when its phase is active
+
+UX:
+- voice selector is now iconic, not a plain select
+- complete ES/EN UI strings are normalized
+- no 30-second preview
+- export controls are in a dedicated row below playback
+- lesson carousel has no visible scrollbar and no redundant Previous/Next controls
+- after a lesson finishes, Replay and Next Lesson appear
+- Create Session hides the player while configuring, then hides the wizard and shows the generated player
+
+Existing audio paths and voice-pack logic from v1.2/v1.3 are unchanged.
