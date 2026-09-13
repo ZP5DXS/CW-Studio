@@ -1,6 +1,6 @@
-import {Timeline} from './timeline.js?v=25';
-import {wordDuration} from './morse-engine.js?v=25';
-import {COMMON_EN,COMMON_ES,RADIO,ABBR,CALLS,NUMBERS100} from './content-data.js?v=25';
+import {Timeline} from './timeline.js?v=28';
+import {wordDuration} from './morse-engine.js?v=28';
+import {COMMON_EN,COMMON_ES,RADIO,ABBR,CALLS,NUMBERS100} from './content-data.js?v=28';
 
 const QSOS=[
 'CQ CQ DE ZP5DXS ZP5DXS K',
@@ -36,11 +36,19 @@ async function addVoice(tl,t,voice,id,lang,gender,title,subtitle,gap=.65){
 export async function buildHeadCopy(id,{lang='es',gender='female',voice,wpm=15,eff=12,onStatus=()=>{}}={}){
   const def=DEF.find(x=>x.id===id)||DEF[0];
   const itemsBase=def.items(lang);
-  const tl=new Timeline({kind:'headcopy',id,title:def.title[lang],longRunning:!!def.endless,noVideoExport:!!def.endless});
+  const tl=new Timeline({
+    kind:'headcopy',
+    id,
+    title:def.title[lang],
+    longRunning:!!def.endless,
+    loopPlayback:!!def.endless,
+    noExport:!!def.endless,
+    noVideoExport:!!def.endless
+  });
 
   const intro=`${def.id}_intro`,outro=`${def.id}_outro`;
   const coach=['headcopy_no_spelling','headcopy_less_time','headcopy_halfway','headcopy_remember_meaning','headcopy_final_ten','challenge_complete'];
-  const required=[intro,outro,...coach];
+  const required=def.endless?[intro]:[intro,outro,...coach];
   const check=await voice.preflight(required,lang,gender,onStatus);
   if(!check.ok)throw new Error(`Missing Head Copy audio: ${check.missing.map(x=>x.id).join(', ')}`);
 
@@ -50,10 +58,11 @@ export async function buildHeadCopy(id,{lang='es',gender='female',voice,wpm=15,e
 
   const r=rng(`${def.id}-${lang}`);
   let items=def.id==='qso_head_copy'?[...itemsBase]:shuffled(itemsBase,r);
-  let count=def.endless?5000:(def.id==='qso_head_copy'?items.length:100);
+  const endlessChunkSeconds=20*60; // repeated automatically by the player
+  let count=def.id==='qso_head_copy'?items.length:100;
   let response=def.id==='qso_head_copy'?3.0:1.9;
 
-  for(let i=0;i<count;i++){
+  for(let i=0; def.endless ? t<endlessChunkSeconds : i<count; i++){
     if(i && i%items.length===0)items=shuffled(items,r);
     const item=items[i%items.length];
     const d=wordDuration(item,wpm,eff);
@@ -74,7 +83,8 @@ export async function buildHeadCopy(id,{lang='es',gender='female',voice,wpm=15,e
     t=await addVoice(tl,t,voice,outro,lang,gender,lang==='es'?'SESIÓN COMPLETADA':'SESSION COMPLETE',def.title[lang],.45);
     tl.add('outro',t,3.0,{title:lang==='es'?'SESIÓN COMPLETADA':'SESSION COMPLETE'});t+=3.0;
   }else{
-    // Practically continuous (~hours). User normally stops it manually.
+    // The UI treats this 20-minute chunk as an infinite stream and loops it.
+    // This avoids constructing thousands of events and giant export buffers.
     tl.duration=t;
   }
 
