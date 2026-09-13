@@ -1,4 +1,4 @@
-# Morse Practice · CW Studio v1.9
+# Morse Practice · CW Studio v2.0
 
 CW Studio is a free, browser-based environment for learning CW, building custom Morse practice sessions, producing long-form training audio/video, and continuing into Head Copy.
 
@@ -36,7 +36,7 @@ Free and open source. No ads.
 73.
 
 
-## v1.9 visual rules
+## v2.0 visual rules
 
 - The CW ECG/keying trace is intentionally used only during **Familiarization**.
 - Recognition, Marathon, QSO and Head Copy use a flowing Living Line instead, avoiding compressed rows of keying pulses for long words and callsigns.
@@ -46,7 +46,7 @@ Free and open source. No ads.
 - Production UI hides internal voice-pack/debug status after successful loading.
 
 
-## v1.9 Familiarization timing
+## v2.0 Familiarization timing
 
 The visual timing is now explicit:
 
@@ -64,7 +64,7 @@ Recognition begins only after a hard neutral visual boundary, so no Familiarizat
 The CW ECG is drawn over a full-width continuous baseline and is used only during Familiarization. Recognition / Marathon / QSO / Head Copy use the fluid Living Line.
 
 
-## v1.9 — One Line
+## v2.0 — One Line
 
 The visual system now follows one strict rule: **there is always one continuous luminous line**.
 

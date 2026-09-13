@@ -4,7 +4,7 @@ export const PROSIGNS={BT:'-...-',AR:'.-.-.',SK:'...-.-',KN:'-.--.'};
 export function unitSeconds(wpm){return 1.2/Math.max(1,wpm)}
 export function patternFor(token){const t=String(token??'').toUpperCase();return PROSIGNS[t]||MORSE[t]||''}
 export function tokenDuration(token,wpm){const u=unitSeconds(wpm),p=patternFor(token);if(!p)return 0;let d=0;[...p].forEach((c,i)=>{d+=c==='.'?u:3*u;if(i<p.length-1)d+=u});return d}
-export function wordDuration(text,wpm,effectiveWpm=wpm){const chars=[...text.toUpperCase()].filter(c=>MORSE[c]);const charUnit=unitSeconds(wpm);const effUnit=unitSeconds(effectiveWpm);let d=0;chars.forEach((c,i)=>{d+=tokenDuration(c,wpm);if(i<chars.length-1)d+=Math.max(3*charUnit,3*effUnit)});return d}
+export function wordDuration(text,wpm,effectiveWpm=wpm){text=String(text??'');const chars=[...text.toUpperCase()].filter(c=>MORSE[c]);const charUnit=unitSeconds(wpm);const effUnit=unitSeconds(effectiveWpm);let d=0;chars.forEach((c,i)=>{d+=tokenDuration(c,wpm);if(i<chars.length-1)d+=Math.max(3*charUnit,3*effUnit)});return d}
 
 // Smooth raised-cosine-ish amplitude ramps remove clicks. No square-wave keying.
 function scheduleEnvelope(gain,start,end,amp=0.32,ramp=0.007){
