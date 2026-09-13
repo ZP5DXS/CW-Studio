@@ -229,7 +229,7 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
       t+=vd+.42;
 
       // Confirmation CW is intentionally clean: mnemonic already taught, now re-hear the sound.
-      t=addConfirmationCw(t,c,wpm,cfg.effectiveWpm,'familiarization-confirmation');
+      t=addConfirmationCw(tl,t,c,wpm,cfg.effectiveWpm,'familiarization-confirmation');
 
       // Clear canvas before courtesy tone and before the next character.
       tl.add('neutral',t,.22,{});
