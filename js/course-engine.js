@@ -1,5 +1,5 @@
-import {Timeline} from './timeline.js?v=17';
-import {tokenDuration,wordDuration} from './morse-engine.js?v=17';
+import {Timeline} from './timeline.js?v=18';
+import {tokenDuration,wordDuration} from './morse-engine.js?v=18';
 
 export const COURSE=[
 [1,'HEAR',['T','E','A'],6,'Discover complete CW sounds'],
@@ -212,24 +212,37 @@ export async function buildLesson(lesson,{lang='es',gender='female',voice,onStat
   if(lesson<=13&&cfg.newItems.length){
     for(const c of cfg.newItems){
       const d=tokenDuration(c,wpm),id=`char_${String(c).toLowerCase()}`;
-      tl.add('cw',t,d,{text:c,wpm,eff:cfg.effectiveWpm,mode:'familiarization',mnemonic:true});
-      t+=d+T.afterFirstCw;
-
       const vd=await voice.requireDuration(id,lang,gender);
-      const visualDur=Math.max(2.20,vd+.55);
-      tl.add('reveal',t,visualDur,{text:c,mnemonic:true,lang});
-      tl.add('charVoice',t,vd,{char:c});
-      t+=visualDur+.12;
 
-      t=addConfirmationCw(tl,t,c,wpm,cfg.effectiveWpm,'familiarization-confirmation');
-      t+=T.beforeChime;
+      const start=t;
+      const voiceAt=start+d+T.afterFirstCw;
+      const mnemonicEnd=voiceAt+vd+.42;
+
+      // The mnemonic is visible from the FIRST CW sound until the spoken answer finishes.
+      // It is a visual aid only for Familiarization and cannot bleed into Recognition.
+      tl.add('mnemonic',start,mnemonicEnd-start,{text:c,lang});
+
+      tl.add('cw',start,d,{text:c,wpm,eff:cfg.effectiveWpm,mode:'familiarization'});
+      t=voiceAt;
+
+      tl.add('charVoice',t,vd,{char:c});
+      t+=vd+.42;
+
+      // Confirmation CW is intentionally clean: mnemonic already taught, now re-hear the sound.
+      t=addConfirmationCw(t,c,wpm,cfg.effectiveWpm,'familiarization-confirmation');
+
+      // Clear canvas before courtesy tone and before the next character.
+      tl.add('neutral',t,.22,{});
+      t+=.22+T.beforeChime;
       t=addChime(tl,t);
     }
   }
 
-  tl.add('neutral',t,.34,{});
-  t+=.34;
+  tl.add('neutral',t,.70,{});
+  t+=.70;
   t=await addSectionAudio(tl,t,plan,'recognition',voice,lang,gender);
+  tl.add('neutral',t,.32,{});
+  t+=.32;
 
   const rounds=lesson<10?30:lesson<14?36:24;
   for(let i=0;i<rounds;i++){

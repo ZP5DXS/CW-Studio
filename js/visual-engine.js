@@ -1,5 +1,5 @@
-import {MORSE,PROSIGNS,unitSeconds} from './morse-engine.js?v=17';
-import {mnemonicFor} from './mnemonics.js?v=17';
+import {MORSE,PROSIGNS,unitSeconds} from './morse-engine.js?v=18';
+import {mnemonicFor} from './mnemonics.js?v=18';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -93,11 +93,13 @@ export class VisualEngine{
     for(const s of patterns)units+=s==='.'?1:s==='-'?3:s==='wordGap'?7:3;
     units=Math.max(units,1);
 
-    const maxW=w*.80;
-    const unit=Math.min(32,maxW/units);
-    const total=units*unit;
-    let x=(w-total)/2;
-    const base=h*.70, high=h*.56, pts=[{x,y:base}];
+    const leftEdge=w*.07,rightEdge=w*.93,available=rightEdge-leftEdge;
+    const unit=Math.min(36,available*.56/units);
+    const signalWidth=units*unit;
+    let x=(w-signalWidth)/2;
+    const signalStart=x;
+    const base=h*.78,high=h*.66;
+    const pts=[{x:leftEdge,y:base},{x:signalStart,y:base}];
 
     for(const s of patterns){
       if(s==='.'||s==='-'){
@@ -109,6 +111,7 @@ export class VisualEngine{
         pts.push({x,y:base});
       }
     }
+    pts.push({x:rightEdge,y:base});
     return pts;
   }
   shapeFlow(event,time,w,h){
@@ -243,56 +246,144 @@ export class VisualEngine{
     }
     ctx.restore();
   }
+  drawMnemonicLabel(char,lang,w,h){
+    const ctx=this.x;
+    const m=mnemonicFor(char,lang||this.language);
+    if(!m)return;
+    const word=String(m.word||'');
+    ctx.save();
+    ctx.textAlign='center';
+    ctx.font='800 54px system-ui';
+    const upper=word.toUpperCase();
+    const target=String(char||'').toUpperCase();
+    const idx=upper.indexOf(target);
+    if(idx>=0 && /^[A-Z]$/.test(target)){
+      const before=word.slice(0,idx),hit=word.slice(idx,idx+1),after=word.slice(idx+1);
+      const total=ctx.measureText(before+hit+after).width;
+      let x=w/2-total/2;
+      ctx.textAlign='left';
+      ctx.fillStyle='#f3f8ff';ctx.fillText(before,x,h*.30);x+=ctx.measureText(before).width;
+      ctx.fillStyle='#79e5ff';ctx.shadowBlur=14;ctx.shadowColor='#79e5ff';ctx.fillText(hit,x,h*.30);x+=ctx.measureText(hit).width;
+      ctx.shadowBlur=0;ctx.fillStyle='#f3f8ff';ctx.fillText(after,x,h*.30);
+    }else{
+      ctx.fillStyle='#f3f8ff';ctx.fillText(word,w/2,h*.30);
+    }
+    ctx.textAlign='center';
+    ctx.font='800 20px system-ui';
+    ctx.fillStyle='#79e5ff';
+    ctx.fillText(target,w/2,h*.36);
+    ctx.restore();
+  }
+
   draw(time,timeline){
-    const ctx=this.x,w=this.c.width,h=this.c.height;this.background(ctx,w,h);
+    const ctx=this.x,w=this.c.width,h=this.c.height;
+    this.background(ctx,w,h);
+
     const ev=timeline?.at(time)||[];
+    const active = type => ev.find(e=>e.type===type);
+    const mnemonicEv=active('mnemonic');
+    const neutralEv=active('neutral');
+    const titleEv=active('title');
+    const outroEv=active('outro');
+    const voiceEv=active('voice');
+    const charVoiceEv=active('charVoice');
+    const cwEv=active('cw');
+    const revealEv=active('reveal');
+    const checkEv=active('check');
+
     let main='',sub='',shape='none',shapeEvent=null,mnemonicLabel='';
-    for(const e of ev){
-      if(e.type==='title'){main=e.data.title||'';sub=e.data.subtitle||'';shape='none';shapeEvent=e}
-      if(e.type==='outro'){main=e.data.title||'';sub=e.data.subtitle||'';shape='recognition';shapeEvent=e}
-      if(e.type==='voice'){
-        main=e.data.visual?.title||'';sub=e.data.visual?.subtitle||'';
-        const g=e.data.visual?.graphic||'voice';
-        shape=g==='clock'?'clock':g==='qso'?'qso':g==='headcopy'?'headcopy':g==='recognition'||g==='focus'?'recognition':'mouth';
-        shapeEvent=e;
-      }
-      if(e.type==='charVoice'){main=e.data.char||'';sub='';shape='mouth';shapeEvent=e}
-      if(e.type==='cw'){
-        main='';sub='';shape=(e.data.mode==='familiarization'||e.data.mode==='familiarization-confirmation')?'cw':'flow';shapeEvent=e
-      }
-      if(e.type==='reveal'){
-        main=e.data.text||'';shape=e.data.mnemonic?'mnemonic':'recognition';shapeEvent=e;
-        if(e.data.mnemonic){const m=mnemonicFor(e.data.text,e.data.lang||this.language);mnemonicLabel=m?.word||''}
-      }
-      if(e.type==='check'){main='✓';sub='';shape='recognition';shapeEvent=e}
-      if(e.type==='neutral'){main='';sub='';shape='none';shapeEvent=e}
+
+    // HARD visual boundaries. A neutral event wins over everything else.
+    if(neutralEv){
+      shape='none';
+    }else if(titleEv){
+      main=titleEv.data.title||'';
+      sub=titleEv.data.subtitle||'';
+      shape='none';
+    }else if(mnemonicEv){
+      // Familiarization visual stays on screen from first CW through spoken answer.
+      shape='mnemonic';
+      shapeEvent=mnemonicEv;
+      main='';
+      sub='';
+    }else if(voiceEv){
+      main=voiceEv.data.visual?.title||'';
+      sub=voiceEv.data.visual?.subtitle||'';
+      const g=voiceEv.data.visual?.graphic||'voice';
+      shape=g==='clock'?'clock':g==='qso'?'qso':g==='headcopy'?'headcopy':g==='recognition'||g==='focus'?'recognition':'mouth';
+      shapeEvent=voiceEv;
+    }else if(charVoiceEv){
+      main=charVoiceEv.data.char||'';
+      shape='mouth';
+      shapeEvent=charVoiceEv;
+    }else if(cwEv){
+      // ECG only for Familiarization. All later listening uses the fluid living line.
+      shape=(cwEv.data.mode==='familiarization'||cwEv.data.mode==='familiarization-confirmation')?'cw':'flow';
+      shapeEvent=cwEv;
+    }else if(revealEv){
+      main=revealEv.data.text||'';
+      shape='recognition';
+      shapeEvent=revealEv;
+    }else if(checkEv){
+      main='✓';
+      shape='recognition';
+      shapeEvent=checkEv;
+    }else if(outroEv){
+      main=outroEv.data.title||'';
+      sub=outroEv.data.subtitle||'';
+      shape='recognition';
+      shapeEvent=outroEv;
     }
 
+    // Main living shape.
     if(shape!=='none'){
       const target=resample(this.shapeFor(shape,shapeEvent,time,w,h),220);
       if(shape!==this.shapeName){
         this.prevShape=this.lastRendered?.length?this.lastRendered.map(p=>({...p})):target;
-        this.shapeStart=performance.now();this.shapeName=shape;
+        this.shapeStart=performance.now();
+        this.shapeName=shape;
       }
-      const morphMs=shape==='cw'?35:shape==='flow'?90:shape==='mouth'?110:240;
+      const morphMs=shape==='cw'?28:shape==='flow'?90:shape==='mouth'?105:220;
       const m=ease(clamp((performance.now()-this.shapeStart)/morphMs,0,1));
-      const points=target.map((p,i)=>({x:lerp(this.prevShape?.[i]?.x??p.x,p.x,m),y:lerp(this.prevShape?.[i]?.y??p.y,p.y,m)}));
+      const points=target.map((p,i)=>({
+        x:lerp(this.prevShape?.[i]?.x??p.x,p.x,m),
+        y:lerp(this.prevShape?.[i]?.y??p.y,p.y,m)
+      }));
       this.lastRendered=points;
       if(shape==='mouth')this.drawMouthRibs(time,w,h);
       this.drawLivingLine(points,time);
     }else{
-      this.shapeName='none';this.lastRendered=null;
+      this.shapeName='none';
+      this.lastRendered=null;
+    }
+
+    // In Familiarization the mnemonic persists, and the current CW trace is added below it.
+    if(mnemonicEv){
+      this.drawMnemonicLabel(mnemonicEv.data.text,mnemonicEv.data.lang||this.language,w,h);
+      if(cwEv && (cwEv.data.mode==='familiarization'||cwEv.data.mode==='familiarization-confirmation')){
+        const trace=this.shapeCw(cwEv,w,h);
+        this.drawLivingLine(trace,time);
+      }
     }
 
     if(main){
-      ctx.textAlign='center';ctx.fillStyle='#f3f8ff';const fs=main.length>28?42:main.length>16?54:main.length>8?68:88;
-      ctx.font=`800 ${fs}px system-ui`;ctx.fillText(main,w/2,h*.25);
+      ctx.textAlign='center';
+      ctx.fillStyle='#f3f8ff';
+      const fs=main.length>28?42:main.length>16?54:main.length>8?68:88;
+      ctx.font=`800 ${fs}px system-ui`;
+      ctx.fillText(main,w/2,h*.24);
     }
-    if(sub){ctx.textAlign='center';ctx.fillStyle='#93a5b8';ctx.font='500 22px system-ui';ctx.fillText(sub,w/2,h*.34)}
-    if(mnemonicLabel){ctx.textAlign='center';ctx.fillStyle='#79e5ff';ctx.font='700 19px system-ui';ctx.fillText(mnemonicLabel.toUpperCase(),w/2,h*.88)}
+    if(sub){
+      ctx.textAlign='center';
+      ctx.fillStyle='#93a5b8';
+      ctx.font='500 22px system-ui';
+      ctx.fillText(sub,w/2,h*.33);
+    }
 
     const prog=timeline?.duration?clamp(time/timeline.duration,0,1):0;
-    ctx.fillStyle='rgba(255,255,255,.055)';ctx.fillRect(w*.08,h-22,w*.84,2);
-    ctx.fillStyle='#79e5ff';ctx.fillRect(w*.08,h-22,w*.84*prog,2);
+    ctx.fillStyle='rgba(255,255,255,.055)';
+    ctx.fillRect(w*.06,h-18,w*.88,2);
+    ctx.fillStyle='#79e5ff';
+    ctx.fillRect(w*.06,h-18,w*.88*prog,2);
   }
 }

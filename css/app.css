@@ -120,3 +120,24 @@ main{width:100%;display:block}
 @media(min-width:1200px){
   .visual-wrap{height:min(80vh,980px)!important}
 }
+
+/* v1.8 — lock the actual player to the same 16:9 geometry used while loading */
+.visual-wrap{
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:16/9!important;
+  min-height:0!important;
+  max-height:none!important;
+}
+.visual-wrap canvas{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:fill!important;
+}
+@media(min-width:1200px){
+  .visual-wrap{
+    height:auto!important;
+    aspect-ratio:16/9!important;
+  }
+}
