@@ -10,6 +10,37 @@ import {exportVideo} from './video-export.js?v=3711';
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 
+
+// CW Studio anonymous analytics · aggregated counters only.
+// No user text, callsigns, generated content, or personal data is sent.
+const CWS_SUPABASE_URL='https://mdwmqgwgrsycelickpyj.supabase.co';
+const CWS_SUPABASE_KEY='sb_publishable_2Pg2V9qOlQaeHfZ2LAYIww_I3C_D0UV';
+async function cwsRecord(event,seconds=0){
+  try{
+    await fetch(`${CWS_SUPABASE_URL}/rest/v1/rpc/cws_record_event`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':CWS_SUPABASE_KEY,'Authorization':`Bearer ${CWS_SUPABASE_KEY}`},
+      body:JSON.stringify({p_event:event,p_seconds:Math.max(0,Math.round(Number(seconds)||0))}),
+      keepalive:true
+    });
+  }catch(err){ console.debug('[CW Studio stats]',err?.message||err); }
+}
+
+// A session is each page load. A visit is counted at most once per browser/day.
+cwsRecord('session');
+try{
+  const day=new Date().toISOString().slice(0,10);
+  const key='cws_visit_day';
+  if(localStorage.getItem(key)!==day){ localStorage.setItem(key,day); cwsRecord('visit'); }
+}catch{ cwsRecord('visit'); }
+
+// Usage is accumulated in one-minute heartbeats only while the page is visible.
+let cwsUsageSeconds=0;
+setInterval(()=>{
+  if(document.visibilityState==='visible') cwsUsageSeconds+=60;
+  if(cwsUsageSeconds>=60){ const n=cwsUsageSeconds; cwsUsageSeconds=0; cwsRecord('usage',n); }
+},60000);
+
 const UI={
   es:{
     learnCW:'Aprender CW',createSession:'Crear',chooseLesson:'Elegí cualquier lección y comenzá cuando quieras.',
@@ -601,6 +632,7 @@ async function exportAudio(kind){
     };
     const blob=kind==='wav'?await exportWav(timeline,voice,options,meta()):await exportMp3(timeline,voice,options,meta());
     download(blob,`${exportBaseName()}.${kind}`);
+    cwsRecord('audio',timeline?.duration||0);
     $('#assetStatus').textContent='';$('#assetStatus').classList.remove('active','warning');
   }catch(err){
     console.error(err);
@@ -663,6 +695,7 @@ $('#videoBtn').onclick=async()=>{
       const ext=blob.type.includes('mp4')?'mp4':'webm';
       download(blob,`${exportBaseName()}.${ext}`);
     }
+    cwsRecord('video',timeline?.duration||0);
   }catch(err){
     console.error(err);
     try{await fileWritable?.abort?.()}catch{}
